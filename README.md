@@ -1,4 +1,4 @@
-# BugMeister
+# Bugmark Test Bench
 
 A Bugmark Research Application 
 
