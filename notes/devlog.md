@@ -1,4 +1,4 @@
-# BugMeister DevLog
+# TestBench DevLog
 
 ## 2018 Mar 22 WED
 
@@ -11,6 +11,15 @@
 - [x] add fontawesome
 - [x] create nav
 
-## TBD
+## 2018 Mar 28 WED
 
-- [ ]
+- [ ] add issues page
+- [ ] add offers page
+- [ ] add offer/create page
+- [ ] create 'authorize' method
+- [ ] create 'current_user' method
+- [ ] create 'logged_in?' method
+- [ ] create login page
+- [ ] create registration page
+
+## TBD

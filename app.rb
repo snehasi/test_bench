@@ -1,6 +1,9 @@
 require 'sinatra'
+require 'sinatra/content_for'
 require 'slim'
+require 'json'
 require_relative "./app_helpers"
+require_relative "./lib/bmx"
 
 helpers AppHelpers
 
@@ -11,6 +14,8 @@ get "/" do
 end
 
 get "/issues" do
+  @issues = Bmx.issues
+  @repos  = Bmx.repos
   slim :issues
 end
 

@@ -4,18 +4,18 @@ A Bugmark Research Application
 
 ## Goals
 
-- Generate live trading data ASAP with a ‘standup poker’ style app
+- Generate live trading data ASAP with a simple trading app
 - Minimum UI, Limited features, limited functions
 - Simple / Hackable / Extensible
 
 ## Scenario
 
-- We post a simple webapp for internal use by the bugmark team
+- We post a simple webapp for internal use by the Bugmark team
 - App runs a friendly competition to see who gets high score
 - Trading tokens not real currency
 - Every week, traders are topped up to a minimum of 1000 tokens
 - Users self-register with email and pwd (anyone can register)
-- We post leaderboards, top issues, etc. etc. 
+- We post prices, top issues, etc. 
 
 ## Tooling
 
