@@ -5,3 +5,5 @@ ruby '2.5.0'
 gem "sinatra"
 gem "sinatra-contrib"
 gem "slim"
+gem "octocat"
+gem "iora",    github: "bugmark/iora"

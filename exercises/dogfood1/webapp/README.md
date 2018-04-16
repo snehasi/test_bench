@@ -1,12 +1,20 @@
-# Bugmark Test Bench
+# Bugmark Exercise: Dogfood1
 
-A Bugmark Research Application 
+A Bugmark Research Application
 
-## Goals
+## Goals 
 
 - Generate live trading data ASAP with a simple trading app
 - Minimum UI, Limited features, limited functions
 - Simple / Hackable / Extensible
+
+## Hard Coded Repos
+
+- bugmark/exchange
+- bugmark/bmx_cl_ruby
+- bugmark/test_bench
+- bugmark/website
+- bugmark/documentation
 
 ## Scenario
 
@@ -31,4 +39,3 @@ A Bugmark Research Application
 - [Weekly] top off user balances
 - [Hourly] sync bugs
 - [Hourly] cross open offers
-
