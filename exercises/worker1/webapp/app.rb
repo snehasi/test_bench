@@ -18,8 +18,7 @@ get "/" do
 end
 
 get "/offers" do
-  @offers = Offer.open.all
-  @repos  = Repo.all
+  @offers = Offer.open.with_issue.all
   slim :offers
 end
 

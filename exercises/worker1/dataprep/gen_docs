@@ -3,7 +3,7 @@
 require_relative "./util_base"
 
 SCRAMBLES   = PrepData.scrambles(1000)
-ANSWER_FILE = "./.trial_data/ANSWERS.md"
+ANSWER_FILE = "./.trial_data/ANSWERS.txt"
 
 def body_base(scramble, level)
   base = "#{scramble.quiz}\n----------"

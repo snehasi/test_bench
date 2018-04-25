@@ -3,14 +3,18 @@ h2 Open Offers (#{@offers.length})
 table.table#xtable
   thead
     tr
-      td VOLUME
-      td PRICE
+      td WORD
+      td TYPE
+      td HINTS
+      td VALUE
       td ACTION
   tbody
-    - @offers.each do |issue|
+    - @offers.each do |offer|
       tr
-        td = issue["volume"]
-        td = issue["price"]
+        td = issue_word(offer)
+        td = issue_type(offer)
+        td = issue_hint(offer)
+        td = offer["value"]
         td
           | [TAKE]
 

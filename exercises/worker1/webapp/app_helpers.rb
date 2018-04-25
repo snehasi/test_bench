@@ -38,4 +38,26 @@ module AppHelpers
   def logged_in?
     current_user
   end
+
+  # ----- offer helpers
+  def issue_title(offer)
+    offer.issue.stm_title
+  end
+
+  def issue_word(offer)
+    issue_title(offer).split("_").first
+  end
+
+  def issue_type(offer)
+    letter = issue_title(offer).split("_").last[0]
+    case letter
+      when "c" then "Comment"
+      when "p" then "PR"
+      else "NA"
+    end
+  end
+
+  def issue_hint(offer)
+    issue_title(offer)[-1]
+  end
 end

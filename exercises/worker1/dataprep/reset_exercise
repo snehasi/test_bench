@@ -31,6 +31,7 @@ end
 puts ""
 
 puts "CLOSE ALL EXISTING IORA ISSUES"
+`rm -f #{PS.repo_name}` if PS.repo_type.to_s == "yaml"
 iora = Iora.new(PS.repo_type, PS.repo_name)
 iora.issues.each do |el|
   iora.close(el["sequence"])
