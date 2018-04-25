@@ -1,0 +1,55 @@
+#!/usr/bin/env ruby
+
+require_relative "./util_base"
+require_relative "../.lib/exchange"
+
+puts "EXCHANGE_DIR=#{Exchange.src_dir}"
+
+puts "LOADING RAILS"
+Exchange.load_rails
+
+puts "LOADING IORA"
+require 'iora'
+
+puts "REMOVE ALL EXISTING EXCHANGE DATA"
+BugmHost.reset
+
+puts "CREATE A FUNDER ACCOUNT"
+FB.create(:user, balance: 100000, email: 'funder@bugmark.net')
+
+puts "CLOSE ALL EXISTING ISSUES"
+iora = Iora.new(PS.repo_type, PS.repo_name)
+iora.issues.each do |el|
+  iora.close(el["sequence"])
+end
+
+puts "CREATE AN ISSUE FOR EACH PR DOC"
+Dir.chdir PS.trial_repo_dir
+Dir.glob("*.md").each do |fn|
+  body = File.read(fn)
+  iora.create(fn.gsub(".md", ""), body)
+end
+
+puts "CREATE A BUGMARK REPO"
+repo_uuid = FB.create(:repo, name: "Worker1").repo.uuid
+
+puts "CREATE AN ISSUE FOR EACH COMMENT DOC"
+Dir.chdir ".trial_data"
+Dir.glob("*.md").each do |fn|
+  body = File.read(fn)
+  iora.create(fn.gsub(".md", ""), body)
+end
+
+puts "SYNC ALL ISSUES"
+iora.issues.each do |el|
+  base = {"stm_repo_uuid" => repo_uuid}
+  pkg  = el.merge(base)
+  puts pkg.inspect
+  IssueCmd::Sync.new(pkg).project
+end
+
+# puts "CREATE AN OFFER FOR EACH PR DOC"
+# Create offer for each PR Doc
+
+# puts "CREATE AN OFFER FOR EACH COMMENT DOC"
+# Create offer for each Comment Doc

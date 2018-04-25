@@ -1,4 +1,4 @@
-# Bugmark Exercise: Dogfood1
+# Bugmark Exercise: Webapp1
 
 A Bugmark Research Application
 

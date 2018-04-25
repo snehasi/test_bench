@@ -1,0 +1,55 @@
+#!/usr/bin/env ruby
+
+require_relative "./util_base"
+
+SCRAMBLES   = PrepData.scrambles(1000)
+ANSWER_FILE = "./.trial_data/ANSWERS.md"
+
+def body_base(scramble, level)
+  base = "#{scramble.quiz}\n----------"
+  hint = "HINT: word starts with '#{scramble.hint(level)}'"
+  return base if level == 0
+  "#{base}\n\n#{hint}"
+end
+
+def write_answer_line(scramble)
+  File.open(ANSWER_FILE, 'a') {|f| f.puts scramble.answer_line}
+end
+
+def pr_body(scramble, level)
+  body_base(scramble, level) + "\n\nAnswer with a pull request"
+end
+
+def write_pr_doc(scramble, level)
+  write_answer_line(scramble)
+  fn = "./.trial_data/#{scramble.quiz_fn(level)}"
+  File.open(fn, 'w') {|f| f.puts(comment_body(scramble, level))}
+end
+
+def comment_body(scramble, level)
+  body_base(scramble, level) + "\n\nAnswer in the issue comments"
+end
+
+def write_comment_doc(scramble, level)
+  write_answer_line(scramble)
+  fn = scramble.quiz_fn(level)
+  File.open(fn, 'w') {|f| f.puts(comment_body(scramble, level))}
+end
+
+def write_docs(type, numdocs, maxlevel)
+  (0..maxlevel).each do |level|
+    SCRAMBLES.sample(numdocs).each do |scramble|
+      case type
+      when :pr      then write_pr_doc(scramble, level)
+      when :comment then write_comment_doc(scramble, level)
+      end
+    end
+  end
+end
+
+Dir.chdir PS.trial_repo_dir
+system "rm -f *.md"
+system "rm -f .trial_data/*.md"
+
+write_docs(:pr     , PS.num_pr_issues     , PS.max_hint_level)
+write_docs(:comment, PS.num_comment_issues, PS.max_hint_level)

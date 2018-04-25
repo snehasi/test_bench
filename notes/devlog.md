@@ -46,16 +46,25 @@
 - [x] Create and provision dogfood1.bugmark.net
 - [x] Create and provision worker1.bugmark.net
 
-## 2018-04-16 MON
+## 2018-04-21 SAT
 
-- [ ] Add dogfood1 data-prep script (sync_issues)
-- [ ] Add worker1 data-prep script (generate_issues)
-- [ ] Add dynamically rendered SVG
+- [x] Add gen_docs script 
+
+## 2018-04-22 SUN
+
+- [x] Get webapp to connect directly to exchange
+
+- [ ] Add gen_exercise script 
+- [ ] Add worker1 sync_issues script 
 - [ ] Render documentation pages
 - [ ] Design GitHub authentication
+- [ ] Add dynamically rendered SVG
 
 ## TBD
 
+- [ ] create dogfood1 exercise
+- [ ] create funder1 exercise
+- [ ] create trader1 exercise
 - [ ] add bugmark-src-sync role
 - [ ] add offers page
 - [ ] add offer/create page
