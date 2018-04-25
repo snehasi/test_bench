@@ -2,10 +2,12 @@ require_relative "./lib/web_util"
 require_relative "./app_helpers"
 
 require 'sinatra'
+require 'sinatra/flash'
 require 'sinatra/content_for'
 
 set :bind, '0.0.0.0'
 set :root, File.dirname(__FILE__)
+enable :sessions
 
 helpers AppHelpers
 
@@ -28,12 +30,8 @@ end
 
 # ----- user account -----
 
-get "/account/new" do
-  "HELLO NEW ACCOUNT"
-end
-
-get "/account/balance" do
-  slim :account_balance
+get "/account" do
+  slim :account
 end
 
 # ----- login/logout -----
@@ -43,12 +41,21 @@ get "/login" do
 end
 
 post "/login" do
-  session[:usermail] = "andy@r210.com"
-  redirect "/"
+  mail, pass = [params["usermail"], params["password"]]
+  user = User.find_by_email(mail)
+  if user && user.valid_password?(pass)
+    session[:usermail] = mail
+    flash[:success] = "Logged in successfully"
+    redirect "/"
+  else
+    flash[:danger] = "Invalid username or password (contact malvikar@gmail.com for help)"
+    redirect "/login"
+  end
 end
 
 get "/logout" do
   session[:usermail] = nil
+  flash[:warning] = "Logged out"
   redirect "/"
 end
 

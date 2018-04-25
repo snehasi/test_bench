@@ -65,12 +65,14 @@
 - [x] create login page
 - [x] create 'current_user' method
 - [x] create 'logged_in?' method
-- [ ] create 'authorize' method
+- [x] create 'authorize' method
 
-- [ ] Add worker1 sync_issues script 
-
+- [ ] fill out account page
+- [ ] create take button
 - [ ] add offers page
 - [ ] add offer/create page
+
+- [ ] Add worker1 sync_issues script 
 
 ## TBD
 

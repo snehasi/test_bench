@@ -1,5 +1,5 @@
 require 'bundler'
-Bundler.setup(:sinatra, :development)
+Bundler.setup(:test_bench)
 
 require_relative "../../.lib/exchange"
 

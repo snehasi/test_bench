@@ -17,4 +17,3 @@ class Exchange
     end
   end
 end
-

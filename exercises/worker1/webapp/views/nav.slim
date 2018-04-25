@@ -1,8 +1,12 @@
 ul.navbar-nav.mr-auto
-  == nav_link("Home"      , "/")
-  == nav_link("Offers"    , "/offers")
-  == nav_link("Contracts" , "/offers")
+  - if logged_in?
+    == nav_link("Home"      , "/")
+    == nav_link("Offers"    , "/offers")
+    == nav_link("Contracts" , "/offers")
 
 ul.navbar-nav.flex-row
-  == nav_link("Login"      , "/login")
-  == nav_link("Account"    , "/account")
+  - if logged_in?
+    == nav_link(user_name , "/account")
+    == nav_link("Logout"  , "/logout")
+  - else
+    == nav_link("Login"   , "/login")

@@ -21,6 +21,8 @@ html[lang="en-US"]
       .collapse.navbar-collapse
         == slim :nav
     .container-fluid[style="margin-top: 65px;"]
+      - flash.keys.each do |type|
+        div[class="alert alert-#{type}" role="alert"] == flash[type]
       main[role="main"] == yield
       hr
       footer
