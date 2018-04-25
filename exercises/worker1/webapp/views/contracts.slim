@@ -1,0 +1,21 @@
+h2 Open Issues (#{@issues.length})
+
+p Repo count: (#{@repos.length})
+
+table.table#xtable
+  thead
+    tr
+      td UUID
+      td TITLE
+      td TYPE
+  tbody
+    - @issues.each do |issue|
+      tr
+        td = issue["uuid"]
+        td = issue["stm_title"]
+        td = issue["type"]
+
+- content_for :page_js do
+  javascript:
+    $('#xtable').DataTable();
+

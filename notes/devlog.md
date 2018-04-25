@@ -54,14 +54,19 @@
 
 - [x] Get webapp to connect directly to exchange
 
-- [ ] Add gen_exercise script 
+## 2018-04-24 TUE
+
+- [x] Add create/update actions to Iora (github and yaml)
+- [x] Add gen_exercise script 
+- [x] Markdown rendering works
+
+## TBD
+
 - [ ] Add worker1 sync_issues script 
 - [ ] Render documentation pages
 - [ ] Design GitHub authentication
 - [ ] Add dynamically rendered SVG
-
-## TBD
-
+- [ ] Add a simulation bot
 - [ ] create dogfood1 exercise
 - [ ] create funder1 exercise
 - [ ] create trader1 exercise

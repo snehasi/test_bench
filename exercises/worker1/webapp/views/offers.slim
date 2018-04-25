@@ -1,3 +1,19 @@
-h2 Open Offers
-p TBD
-p TBD
+h2 Open Offers (#{@offers.length})
+
+table.table#xtable
+  thead
+    tr
+      td VOLUME
+      td PRICE
+      td ACTION
+  tbody
+    - @offers.each do |issue|
+      tr
+        td = issue["volume"]
+        td = issue["price"]
+        td
+          | [TAKE]
+
+- content_for :page_js do
+  javascript:
+    $('#xtable').DataTable();

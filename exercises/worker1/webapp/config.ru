@@ -1,6 +1,7 @@
 require_relative "../.lib/exchange"
-require_relative "./app"
 
 Exchange.load_rails
+
+require_relative "./app"
 
 run Sinatra::Application

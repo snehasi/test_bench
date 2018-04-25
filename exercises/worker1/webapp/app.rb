@@ -5,6 +5,7 @@ require 'sinatra'
 require 'sinatra/content_for'
 
 set :bind, '0.0.0.0'
+set :root, File.dirname(__FILE__)
 
 helpers AppHelpers
 
@@ -12,20 +13,23 @@ get "/" do
   slim :home
 end
 
-get "/issues" do
-  @issues = Issue.all
-  @repos  = Repo.all
-  slim :issues
+get "/markdown" do
+  markdown :mdtest
 end
 
 get "/offers" do
-  @offers = Offer.all
+  @offers = Offer.open.all
   @repos  = Repo.all
   slim :offers
 end
 
 get "/offers/new" do
   "HELLO NEW OFFERS"
+end
+
+get "/contracts" do
+  @contracts = Contract.install_dirs
+  slim :contracts
 end
 
 get "/account/new" do

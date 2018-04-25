@@ -1,4 +1,4 @@
-require_relative "./bmx"
+# require_relative "./bmx"
 require_relative "../../.lib/exchange"
 
 WEB_DIR  = File.expand_path("../", File.dirname(__FILE__))
