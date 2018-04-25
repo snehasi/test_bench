@@ -39,6 +39,13 @@ module AppHelpers
     current_user
   end
 
+  def protected!
+    return if logged_in?
+    flash[:danger]     = "Please log in"
+    session[:tgt_path] = request.path_info
+    redirect "/login"
+  end
+
   # ----- offer helpers
   def issue_title(offer)
     offer.issue.stm_title

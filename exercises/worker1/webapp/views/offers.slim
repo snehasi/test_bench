@@ -11,12 +11,13 @@ table.table#xtable
   tbody
     - @offers.each do |offer|
       tr
-        td = issue_word(offer)
+        td
+          a[href="/offers/#{offer.uuid}"] = issue_word(offer)
         td = issue_type(offer)
         td = issue_hint(offer)
         td = offer["value"]
         td
-          | [TAKE]
+          a[href="/take/#{offer.uuid}"] TAKE
 
 - content_for :page_js do
   javascript:

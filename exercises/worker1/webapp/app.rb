@@ -17,19 +17,50 @@ get "/" do
   slim :home
 end
 
+get "/offers/:uuid" do
+  protected!
+  @offer = Offer.find_by_uuid(params['uuid'])
+  slim :offer
+end
+
 get "/offers" do
+  protected!
   @offers = Offer.open.with_issue.all
   slim :offers
 end
 
+get "/contracts/:uuid" do
+  protected!
+  @contract = Contract.find_by_uuid(params['uuid'])
+  slim :contract
+end
+
 get "/contracts" do
-  @contracts = Contract.install_dirs
+  protected!
+  @contracts = Contract.all
   slim :contracts
+end
+
+get "/take/:offer_uuid" do
+  protected!
+  @offer = Offer.find_by_uuid(params['offer_uuid'])
+  slim :take
+end
+
+get "/transact/:offer_uuid" do
+  protected!
+  user_uuid = current_user.uuid
+  offer     = Offer.find_by_uuid(params['offer_uuid'])
+  counter   = OfferCmd::CreateCounter.new(offer, user_uuid: user_uuid).project.offer
+  contract  = ContractCmd::Cross.new(counter, :expand).project.contract
+  flash[:success] = "You have formed a new contract"
+  redirect "/contracts/#{contract.uuid}"
 end
 
 # ----- user account -----
 
 get "/account" do
+  protected!
   slim :account
 end
 
@@ -45,7 +76,9 @@ post "/login" do
   if user && user.valid_password?(pass)
     session[:usermail] = mail
     flash[:success] = "Logged in successfully"
-    redirect "/"
+    path = session[:tgt_path]
+    session[:tgt_path] = nil
+    redirect path || "/"
   else
     flash[:danger] = "Invalid username or password (contact malvikar@gmail.com for help)"
     redirect "/login"

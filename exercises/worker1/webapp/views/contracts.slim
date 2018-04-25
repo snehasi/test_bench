@@ -1,6 +1,4 @@
-h2 Open Issues (#{@issues.length})
-
-p Repo count: (#{@repos.length})
+h2 My Contracts (#{@contracts.length})
 
 table.table#xtable
   thead
@@ -9,7 +7,7 @@ table.table#xtable
       td TITLE
       td TYPE
   tbody
-    - @issues.each do |issue|
+    - @contracts.each do |issue|
       tr
         td = issue["uuid"]
         td = issue["stm_title"]
