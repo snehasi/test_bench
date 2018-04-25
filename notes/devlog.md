@@ -60,21 +60,24 @@
 - [x] Add gen_exercise script 
 - [x] Markdown rendering works
 
-## TBD
+## 2018-04-24 TUE
+
+- [x] create login page
+- [x] create 'current_user' method
+- [x] create 'logged_in?' method
+- [ ] create 'authorize' method
 
 - [ ] Add worker1 sync_issues script 
+
+- [ ] add offers page
+- [ ] add offer/create page
+
+## TBD
+
 - [ ] Render documentation pages
-- [ ] Design GitHub authentication
 - [ ] Add dynamically rendered SVG
-- [ ] Add a simulation bot
+
 - [ ] create dogfood1 exercise
 - [ ] create funder1 exercise
 - [ ] create trader1 exercise
-- [ ] add bugmark-src-sync role
-- [ ] add offers page
-- [ ] add offer/create page
-- [ ] create 'authorize' method
-- [ ] create 'current_user' method
-- [ ] create 'logged_in?' method
-- [ ] create login page
-- [ ] create registration page
+

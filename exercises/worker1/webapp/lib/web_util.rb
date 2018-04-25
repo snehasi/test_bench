@@ -1,4 +1,6 @@
-# require_relative "./bmx"
+require 'bundler'
+Bundler.setup(:sinatra, :development)
+
 require_relative "../../.lib/exchange"
 
 WEB_DIR  = File.expand_path("../", File.dirname(__FILE__))

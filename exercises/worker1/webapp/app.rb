@@ -9,12 +9,10 @@ set :root, File.dirname(__FILE__)
 
 helpers AppHelpers
 
+# ----- core app -----
+
 get "/" do
   slim :home
-end
-
-get "/markdown" do
-  markdown :mdtest
 end
 
 get "/offers" do
@@ -23,14 +21,12 @@ get "/offers" do
   slim :offers
 end
 
-get "/offers/new" do
-  "HELLO NEW OFFERS"
-end
-
 get "/contracts" do
   @contracts = Contract.install_dirs
   slim :contracts
 end
+
+# ----- user account -----
 
 get "/account/new" do
   "HELLO NEW ACCOUNT"
@@ -40,16 +36,24 @@ get "/account/balance" do
   slim :account_balance
 end
 
-get "/account/history" do
-  "HELLO ACCOUNT HISTORY"
+# ----- login/logout -----
+
+get "/login" do
+  slim :login
 end
 
-get "/account/password" do
-  "HELLO ACCOUNT PASSWORD"
+post "/login" do
+  session[:usermail] = "andy@r210.com"
+  redirect "/"
 end
+
+get "/logout" do
+  session[:usermail] = nil
+  redirect "/"
+end
+
+# ----- testing -----
 
 get "/ztst" do
   slim :ztst
 end
-
-

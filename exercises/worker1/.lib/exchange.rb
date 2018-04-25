@@ -10,7 +10,10 @@ class Exchange
     end
 
     def load_rails
+      orig = $VERBOSE
+      $VERBOSE = nil
       require src_dir + "/config/environment"
+      $VERBOSE = orig
     end
   end
 end

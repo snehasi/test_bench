@@ -16,19 +16,27 @@ Exchange.load_rails
 puts "LOADING IORA"
 require 'iora'
 
-puts "REMOVE ALL EXISTING EXCHANGE DATA"
+puts "RESET ALL BUGMARK DATA AND CREATE AN ADMIN USER"
 BugmHost.reset
 
-puts "CREATE A FUNDER ACCOUNT"
+puts "CREATE A BUGMARK FUNDER ACCOUNT"
 funder = FB.create(:user, balance: 100000, email: 'funder@bugmark.net').user
 
-puts "CLOSE ALL EXISTING ISSUES"
+puts "CREATE BUGMARK WORKER ACCOUNTS"
+workerfile = PrepSettings.trial_repo_dir + "/.trial_data/Workers.txt"
+File.readlines(workerfile).each do |email|
+  FB.create(:user, email: email.chomp.strip)
+  print '.'
+end
+puts ""
+
+puts "CLOSE ALL EXISTING IORA ISSUES"
 iora = Iora.new(PS.repo_type, PS.repo_name)
 iora.issues.each do |el|
   iora.close(el["sequence"])
 end
 
-puts "CREATE AN ISSUE FOR EACH PR DOC"
+puts "CREATE AN IORA ISSUE FOR EACH PR DOC"
 Dir.chdir PS.trial_repo_dir
 Dir.glob("*.md").each do |fn|
   body = File.read(fn)
@@ -36,7 +44,7 @@ Dir.glob("*.md").each do |fn|
   iora.create("#{base}_p#{ext}", body)
 end
 
-puts "CREATE AN ISSUE FOR EACH COMMENT DOC"
+puts "CREATE AN IORA ISSUE FOR EACH COMMENT DOC"
 Dir.chdir ".trial_data"
 Dir.glob("*.md").each do |fn|
   body = File.read(fn)
@@ -44,10 +52,10 @@ Dir.glob("*.md").each do |fn|
   iora.create("#{base}_c#{ext}", body)
 end
 
-puts "CREATE A BUGMARK REPO ON THE EXCHANGE"
+puts "CREATE A BUGMARK REPO"
 repo_uuid = FB.create(:repo, name: "Worker1").repo.uuid
 
-puts "SYNC ALL ISSUES TO THE EXCHANGE"
+puts "SYNC ALL ISSUES TO BUGMARK"
 iora.issues.each do |el|
   base = {"stm_repo_uuid" => repo_uuid}
   pkg  = el.merge(base)
