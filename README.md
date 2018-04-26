@@ -7,12 +7,12 @@ See our [Google Doc][1] for more info.
 [1]: https://docs.google.com/document/d/1Eju-BQK65XL82GG_aT9HddUwh0jZLpR6xKIPxPnAxuo/edit#
 
 
-Notes
+How to setup a new exercise:
 
 - create a .env file
 
-TRIAL_DIR=~/trial/worker1_1804
-EXCHANGE_DIR=~/src/bugmark/exchange
+    TRIAL_DIR=~/trial/scramword_1804
+    EXCHANGE_DIR=~/src/bugmark/exchange
 
 - setup the cron scripts
 - create a trial repo
@@ -22,4 +22,4 @@ EXCHANGE_DIR=~/src/bugmark/exchange
   - run `trialinit`
   - edit `<TRIAL_DIR>/Settings.yml`
   
-- Scrambled word answers in `<TRIAL_DIR>/ANSWERS.md`
+- Scrambled word answers in `<TRIAL_DIR>/ANSWERS.txt`
