@@ -1,71 +1,77 @@
 #!/usr/bin/env ruby
 
-require_relative "./util_base"
-require_relative "../.lib/exchange"
+require_relative './util_base'
+require_relative '../.lib/exchange'
 
 require 'awesome_print'
 
 puts "EXCHANGE_DIR=#{Exchange.src_dir}"
 
-puts "EXERCISE SETTINGS"
+puts 'EXERCISE SETTINGS'
 ap PrepSettings.settings
 
-puts "LOADING RAILS"
+puts 'LOADING RAILS'
 Exchange.load_rails
 
-puts "LOADING IORA"
+puts 'LOADING IORA'
 require 'iora'
 
-puts "RESET ALL BUGMARK DATA AND CREATE AN ADMIN USER"
+puts 'RESET ALL BUGMARK DATA AND CREATE AN ADMIN USER'
 BugmHost.reset
 
-puts "CREATE A BUGMARK FUNDER ACCOUNT"
+puts 'CREATE A BUGMARK FUNDER ACCOUNT'
 funder = FB.create(:user, balance: 100000, email: 'funder@bugmark.net').user
 
-puts "CREATE BUGMARK WORKER ACCOUNTS"
+puts 'CREATE BUGMARK WORKER ACCOUNTS'
 workerfile = PrepSettings.trial_repo_dir + "/.trial_data/Workers.txt"
 File.readlines(workerfile).each do |email|
   FB.create(:user, email: email.chomp.strip)
   print '.'
 end
-puts ""
+puts ''
 
-puts "CLOSE ALL EXISTING IORA ISSUES"
-`rm -f #{PS.repo_name}` if PS.repo_type.to_s == "yaml"
+puts 'CLOSE ALL EXISTING IORA ISSUES'
+`rm -f #{PS.repo_name}` if PS.repo_type.to_s == 'yaml'
 iora = Iora.new(PS.repo_type, PS.repo_name)
 iora.issues.each do |el|
-  iora.close(el["sequence"])
+  iora.close(el['sequence'])
+  print '.'
 end
+puts ''
 
-puts "CREATE AN IORA ISSUE FOR EACH PR DOC"
+puts 'CREATE AN IORA ISSUE FOR EACH PR DOC'
 Dir.chdir PS.trial_repo_dir
 Dir.glob("*.md").each do |fn|
   body = File.read(fn)
   base, ext = fn.gsub(".md", "").split("_")
   iora.create("#{base}_p#{ext}", body)
+  print '.'
 end
+puts ''
 
-puts "CREATE AN IORA ISSUE FOR EACH COMMENT DOC"
-Dir.chdir ".trial_data"
-Dir.glob("*.md").each do |fn|
+puts 'CREATE AN IORA ISSUE FOR EACH COMMENT DOC'
+Dir.chdir '.trial_data'
+Dir.glob('*.md').each do |fn|
   body = File.read(fn)
   base, ext = fn.gsub(".md", "").split("_")
   iora.create("#{base}_c#{ext}", body)
+  print '.'
 end
+puts ''
 
-puts "CREATE A BUGMARK REPO"
+puts 'CREATE A BUGMARK REPO'
 repo_uuid = FB.create(:repo, name: "Worker1").repo.uuid
 
-puts "SYNC ALL ISSUES TO BUGMARK"
+puts 'SYNC ALL ISSUES TO BUGMARK'
 iora.issues.each do |el|
   base = {"stm_repo_uuid" => repo_uuid}
   pkg  = el.merge(base)
-  print "."
+  print '.'
   IssueCmd::Sync.new(pkg).project
 end
-puts ""
+puts ''
 
-puts "CREATE A BUY-UNFIXED OFFER FOR EACH OPEN ISSUE"
+puts 'CREATE A BUY-UNFIXED OFFER FOR EACH OPEN ISSUE'
 Issue.all.open.each do |issue|
   _name, cat = issue.stm_title.split("_")
   opts = {
@@ -75,8 +81,8 @@ Issue.all.open.each do |issue|
     stm_issue_uuid: issue.uuid
   }
   FB.create(:offer_bu, opts).project
-  print "."
+  print '.'
 end
-puts ""
+puts ''
 
-puts "DONE"
+puts 'DONE'
