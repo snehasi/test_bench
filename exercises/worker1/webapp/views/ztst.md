@@ -13,12 +13,6 @@ Here is a header:
 - bullet1
 - bullet2
 
-And a [link](/ztst) 
-to a font-rendering
-test page.
+And a [link](/) 
+to the home page.
 
-|Header1   | Header2   |
-|-------   | -------   |
-|Tables in | Markdown! |
-
-Tables - not so great...

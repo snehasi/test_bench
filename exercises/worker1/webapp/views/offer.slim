@@ -1,4 +1,14 @@
 h2 Offer
-p Offer UUID is #{@offer.uuid}
-p CONTENT TBD
-
+.row
+  .col-md-4
+    p
+      b Issue Title:<br/>
+      == @offer.issue.stm_title
+    p
+      b Issue Body:<br/>
+      == @offer.issue.stm_body.gsub("\n", "<br/>")
+  .col-md-4
+    p
+      a.btn.btn-primary[role="button" href="/take/#{@offer.uuid}"] TAKE
+  .col-md-4
+    p

@@ -7,6 +7,21 @@ module AppHelpers
     Rack::Utils.escape_html(text)
   end
 
+  def help_nav(label, path)
+    """
+    <hr/>
+    <a href='#{path}'>#{label}</a>
+    """
+  end
+
+  def nav_btn(label, path)
+    """
+    <li class='nav-item'>
+      <a class='nav-link btn-like' role='button' href='#{path}'>#{label}</a>
+    </li>
+    """
+  end
+
   def nav_link(label, path)
     """
     <li class='nav-item'>

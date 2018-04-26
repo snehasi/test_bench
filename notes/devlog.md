@@ -67,17 +67,27 @@
 - [x] create 'logged_in?' method
 - [x] create 'authorize' method
 
-- [ ] fill out account page
-- [ ] create take button
-- [ ] add offers page
-- [ ] add offer/create page
+## 2018-04-25 WED
 
-- [ ] Add worker1 sync_issues script 
+- [x] fix gem versioning bug
+- [x] create take button
+- [x] add offers page
+- [x] create help page template
+- [x] update exercise title
+
+- [ ] update home-page text
+- [ ] fill out account page
+
+- [ ] sync_issues script 
+- [ ] cron - issue sync
+
+- [ ] Add dynamically rendered SVG
+
+- [ ] Add SSL
+- [ ] Create a SystemD deploy script
+- [ ] Create an Nginx config
 
 ## TBD
-
-- [ ] Render documentation pages
-- [ ] Add dynamically rendered SVG
 
 - [ ] create dogfood1 exercise
 - [ ] create funder1 exercise

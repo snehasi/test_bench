@@ -17,36 +17,42 @@ get "/" do
   slim :home
 end
 
+# show one offer
 get "/offers/:uuid" do
   protected!
   @offer = Offer.find_by_uuid(params['uuid'])
   slim :offer
 end
 
+# list all offers
 get "/offers" do
   protected!
   @offers = Offer.open.with_issue.all
   slim :offers
 end
 
+# show one contract
 get "/contracts/:uuid" do
   protected!
   @contract = Contract.find_by_uuid(params['uuid'])
   slim :contract
 end
 
+# list all contracts
 get "/contracts" do
   protected!
   @contracts = Contract.all
   slim :contracts
 end
 
+# confirmation page to take offer
 get "/take/:offer_uuid" do
   protected!
   @offer = Offer.find_by_uuid(params['offer_uuid'])
   slim :take
 end
 
+# form a contract
 get "/transact/:offer_uuid" do
   protected!
   user_uuid = current_user.uuid
@@ -89,6 +95,18 @@ get "/logout" do
   session[:usermail] = nil
   flash[:warning] = "Logged out"
   redirect "/"
+end
+
+# ----- help -----
+
+get "/help/:page" do
+  @page = params['page']
+  slim :help
+end
+
+get "/help" do
+  @page = "base"
+  slim :help
 end
 
 # ----- testing -----
