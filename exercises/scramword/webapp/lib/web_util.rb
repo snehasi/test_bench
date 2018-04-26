@@ -1,11 +1,12 @@
 require 'bundler'
 Bundler.setup(:test_bench)
 
-require_relative "../../.lib/exchange"
+require_relative "../../lib/base"
+require_relative "../../lib/exchange"
+require_relative "../../lib/trial_data"
+require_relative "../../lib/trial_settings"
 
 WEB_DIR  = File.expand_path("../", File.dirname(__FILE__))
-ENV_PATH = "../.env"
-ENV_FILE = File.expand_path(ENV_PATH, WEB_DIR)
 
 puts "WEB DIR IS #{WEB_DIR}"
 puts "ENV FILE IS #{ENV_FILE}"
@@ -17,3 +18,4 @@ puts "EXCHANGE_DIR is #{Exchange.src_dir}"
 require 'slim'
 require 'json'
 require 'dotenv'
+require 'iora'

@@ -1,4 +1,4 @@
-require_relative "../.lib/exchange"
+require_relative "../lib/exchange"
 
 Exchange.load_rails
 

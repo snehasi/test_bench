@@ -1,14 +1,16 @@
 #!/usr/bin/env ruby
 
-require_relative './util_base'
-require_relative '../.lib/exchange'
+require_relative '../lib/base'
+require_relative '../lib/exchange'
+require_relative '../lib/trial_data'
+require_relative '../lib/trial_settings'
 
 require 'awesome_print'
 
 puts "EXCHANGE_DIR=#{Exchange.src_dir}"
 
 puts 'EXERCISE SETTINGS'
-ap PrepSettings.settings
+ap TrialSettings.settings
 
 puts 'LOADING RAILS'
 Exchange.load_rails
@@ -23,7 +25,7 @@ puts 'CREATE A BUGMARK FUNDER ACCOUNT'
 funder = FB.create(:user, balance: 100000, email: 'funder@bugmark.net').user
 
 puts 'CREATE BUGMARK WORKER ACCOUNTS'
-workerfile = PrepSettings.trial_repo_dir + "/.trial_data/Workers.txt"
+workerfile = TrialSettings.trial_repo_dir + "/.trial_data/Workers.txt"
 File.readlines(workerfile).each do |email|
   FB.create(:user, email: email.chomp.strip)
   print '.'
@@ -31,8 +33,8 @@ end
 puts ''
 
 puts 'CLOSE ALL EXISTING IORA ISSUES'
-`rm -f #{PS.repo_name}` if PS.repo_type.to_s == 'yaml'
-iora = Iora.new(PS.repo_type, PS.repo_name)
+`rm -f #{TS.repo_name}` if TS.repo_type.to_s == 'yaml'
+iora = Iora.new(TS.repo_type, TS.repo_name)
 iora.issues.each do |el|
   iora.close(el['sequence'])
   print '.'
@@ -40,27 +42,29 @@ end
 puts ''
 
 puts 'CREATE AN IORA ISSUE FOR EACH PR DOC'
-Dir.chdir PS.trial_repo_dir
-Dir.glob("*.md").each do |fn|
+Dir.chdir TS.trial_repo_dir
+Dir.chdir 'doc'
+Dir.glob('*.md').each do |fn|
   body = File.read(fn)
-  base, ext = fn.gsub(".md", "").split("_")
+  base, ext = fn.gsub('.md', "").split("_")
   iora.create("#{base}_p#{ext}", body)
   print '.'
 end
 puts ''
 
 puts 'CREATE AN IORA ISSUE FOR EACH COMMENT DOC'
+Dir.chdir TS.trial_repo_dir
 Dir.chdir '.trial_data'
 Dir.glob('*.md').each do |fn|
   body = File.read(fn)
-  base, ext = fn.gsub(".md", "").split("_")
+  base, ext = fn.gsub('.md', '').split("_")
   iora.create("#{base}_c#{ext}", body)
   print '.'
 end
 puts ''
 
 puts 'CREATE A BUGMARK REPO'
-repo_uuid = FB.create(:repo, name: "Worker1").repo.uuid
+repo_uuid = FB.create(:repo, name: 'Scramword').repo.uuid
 
 puts 'SYNC ALL ISSUES TO BUGMARK'
 iora.issues.each do |el|
@@ -75,8 +79,8 @@ puts 'CREATE A BUY-UNFIXED OFFER FOR EACH OPEN ISSUE'
 Issue.all.open.each do |issue|
   _name, cat = issue.stm_title.split("_")
   opts = {
-    price:          PS.settings.fetch("#{cat}_price".to_sym , 1.00)   ,
-    volume:         PS.settings.fetch("#{cat}_volume".to_sym, 10)     ,
+    price:          TS.settings.fetch("#{cat}_price".to_sym , 1.00)   ,
+    volume:         TS.settings.fetch("#{cat}_volume".to_sym, 10)     ,
     user_uuid:      funder.uuid                                       ,
     stm_issue_uuid: issue.uuid
   }

@@ -1,40 +1,6 @@
-require 'csv'
-require 'yaml'
-require 'dotenv'
+require_relative './base'
 
-SCRIPT_DIR = File.dirname(__FILE__)
-ENV_PATH = "../.env"
-CSV_PATH = "../../../data/trivia1.csv"
-ENV_FILE = File.expand_path(ENV_PATH, SCRIPT_DIR)
-CSV_FILE = File.expand_path(CSV_PATH, SCRIPT_DIR)
-
-Dotenv.load(ENV_FILE)
-
-EXCHANGE_DIR = File.expand_path(ENV["EXCHANGE_DIR"])
-TRIAL_DIR    = File.expand_path(ENV["TRIAL_DIR"])
-SETTINGS     = File.expand_path("./.trial_data/Settings.yml", TRIAL_DIR)
-
-class PrepSettings
-  class << self
-    def method_missing(m)
-      settings[m.to_sym]
-    end
-
-    def settings
-      base_settings = {trial_repo_dir: TRIAL_DIR}
-      @settings ||= yaml_settings.merge(base_settings)
-    end
-
-    private
-
-    def yaml_settings
-       YAML.load_file(SETTINGS).transform_keys {|k| k.to_sym}
-    end
-  end
-end
-PS = PrepSettings
-
-class PrepData
+class TrialData
   class << self
 
     Scramble = Struct.new(:qstring, :astring) do
@@ -86,5 +52,5 @@ class PrepData
     end
   end
 end
-PD = PrepData
 
+TD = TrialData

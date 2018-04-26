@@ -7,6 +7,22 @@ module AppHelpers
     Rack::Utils.escape_html(text)
   end
 
+  def iora_nav_menu
+    iora = Iora.new(TS.repo_type, TS.repo_name)
+    iora.issues.map do |el|
+      label = el["stm_title"]
+      exid  = el["exid"]
+      iora_nav(label, "/iora/#{exid}")
+    end.join
+  end
+
+  def iora_nav(label, path)
+    """
+    <hr style='margin:0; padding:0;'/>
+    <a href='#{path}'>#{label}</a>
+    """
+  end
+
   def help_nav(label, path)
     """
     <hr/>

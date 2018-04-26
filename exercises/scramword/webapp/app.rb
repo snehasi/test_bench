@@ -109,6 +109,21 @@ get "/help" do
   slim :help
 end
 
+# ----- iora issue tracker -----
+
+get "/iora/:exid" do
+  @navbar = :layout_nav_iora
+  @exid   = params['exid']
+  @page   = "issue"
+  slim :iora
+end
+
+get "/iora" do
+  @navbar = :layout_nav_iora
+  @page   = "home"
+  slim :iora
+end
+
 # ----- testing -----
 
 get "/ztst" do

@@ -1,8 +1,10 @@
 #!/usr/bin/env ruby
 
-require_relative "./util_base"
+require_relative '../lib/base'
+require_relative '../lib/trial_data'
+require_relative '../lib/trial_settings'
 
-SCRAMBLES   = PrepData.scrambles(1000)
+SCRAMBLES   = TrialData.scrambles(1000)
 ANSWER_FILE = "./.trial_data/ANSWERS.txt"
 
 def body_base(scramble, level)
@@ -23,6 +25,7 @@ end
 def write_pr_doc(scramble, level)
   write_answer_line(scramble)
   fn = "./.trial_data/#{scramble.quiz_fn(level)}"
+  fn = "./doc/#{scramble.quiz_fn(level)}"
   File.open(fn, 'w') {|f| f.puts(comment_body(scramble, level))}
 end
 
@@ -32,7 +35,7 @@ end
 
 def write_comment_doc(scramble, level)
   write_answer_line(scramble)
-  fn = scramble.quiz_fn(level)
+  fn = "./.trial_data/#{scramble.quiz_fn(level)}"
   File.open(fn, 'w') {|f| f.puts(comment_body(scramble, level))}
 end
 
@@ -47,9 +50,11 @@ def write_docs(type, numdocs, maxlevel)
   end
 end
 
-Dir.chdir PS.trial_repo_dir
-system "rm -f *.md"
+Dir.chdir TS.trial_repo_dir
+system "mkdir -p doc"
+system "mkdir -p .trial_data"
+system "rm -f doc/*.md"
 system "rm -f .trial_data/*.md"
 
-write_docs(:pr     , PS.num_pr_issues     , PS.max_hint_level)
-write_docs(:comment, PS.num_comment_issues, PS.max_hint_level)
+write_docs(:pr     , TS.num_pr_issues     , TS.max_hint_level)
+write_docs(:comment, TS.num_comment_issues, TS.max_hint_level)

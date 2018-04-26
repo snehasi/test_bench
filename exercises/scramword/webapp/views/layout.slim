@@ -13,13 +13,7 @@ html[lang="en-US"]
     link[rel="stylesheet" crossorigin="anonymous" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css"   ]
     link[rel="stylesheet" href="/css/app.css"]
   body
-    nav.navbar.navbar-expand-md.navbar-dark.fixed-top.bg-dark
-      button.navbar-toggler.navbar-toggler-right[type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation"]
-        span.navbar-toggler-icon
-      a.navbar-brand[href="/"]
-        | Scramble Word
-      .collapse.navbar-collapse
-        == slim :nav
+    == slim @navbar || :layout_nav_base_bar
     .container-fluid[style="margin-top: 65px;"]
       - flash.keys.each do |type|
         div[class="alert alert-#{type}" role="alert"] == flash[type]
