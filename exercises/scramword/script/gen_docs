@@ -24,7 +24,6 @@ end
 
 def write_pr_doc(scramble, level)
   write_answer_line(scramble)
-  fn = "./.trial_data/#{scramble.quiz_fn(level)}"
   fn = "./doc/#{scramble.quiz_fn(level)}"
   File.open(fn, 'w') {|f| f.puts(comment_body(scramble, level))}
 end
@@ -35,7 +34,7 @@ end
 
 def write_comment_doc(scramble, level)
   write_answer_line(scramble)
-  fn = "./.trial_data/#{scramble.quiz_fn(level)}"
+  fn = "./.trial_data/doc/#{scramble.quiz_fn(level)}"
   File.open(fn, 'w') {|f| f.puts(comment_body(scramble, level))}
 end
 
@@ -53,8 +52,9 @@ end
 Dir.chdir TS.trial_repo_dir
 system "mkdir -p doc"
 system "mkdir -p .trial_data"
+system "mkdir -p .trial_data/doc"
 system "rm -f doc/*.md"
-system "rm -f .trial_data/*.md"
+system "rm -f .trial_data/doc/*.md"
 
 write_docs(:pr     , TS.num_pr_issues     , TS.max_hint_level)
 write_docs(:comment, TS.num_comment_issues, TS.max_hint_level)
