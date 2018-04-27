@@ -133,7 +133,11 @@ get "/iora" do
   slim :iora
 end
 
-# ----- testing -----
+# ----- misc / testing -----
+
+get "/tbd" do
+  slim :ztbd
+end
 
 get "/ztst" do
   slim :ztst
