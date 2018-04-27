@@ -1,7 +1,8 @@
 .row
   .col-md-2[style="border-right: 1px solid lightgrey;"]
     div[style='height: 40px;']
-    == help_nav("Help", "/help")
-    == help_nav("Misc" , "/help/misc")
+    == help_nav("Help"  , "/help")
+    == help_nav("About" , "/help/about")
+    == help_nav("Misc"  , "/help/misc")
   .col-md-10
     == slim(:"help/#{@page}")
