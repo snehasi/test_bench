@@ -75,6 +75,18 @@
 - [x] create help page template
 - [x] update exercise title
 
+## 2018-04-25 WED
+
+- [x] add IORA tracker
+- [x] add 'link_to_unless_current'
+- [x] add All Contracts | My Contracts
+
+- [ ] add Offer maturation dates
+- [ ] show balance and history on account page
+
+- [ ] add OPEN/CLOSE actions to IORA tracker
+- [ ] add comments to the IORA tracker
+
 - [ ] update home-page text
 - [ ] fill out account page
 
@@ -83,11 +95,11 @@
 
 - [ ] Add dynamically rendered SVG
 
+## TBD
+
 - [ ] Add SSL
 - [ ] Create a SystemD deploy script
 - [ ] Create an Nginx config
-
-## TBD
 
 - [ ] create dogfood1 exercise
 - [ ] create funder1 exercise

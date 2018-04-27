@@ -25,8 +25,7 @@ puts 'CREATE A BUGMARK FUNDER ACCOUNT'
 funder = FB.create(:user, balance: 100000, email: 'funder@bugmark.net').user
 
 puts 'CREATE BUGMARK WORKER ACCOUNTS'
-workerfile = TrialSettings.trial_repo_dir + "/.trial_data/Workers.txt"
-File.readlines(workerfile).each do |email|
+TS.workers.each do |email|
   FB.create(:user, email: email.chomp.strip)
   print '.'
 end

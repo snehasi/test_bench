@@ -1,6 +1,47 @@
-h2 About this Exercise
-p Content TBD.  You can add tables, links, graphics - anything you like!
-p This text lives in the file "home.slim".  You can either edit this text
-  directly, or give me the copy and I'll cut and paste.
-p Click <a href='/ztst'>here</a> for some layout examples.
+h2 About the Scramble Word Exercise
+.row
+  .col-md-7
+    p This is the simplest Bugmark Exercise - finding solutions to
+      scrambled words.
+    table.table
+      tr
+        td <b>Objective</b>
+        td Basic experience navigating GitHub and trading issues on Bugmark
+      tr
+        td <b>Start Date</b>
+        td = start_date
+      tr
+        td <b>Finish Date</b>
+        td = finish_date
+      tr
+        td <b>Leader</b>
+        td #{TS.leader_name} - #{TS.leader_email}
+      tr
+        td <b>Participants</b>
+        td
+          == participant_list(obfuscated: true)
+          p Contact #{TS.leader_name} if you would like to join.
+  .col-md-5
+    p Get started:
+    ol
+      li == base_link("Login", "/tbd")
+      li == base_link("Accept an Offer", "/tbd")
+      li == base_link("Complete a Word-Scramble Task", "/tbd")
+      li == base_link("Earn Credits", "/tbd")
+    p Get help:
+    ol
+      li
+        ' View the
+        == base_link("Help Pages", "/help")
+      li
+        ' Contact
+        == base_link(TS.leader_name, "mailto:" + TS.leader_email)
+      li
+        ' Use
+        == base_link("Bugmark Slack", "/tbd")
+    p Learn more:
+    ul
+      li == base_link("About Bugmark", "/tbd")
+      li == base_link("Markets and Open Source", "/tbd")
+      li == base_link("Bugmark Research", "/tbd")
 

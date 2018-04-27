@@ -7,6 +7,7 @@ table.table#xtable
       td TYPE
       td HINTS
       td VALUE
+      td MATURES
       td ACTION
   tbody
     - @offers.each do |offer|
@@ -16,8 +17,9 @@ table.table#xtable
         td = issue_type(offer)
         td = issue_hint(offer)
         td = offer["value"]
+        td = offer.maturation_date
         td
-          a[href="/take/#{offer.uuid}"] TAKE
+          a[href="/take/#{offer.uuid}"] ACCEPT
 
 - content_for :page_js do
   javascript:

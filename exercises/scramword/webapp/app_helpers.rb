@@ -1,3 +1,5 @@
+require 'time'
+
 module AppHelpers
   def hello
     raw("HELLO")
@@ -5,6 +7,10 @@ module AppHelpers
 
   def h(text)
     Rack::Utils.escape_html(text)
+  end
+
+  def current_page(path)
+    request.path_info == path
   end
 
   def iora_nav_menu
@@ -17,30 +23,41 @@ module AppHelpers
   end
 
   def iora_nav(label, path)
+    href = "<a href='#{path}'>#{label}</a>"
+    link = current_page(path) ? label :  href
     """
     <hr style='margin:0; padding:0;'/>
-    <a href='#{path}'>#{label}</a>
+    #{link}
     """
   end
 
   def help_nav(label, path)
+    href = "<a href='#{path}'>#{label}</a>"
+    link = current_page(path) ? label :  href
     """
     <hr/>
-    <a href='#{path}'>#{label}</a>
+    #{link}
     """
   end
 
+  def base_link(label, path)
+    href = "<a href='#{path}'>#{label}</a>"
+    current_page(path) ? label :  href
+  end
+
   def nav_btn(label, path)
+    active = current_page(path) ? 'active' : ''
     """
-    <li class='nav-item'>
+    <li class='nav-item #{active}'>
       <a class='nav-link btn-like' role='button' href='#{path}'>#{label}</a>
     </li>
     """
   end
 
   def nav_link(label, path)
+    active = current_page(path) ? 'active' : ''
     """
-    <li class='nav-item'>
+    <li class='nav-item #{active}'>
       <a class='nav-link' href='#{path}'>#{label}</a>
     </li>
     """
@@ -97,5 +114,30 @@ module AppHelpers
 
   def issue_hint(offer)
     issue_title(offer)[-1]
+  end
+
+  def start_date
+    xformat TS.start_date
+  end
+
+  def finish_date
+    xformat TS.finish_date
+  end
+
+  def xformat(time)
+    time.strftime("%B %d")
+  end
+
+  def participant_list(args = {})
+    puts args.inspect
+    TS.participants.sort.map do |email|
+      args[:obfuscated] ? obfuscate(email) : email
+    end.join(", ")
+  end
+
+  def obfuscate(email)
+    name, domain = email.split('@')
+    comp, ext = domain.split(".")
+    "<code>#{name}@#{comp.gsub(/./, '*')}.#{ext}</code>"
   end
 end

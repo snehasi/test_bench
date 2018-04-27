@@ -38,9 +38,18 @@ get "/contracts/:uuid" do
   slim :contract
 end
 
-# list all contracts
+# list my contracts
 get "/contracts" do
   protected!
+  @title     = "My Contracts"
+  @contracts = current_user.contracts
+  slim :contracts
+end
+
+# list all contracts
+get "/contracts_all" do
+  protected!
+  @title     = "All Contracts"
   @contracts = Contract.all
   slim :contracts
 end

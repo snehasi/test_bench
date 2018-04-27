@@ -1,4 +1,10 @@
-h2 My Contracts (#{@contracts.length})
+.row
+  .col-md-6
+    h2 #{@title} (#{@contracts.length})
+  .col-md-6.text-right
+    == base_link("My Contracts", "/contracts")
+    '  |
+    == base_link("All Contracts", "/contracts_all")
 
 table.table#xtable
   thead
