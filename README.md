@@ -11,8 +11,10 @@ How to setup a new exercise:
 
 - create a .env file
 
-    TRIAL_DIR=~/trial/scramword_1804
-    EXCHANGE_DIR=~/src/bugmark/exchange
+```
+TRIAL_DIR=~/trial/scramword_1804
+EXCHANGE_DIR=~/src/bugmark/exchange
+```
 
 - setup the cron scripts
 - create a trial repo
