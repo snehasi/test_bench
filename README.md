@@ -13,7 +13,6 @@ How to setup a new exercise:
 
 ```
 TRIAL_DIR=~/trial/scramword_1804
-EXCHANGE_DIR=~/src/bugmark/exchange
 ```
 
 - setup the cron scripts
