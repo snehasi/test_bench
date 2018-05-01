@@ -1,0 +1,30 @@
+#!/usr/bin/env ruby
+
+require_relative '../../Base/lib/base'
+require_relative '../../Base/lib/exchange'
+require_relative '../../Base/lib/trial_data'
+require_relative '../../Base/lib/trial_settings'
+
+require 'awesome_print'
+
+puts "EXCHANGE_DIR=#{Exchange.src_dir}"
+
+puts 'EXERCISE SETTINGS'
+ap TrialSettings.settings
+
+puts 'LOADING RAILS'
+Exchange.load_rails
+
+puts 'LOADING IORA'
+require 'iora'
+
+puts 'SYNC ALL ISSUES TO BUGMARK'
+iora = Iora.new(TS.tracker_type, TS.tracker_name)
+repo_uuid = Repo.first.uuid
+iora.issues.each do |el|
+  base = {"stm_repo_uuid" => repo_uuid}
+  pkg  = el.merge(base)
+  print '.'
+  IssueCmd::Sync.new(pkg).project
+end
+puts ''

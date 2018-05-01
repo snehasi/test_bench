@@ -9,19 +9,19 @@
 table.table#xtable
   thead
     tr
-      td ISSUE
-      td CONTRACT VALUE
-      td CONTRACT STATUS
-      td CONTRACT MATURATION
-      td CONTRACT EARNINGS
+      td ID
+      td VALUE
+      td MATURES
+      td STATUS
+      td EARNINGS
   tbody
     - @contracts.each do |contract|
       tr
-        td = contract.issue.stm_title
+        td == contract_id_link(contract)
         td = contract.total_value
-        td = contract.status
-        td = contract.maturation.strftime("%B-%d")
-        td ding
+        td == contract_mature_date(contract)
+        td == contract_status(contract)
+        td == contract_earnings(current_user, contract)
 
 - content_for :page_js do
   javascript:

@@ -1,8 +1,8 @@
 #!/usr/bin/env ruby
 
-require_relative '../lib/base'
-require_relative '../lib/trial_data'
-require_relative '../lib/trial_settings'
+require_relative '../../Base/lib/base'
+require_relative '../../Base/lib/trial_data'
+require_relative '../../Base/lib/trial_settings'
 
 SCRAMBLES   = TrialData.scrambles(1000)
 ANSWER_FILE = "./.trial_data/ANSWERS.txt"

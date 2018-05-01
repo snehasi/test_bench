@@ -1,0 +1,61 @@
+#!/usr/bin/env ruby
+
+require_relative '../../Base/lib/base'
+require_relative '../../Base/lib/exchange'
+require_relative '../../Base/lib/trial_data'
+require_relative '../../Base/lib/trial_settings'
+
+require 'awesome_print'
+
+puts "EXCHANGE_DIR=#{Exchange.src_dir}"
+
+puts 'EXERCISE SETTINGS'
+ap TrialSettings.settings
+
+puts 'LOADING RAILS'
+Exchange.load_rails
+
+puts 'LOADING IORA'
+require 'iora'
+
+puts 'RESET ALL BUGMARK DATA AND CREATE AN ADMIN USER'
+BugmHost.reset
+
+puts 'CREATE A BUGMARK FUNDER ACCOUNT'
+funder = FB.create(:user, balance: 100000, email: 'funder@bugmark.net').user
+
+puts 'CREATE BUGMARK WORKER ACCOUNTS'
+TS.participants.each do |email|
+  FB.create(:user, email: email.chomp.strip)
+  print '.'
+end
+puts ''
+
+puts 'CREATE A BUGMARK TRACKER'
+repo_uuid = FB.create(:repo, name: 'Docs').repo.uuid
+
+puts 'SYNC ALL ISSUES TO BUGMARK'
+iora = Iora.new(TS.tracker_type, TS.tracker_name)
+iora.issues.each do |el|
+  base = {"stm_repo_uuid" => repo_uuid}
+  pkg  = el.merge(base)
+  print '.'
+  IssueCmd::Sync.new(pkg).project
+end
+puts ''
+
+puts 'CREATE A BUY-UNFIXED OFFER FOR EACH OPEN ISSUE'
+Issue.all.open.each do |issue|
+  _name, cat = issue.stm_title.split("_")
+  opts = {
+    price:          TS.settings.fetch("base_price".to_sym , 1.00)   ,
+    volume:         TS.settings.fetch("base_volume".to_sym, 10)     ,
+    user_uuid:      funder.uuid                                       ,
+    stm_issue_uuid: issue.uuid
+  }
+  FB.create(:offer_bu, opts).project
+  print '.'
+end
+puts ''
+
+puts 'DONE'

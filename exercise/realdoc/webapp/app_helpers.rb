@@ -9,6 +9,34 @@ module AppHelpers
     Rack::Utils.escape_html(text)
   end
 
+  # -----
+
+  def contract_id_link(contract)
+    "<a href='/contracts/#{contract.uuid}'>#{contract.xid}</a>"
+  end
+
+  def contract_mature_date(contract)
+    color = BugmTime.now > contract.maturation ? "red" : "green"
+    date = contract.maturation.strftime("%m-%d %H:%M %Z")
+    "<span style='color: #{color};'>#{date}</span>"
+  end
+
+  def contract_status(contract)
+    case contract.status
+    when "open"     then "<i class='fa fa-unlock'></i> open"
+    when "matured"  then "<i class='fa fa-lock'></i> matured"
+    when "resolved" then "<i class='fa fa-check'></i> resolved"
+    else "UNKNOWN_CONTRACT_STATE"
+    end
+  end
+
+  def contract_earnings(user, contract)
+    return "NA" unless contract.resolved?
+    contract.value_for(user)
+  end
+
+  # -----
+
   def repo_link
     url = TS.trial_repo_url
     "<a href='#{url}' target='_blank'>Document Repo</a>"
