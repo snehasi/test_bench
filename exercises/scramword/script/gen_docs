@@ -19,17 +19,26 @@ def write_answer_line(scramble)
 end
 
 def pr_body(scramble, level)
-  body_base(scramble, level) + "\n\nAnswer with a pull request"
+  instructions = <<~EOF.gsub("\n", " ")
+  TO RESOLVE THIS ISSUE: unscramble the word, and add it to the document.
+  Then submit a pull-request.  The document URL is:
+  EOF
+  url = "#{TS.trial_repo_url}/doc/#{scramble.quiz_fn(level)}"
+  body_base(scramble, level) + "\n\n#{instructions}\n#{url}"
 end
 
 def write_pr_doc(scramble, level)
   write_answer_line(scramble)
   fn = "./doc/#{scramble.quiz_fn(level)}"
-  File.open(fn, 'w') {|f| f.puts(comment_body(scramble, level))}
+  File.open(fn, 'w') {|f| f.puts(pr_body(scramble, level))}
 end
 
 def comment_body(scramble, level)
-  body_base(scramble, level) + "\n\nAnswer in the issue comments"
+  instructions = <<~EOF.gsub("\n", " ")
+  TO RESOLVE THIS ISSUE: post the unscrambled word
+  in the issue comments.
+  EOF
+  body_base(scramble, level) + "\n\n#{instructions}"
 end
 
 def write_comment_doc(scramble, level)

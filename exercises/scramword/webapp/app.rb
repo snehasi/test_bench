@@ -54,13 +54,6 @@ get "/contracts_all" do
   slim :contracts
 end
 
-# confirmation page to take offer
-get "/take/:offer_uuid" do
-  protected!
-  @offer = Offer.find_by_uuid(params['offer_uuid'])
-  slim :take
-end
-
 # form a contract
 get "/transact/:offer_uuid" do
   protected!
@@ -118,19 +111,20 @@ get "/help" do
   slim :help
 end
 
-# ----- iora issue tracker -----
+# ----- ytrack issue tracker -----
 
-get "/iora/:exid" do
-  @navbar = :layout_nav_iora
+get "/ytrack/:exid" do
+  @navbar = :layout_nav_ytrack
   @exid   = params['exid']
+  @issue  = Iora.new(TS.tracker_type, TS.tracker_name).issue(@exid)
   @page   = "issue"
-  slim :iora
+  slim :ytrack
 end
 
-get "/iora" do
-  @navbar = :layout_nav_iora
+get "/ytrack" do
+  @navbar = :layout_nav_ytrack
   @page   = "home"
-  slim :iora
+  slim :ytrack
 end
 
 # ----- misc / testing -----

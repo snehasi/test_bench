@@ -10,5 +10,6 @@ CSV_FILE = File.expand_path(CSV_PATH, LIB_DIR)
 
 Dotenv.load(ENV_FILE)
 
-TRIAL_DIR    = File.expand_path(ENV["TRIAL_DIR"])
-SETTINGS     = File.expand_path("./.trial_data/Settings.yml", TRIAL_DIR)
+TRIAL_REPO_DIR = File.expand_path(ENV["TRIAL_REPO_DIR"])
+TRIAL_REPO_URL = ENV["TRIAL_REPO_URL"]
+SETTINGS       = File.expand_path("./.trial_data/Settings.yml", TRIAL_REPO_DIR)

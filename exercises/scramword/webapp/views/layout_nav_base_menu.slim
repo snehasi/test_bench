@@ -1,12 +1,12 @@
 ul.navbar-nav.mr-auto
   - if logged_in?
     == nav_link("Home"      , "/")
-    == nav_link("Offers"    , "/offers")
-    == nav_link("Contracts" , "/contracts")
+    == nav_link("Offers-#{Offer.open.count}"                 , "/offers")
+    == nav_link("Contracts-#{current_user.contracts.length}" , "/contracts")
 
 ul.navbar-nav.flex-row
   - if logged_in?
-    == nav_btn(user_name , "/account")
+    == nav_btn("#{user_name}-#{current_user.balance}", "/account")
     == nav_link("Logout"  , "/logout")
     == nav_link("Help"    , "/help")
   - else

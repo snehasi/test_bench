@@ -32,8 +32,8 @@ end
 puts ''
 
 puts 'CLOSE ALL EXISTING IORA ISSUES'
-`rm -f #{TS.repo_name}` if TS.repo_type.to_s == 'yaml'
-iora = Iora.new(TS.repo_type, TS.repo_name)
+`rm -f #{TS.tracker_name}` if TS.tracker_type.to_s == 'yaml'
+iora = Iora.new(TS.tracker_type, TS.tracker_name)
 iora.issues.each do |el|
   iora.close(el['sequence'])
   print '.'

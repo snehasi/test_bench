@@ -9,20 +9,44 @@ module AppHelpers
     Rack::Utils.escape_html(text)
   end
 
+  def repo_link
+    url = TS.trial_repo_url
+    "<a href='#{url}' target='_blank'>Document Repo</a>"
+  end
+
+  def tracker_link(issue = nil, label = nil)
+    url = case TS.tracker_type.to_sym
+      when :yaml   then yaml_tracker_url(issue)
+      when :github then github_tracker_url(issue)
+    end
+    lbl = label || url
+    "<a href='#{url}' target='_blank'>#{lbl}</a>"
+  end
+
+  def yaml_tracker_url(issue)
+    base = "http://#{TS.webapp_url}/ytrack"
+    issue ? "#{base}/#{issue.exid}" : base
+  end
+
+  def github_tracker_url(issue)
+    base = "https://#{TS.trial_repo_url}/issues"
+    issue ? "#{base}/#{issue.exid}" : base
+  end
+
   def current_page(path)
     request.path_info == path
   end
 
-  def iora_nav_menu
-    iora = Iora.new(TS.repo_type, TS.repo_name)
+  def ytrack_nav_menu
+    iora = Iora.new(TS.tracker_type, TS.tracker_name)
     iora.issues.map do |el|
       label = el["stm_title"]
       exid  = el["exid"]
-      iora_nav(label, "/iora/#{exid}")
+      ytrack_nav(label, "/ytrack/#{exid}")
     end.join
   end
 
-  def iora_nav(label, path)
+  def ytrack_nav(label, path)
     href = "<a href='#{path}'>#{label}</a>"
     link = current_page(path) ? label :  href
     """

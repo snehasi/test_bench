@@ -20,9 +20,12 @@ html[lang="en-US"]
       main[role="main"] == yield
       hr
       footer
-        div[style="text-align: center;"]
-          small
-            | Powered by Bugmark
+        small
+          .row
+            .col-md-6.text-center
+              | Powered by Bugmark
+            .col-md-6.text-center
+              == BugmTime.now.strftime("%B-%d %H:%M")
     script[crossorigin="anonymous" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" src="https://code.jquery.com/jquery-3.2.1.slim.min.js"                              ]
     script[crossorigin="anonymous" integrity="sha384-lZmvU/TzxoIQIOD9yQDEpvxp6wEU32Fy0ckUgOH4EIlMOCdR823rg4+3gWRwnX1M" src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.bundle.min.js" ]
     script[crossorigin="anonymous"                                                                                     src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"                ]

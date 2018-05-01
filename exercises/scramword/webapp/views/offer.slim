@@ -2,13 +2,23 @@ h2 Offer
 .row
   .col-md-4
     p
+      b Offer Value:<br/>
+      == @offer.value
+    p
+      b Offer Maturation Date:<br/>
+      == @offer.maturation_date
+    p If the issue is closed on or before #{@offer.maturation_date}
+      you will earn #{@offer.value} tokens.
+    p
+      a.btn.btn-primary[role="button" href="/transact/#{@offer.uuid}"]
+        | ACCEPT OFFER<br/>AND FORM CONTRACT
+  .col-md-8
+    p
       b Issue Title:<br/>
       == @offer.issue.stm_title
+      '  (see
+      == tracker_link(@offer.issue)
+      | )
     p
       b Issue Body:<br/>
       == @offer.issue.stm_body.gsub("\n", "<br/>")
-  .col-md-4
-    p
-      a.btn.btn-primary[role="button" href="/take/#{@offer.uuid}"] TAKE
-  .col-md-4
-    p

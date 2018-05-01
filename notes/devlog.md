@@ -80,8 +80,10 @@
 - [x] add IORA tracker
 - [x] add 'link_to_unless_current'
 - [x] add All Contracts | My Contracts
+- [x] add Offer maturation dates
 
-- [ ] add Offer maturation dates
+## 2018-04-25 WED
+
 - [ ] show balance and history on account page
 
 - [ ] add OPEN/CLOSE actions to IORA tracker

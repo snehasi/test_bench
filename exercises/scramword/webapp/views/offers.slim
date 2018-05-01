@@ -16,10 +16,10 @@ table.table#xtable
           a[href="/offers/#{offer.uuid}"] = issue_word(offer)
         td = issue_type(offer)
         td = issue_hint(offer)
-        td = offer["value"]
+        td = offer.value
         td = offer.maturation_date
         td
-          a[href="/take/#{offer.uuid}"] ACCEPT
+          a[href="/offers/#{offer.uuid}"] ACCEPT
 
 - content_for :page_js do
   javascript:
