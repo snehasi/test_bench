@@ -1,5 +1,7 @@
 #!/usr/bin/env ruby
 
+EXERCISE_DIR = File.expand_path("../", File.dirname(__FILE__))
+
 require_relative '../../Base/lib/base'
 require_relative '../../Base/lib/exchange'
 require_relative '../../Base/lib/trial_data'

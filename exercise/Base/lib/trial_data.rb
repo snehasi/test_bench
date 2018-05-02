@@ -1,4 +1,4 @@
-require_relative './se'
+require_relative './base'
 
 class TrialData
   class << self

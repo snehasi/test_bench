@@ -3,10 +3,7 @@ require 'yaml'
 require 'dotenv'
 
 LIB_DIR  = File.dirname(__FILE__)
-ENV_PATH = "../.env"
-CSV_PATH = "../../../data/trivia1.csv"
-ENV_FILE = File.expand_path(ENV_PATH, LIB_DIR)
-CSV_FILE = File.expand_path(CSV_PATH, LIB_DIR)
+ENV_FILE = "#{EXERCISE_DIR}/.env"
 
 Dotenv.load(ENV_FILE)
 
