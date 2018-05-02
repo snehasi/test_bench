@@ -1,10 +1,10 @@
 require 'bundler'
 Bundler.setup(:test_bench)
 
-require_relative "../../lib/base"
-require_relative "../../lib/exchange"
-require_relative "../../lib/trial_data"
-require_relative "../../lib/trial_settings"
+require_relative "../../../Base/lib/base"
+require_relative "../../../Base/lib/exchange"
+require_relative "../../../Base/lib/trial_data"
+require_relative "../../../Base/lib/trial_settings"
 
 WEB_DIR  = File.expand_path("../", File.dirname(__FILE__))
 

@@ -57,7 +57,7 @@ module AppHelpers
   end
 
   def github_tracker_url(issue)
-    base = "https://#{TS.trial_repo_url}/issues"
+    base = "#{TS.trial_repo_url}/issues"
     issue ? "#{base}/#{issue.exid}" : base
   end
 
