@@ -5,49 +5,20 @@ require_relative '../../Base/lib/base'
 require_relative '../../Base/lib/trial_settings'
 require_relative '../lib/trial_data'
 
-PARAGRAPHS   = TrialData.new
-
-def body_base(scramble, level)
-  base = "#{scramble.quiz}\n----------"
-  hint = "HINT: word starts with '#{scramble.hint(level)}'"
-  return base if level == 0
-  "#{base}\n\n#{hint}"
-end
-
-def write_answer_line(scramble)
-  File.open(ANSWER_FILE, 'a') {|f| f.puts scramble.answer_line}
-end
-
-def text_body(scramble, level)
-  instructions = <<~EOF.gsub("\n", " ")
-  TO RESOLVE THIS ISSUE: post the unscrambled word
-  in the issue comments.
-  EOF
-  body_base(scramble, level) + "\n\n#{instructions}"
-end
-
-def write_doc(scramble, level)
-  write_answer_line(scramble)
-  fn = "./.trial_data/doc/#{scramble.quiz_fn(level)}"
-  File.open(fn, 'w') {|f| f.puts(comment_body(scramble, level))}
-end
-
-def write_docs(type, numdocs, maxlevel)
-  (0..maxlevel).each do |level|
-    SCRAMBLES.sample(numdocs).each do |scramble|
-      case type
-      when :pr      then write_pr_doc(scramble, level)
-      when :comment then write_comment_doc(scramble, level)
-      end
-    end
-  end
-end
+DATA_SRC = TrialData.new
+TIMESTAMP = Time.now.strftime("%d%H%M")
 
 Dir.chdir TS.trial_repo_dir
-system "mkdir -p doc"
-system "mkdir -p .trial_data"
-system "mkdir -p .trial_data/doc"
-system "rm -f doc/*.md"
-system "rm -f .trial_data/doc/*.md"
+system "mkdir -p Exercise"
+system "rm -f Exercise/*html"
+Dir.chdir "Exercise"
 
-write_docs(TS.num_exercise_docs)
+def fname(idx)
+  maxpad = TS.num_exercise_docs.to_s.length
+  zpad = idx.to_s.rjust(maxpad, "0")
+  "file#{zpad}_#{TIMESTAMP}.html"
+end
+
+(0..TS.num_exercise_docs).to_a.each do |idx|
+  File.open(fname(idx), "w") {|f| f.puts DATA_SRC.marked_para}
+end
