@@ -5,8 +5,7 @@ require_relative '../../Base/lib/base'
 require_relative '../../Base/lib/trial_settings'
 require_relative '../lib/trial_data'
 
-SCRAMBLES   = TrialData.scrambles(1000)
-ANSWER_FILE = "./.trial_data/ANSWERS.txt"
+PARAGRAPHS   = TrialData.new
 
 def body_base(scramble, level)
   base = "#{scramble.quiz}\n----------"
@@ -19,22 +18,7 @@ def write_answer_line(scramble)
   File.open(ANSWER_FILE, 'a') {|f| f.puts scramble.answer_line}
 end
 
-def pr_body(scramble, level)
-  instructions = <<~EOF.gsub("\n", " ")
-  TO RESOLVE THIS ISSUE: unscramble the word, and add it to the document.
-  Then submit a pull-request.  The document URL is:
-  EOF
-  url = "#{TS.trial_repo_url}/doc/#{scramble.quiz_fn(level)}"
-  body_base(scramble, level) + "\n\n#{instructions}\n#{url}"
-end
-
-def write_pr_doc(scramble, level)
-  write_answer_line(scramble)
-  fn = "./doc/#{scramble.quiz_fn(level)}"
-  File.open(fn, 'w') {|f| f.puts(pr_body(scramble, level))}
-end
-
-def comment_body(scramble, level)
+def text_body(scramble, level)
   instructions = <<~EOF.gsub("\n", " ")
   TO RESOLVE THIS ISSUE: post the unscrambled word
   in the issue comments.
@@ -42,7 +26,7 @@ def comment_body(scramble, level)
   body_base(scramble, level) + "\n\n#{instructions}"
 end
 
-def write_comment_doc(scramble, level)
+def write_doc(scramble, level)
   write_answer_line(scramble)
   fn = "./.trial_data/doc/#{scramble.quiz_fn(level)}"
   File.open(fn, 'w') {|f| f.puts(comment_body(scramble, level))}
@@ -66,5 +50,4 @@ system "mkdir -p .trial_data/doc"
 system "rm -f doc/*.md"
 system "rm -f .trial_data/doc/*.md"
 
-write_docs(:pr     , TS.num_pr_issues     , TS.max_hint_level)
-write_docs(:comment, TS.num_comment_issues, TS.max_hint_level)
+write_docs(TS.num_exercise_docs)

@@ -1,4 +1,4 @@
-require_relative './base'
+require_relative '../../Base/lib/base'
 
 class TrialData
   class << self
