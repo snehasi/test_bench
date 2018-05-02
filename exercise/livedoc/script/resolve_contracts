@@ -1,13 +1,12 @@
 #!/usr/bin/env ruby
 
 require_relative '../lib/base'
-require_relative '../lib/exchange'
-require_relative '../lib/trial_data'
-require_relative '../lib/trial_settings'
+require_relative '../../Base/lib/base'
+require_relative '../../Base/lib/exchange'
+require_relative '../../Base/lib/trial_data'
+require_relative '../../Base/lib/trial_settings'
 
 require 'awesome_print'
-
-puts "EXCHANGE_DIR=#{Exchange.src_dir}"
 
 puts 'EXERCISE SETTINGS'
 ap TrialSettings.settings
