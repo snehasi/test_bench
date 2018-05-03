@@ -37,9 +37,9 @@ module AppHelpers
 
   # -----
 
-  def tracker_link
-    url = TS.trial_tracker_url
-    "<a href='#{url}' target='_blank'>Document Tracker</a>"
+  def repo_link
+    url = TS.repo_url
+    "<a href='http://#{url}' target='_blank'>Document Repo</a>"
   end
 
   def tracker_link(issue = nil, label = nil)
