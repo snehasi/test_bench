@@ -8,7 +8,7 @@ A Bugmark Research Application
 - Minimum UI, Limited features, limited functions
 - Simple / Hackable / Extensible
 
-## Hard Coded Repos
+## Hard Coded Trackers
 
 - bugmark/exchange
 - bugmark/bmx_cl_ruby
@@ -32,7 +32,7 @@ A Bugmark Research Application
 - Bootstrap4 / FontAwesome / Datatables - loaded via CDN in page layout
 - Application data stored in JSON files - no database
 - Tested to run on an Ubuntu host
-- Repo list hard-coded in a server-side JSON file
+- Tracker list hard-coded in a server-side JSON file
 
 ## Cron 
 

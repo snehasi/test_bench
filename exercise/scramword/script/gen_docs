@@ -24,7 +24,7 @@ def pr_body(scramble, level)
   TO RESOLVE THIS ISSUE: unscramble the word, and add it to the document.
   Then submit a pull-request.  The document URL is:
   EOF
-  url = "#{TS.trial_repo_url}/doc/#{scramble.quiz_fn(level)}"
+  url = "#{TS.trial_tracker_url}/doc/#{scramble.quiz_fn(level)}"
   body_base(scramble, level) + "\n\n#{instructions}\n#{url}"
 end
 
@@ -59,7 +59,7 @@ def write_docs(type, numdocs, maxlevel)
   end
 end
 
-Dir.chdir TS.trial_repo_dir
+Dir.chdir TS.trial_tracker_dir
 system "mkdir -p doc"
 system "mkdir -p .trial_data"
 system "mkdir -p .trial_data/doc"

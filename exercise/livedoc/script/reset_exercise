@@ -33,12 +33,12 @@ end
 puts ''
 
 puts 'CREATE A BUGMARK TRACKER'
-repo_uuid = FB.create(:repo, name: 'Docs').repo.uuid
+tracker_uuid = FB.create(:tracker, name: 'Docs').tracker.uuid
 
 puts 'SYNC ALL ISSUES TO BUGMARK'
 iora = Iora.new(TS.tracker_type, TS.tracker_name)
 iora.issues.each do |el|
-  base = {"stm_repo_uuid" => repo_uuid}
+  base = {"stm_tracker_uuid" => tracker_uuid}
   pkg  = el.merge(base)
   print '.'
   IssueCmd::Sync.new(pkg).project

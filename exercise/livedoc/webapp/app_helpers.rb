@@ -37,9 +37,9 @@ module AppHelpers
 
   # -----
 
-  def repo_link
-    url = TS.trial_repo_url
-    "<a href='#{url}' target='_blank'>Document Repo</a>"
+  def tracker_link
+    url = TS.trial_tracker_url
+    "<a href='#{url}' target='_blank'>Document Tracker</a>"
   end
 
   def tracker_link(issue = nil, label = nil)
@@ -57,7 +57,7 @@ module AppHelpers
   end
 
   def github_tracker_url(issue)
-    base = "#{TS.trial_repo_url}/issues"
+    base = "#{TS.trial_tracker_url}/issues"
     issue ? "#{base}/#{issue.exid}" : base
   end
 

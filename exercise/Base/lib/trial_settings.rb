@@ -8,8 +8,8 @@ class TrialSettings
 
     def settings
       base_settings = {
-        trial_repo_dir: TRIAL_REPO_DIR,
-        trial_repo_url: TRIAL_REPO_URL
+        trial_tracker_dir: TRIAL_TRACKER_DIR,
+        trial_tracker_url: TRIAL_TRACKER_URL
       }
       @settings ||= base_settings.merge(yaml_settings)
     end

@@ -55,7 +55,7 @@ you struggle with?" Other evaluations include trace data from the transaction hi
 in our software prototype.
 
 The results of these research studies will not be of any use to you, and you will not
-be told individual results. If you like to receive the final study report, you are free to
+be told individual results. If you like to receive the final study trackerrt, you are free to
 ask us for it.
 
 If you have any questions about your rights as a research participant, please contact

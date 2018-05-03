@@ -1,11 +1,11 @@
 #!/usr/bin/env ruby
 
-REPO_LIST = %w(bugmark/iora bugmark/exchange bugmark/bmx_cl_ruby)
+TRACKER_LIST = %w(bugmark/iora bugmark/exchange bugmark/bmx_cl_ruby)
 
-REPO_LIST.each do |repo_name|
-  `bmx repo create #{repo_name}`
+TRACKER_LIST.each do |tracker_name|
+  `bmx tracker create #{tracker_name}`
 end
 
-REPO_LIST.each do |repo_name|
-  `bmx repo sync #{repo_name} --source=github:#{repo_name}`
+TRACKER_LIST.each do |tracker_name|
+  `bmx tracker sync #{tracker_name} --source=github:#{tracker_name}`
 end

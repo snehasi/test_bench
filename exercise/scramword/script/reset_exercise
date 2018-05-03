@@ -41,7 +41,7 @@ end
 puts ''
 
 puts 'CREATE AN IORA ISSUE FOR EACH PR DOC'
-Dir.chdir TS.trial_repo_dir
+Dir.chdir TS.trial_tracker_dir
 Dir.chdir 'doc'
 Dir.glob('*.md').each do |fn|
   body = File.read(fn)
@@ -52,7 +52,7 @@ end
 puts ''
 
 puts 'CREATE AN IORA ISSUE FOR EACH COMMENT DOC'
-Dir.chdir TS.trial_repo_dir
+Dir.chdir TS.trial_tracker_dir
 Dir.chdir '.trial_data'
 Dir.glob('*.md').each do |fn|
   body = File.read(fn)
@@ -62,12 +62,12 @@ Dir.glob('*.md').each do |fn|
 end
 puts ''
 
-puts 'CREATE A BUGMARK REPO'
-repo_uuid = FB.create(:repo, name: 'Scramword').repo.uuid
+puts 'CREATE A BUGMARK TRACKER'
+tracker_uuid = FB.create(:tracker, name: 'Scramword').tracker.uuid
 
 puts 'SYNC ALL ISSUES TO BUGMARK'
 iora.issues.each do |el|
-  base = {"stm_repo_uuid" => repo_uuid}
+  base = {"stm_tracker_uuid" => tracker_uuid}
   pkg  = el.merge(base)
   print '.'
   IssueCmd::Sync.new(pkg).project
