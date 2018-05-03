@@ -57,7 +57,7 @@ module AppHelpers
   end
 
   def github_tracker_url(issue)
-    base = "#{TS.trial_tracker_url}/issues"
+    base = "http://github.com/#{TS.tracker_name}/issues"
     issue ? "#{base}/#{issue.exid}" : base
   end
 
@@ -92,8 +92,9 @@ module AppHelpers
     """
   end
 
-  def base_link(label, path)
-    href = "<a href='#{path}'>#{label}</a>"
+  def base_link(label, path, jump = nil)
+    tgt = jump ? "target=_blank" : ""
+    href = "<a href='#{path}' #{tgt}>#{label}</a>"
     current_page(path) ? label :  href
   end
 

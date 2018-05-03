@@ -9,7 +9,6 @@ class TrialSettings
     def settings
       base_settings = {
         trial_tracker_dir: TRIAL_TRACKER_DIR,
-        trial_tracker_url: TRIAL_TRACKER_URL
       }
       @settings ||= base_settings.merge(yaml_settings)
     end
