@@ -123,8 +123,14 @@ module AppHelpers
     """
   end
 
+  # ----- auth / consent -----
+
   def current_user
     @current_user ||= User.find_by_email(session[:usermail])
+  end
+
+  def consented?
+    session[:consent]
   end
 
   def user_mail
@@ -139,14 +145,30 @@ module AppHelpers
     current_user
   end
 
+  def valid_consent(_user)
+    # look up valid consent
+    false
+  end
+
   def protected!
+    authenticated!
+    consented!
+  end
+
+  def authenticated!
     return if logged_in?
     flash[:danger]     = "Please log in"
     session[:tgt_path] = request.path_info
     redirect "/login"
   end
 
+  def consented!
+    return if consented?
+    redirect "/consent_form"
+  end
+
   # ----- offer helpers
+
   def issue_title(offer)
     offer.issue.stm_title
   end

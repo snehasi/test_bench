@@ -81,22 +81,45 @@ end
 post "/login" do
   mail, pass = [params["usermail"], params["password"]]
   user = User.find_by_email(mail)
-  if user && user.valid_password?(pass)
+  valid_auth    = user && user.valid_password?(pass)
+  valid_consent = valid_consent(user)
+  case
+  when valid_auth && valid_consent
     session[:usermail] = mail
-    flash[:success] = "Logged in successfully"
+    session[:consent]  = true
+    flash[:success]    = "Logged in successfully"
     path = session[:tgt_path]
     session[:tgt_path] = nil
     redirect path || "/"
-  else
-    flash[:danger] = "Invalid username or password (contact malvikar@gmail.com for help)"
+  when ! valid_auth
+    flash[:danger] = "Invalid username or password"
     redirect "/login"
+  when ! valid_consent
+    session[:usermail] = mail
+    redirect "/consent_form"
   end
 end
 
 get "/logout" do
   session[:usermail] = nil
+  session[:consent] = nil
   flash[:warning] = "Logged out"
   redirect "/"
+end
+
+# ----- consent -----
+
+get "/consent_form" do
+  authenticated!
+  slim :consent
+end
+
+get "/consent_register" do
+  authenticated!
+  session[:consent] = true
+  path = session[:tgt_path]
+  session[:tgt_path] = nil
+  redirect path || "/"
 end
 
 # ----- help -----

@@ -22,4 +22,3 @@ TRIAL_DIR=~/trial/scramword_1804
   - run `trialinit`
   - edit `<TRIAL_DIR>/Settings.yml`
   
-- Scrambled word answers in `<TRIAL_DIR>/ANSWERS.txt`
