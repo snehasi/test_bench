@@ -32,11 +32,20 @@ TS.participants.each do |email|
 end
 puts ''
 
+puts 'CLOSE ALL EXERCISE-TAGGED ISSUES THAT ARE OPEN'
+exercise_iora = Iora.new(TS.tracker_type, TS.tracker_name, labels: "EXERCISE")
+exercise_iora.each do |el|
+  exercise_iora.close(el['sequence'])
+  print '.'
+end
+puts ''
+
+puts 'CREATE EXERCISE-TAGGED ISSUE FOR EACH DOC'
+
 puts 'CREATE A BUGMARK TRACKER'
 tracker_uuid = FB.create(:tracker, name: 'Docs').tracker.uuid
 
 puts 'SYNC ALL ISSUES TO BUGMARK'
-iora = Iora.new(TS.tracker_type, TS.tracker_name)
 iora.issues.each do |el|
   base = {"stm_tracker_uuid" => tracker_uuid}
   pkg  = el.merge(base)
