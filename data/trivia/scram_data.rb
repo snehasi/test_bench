@@ -55,4 +55,4 @@ class ScramData
   end
 end
 
-SD = ScrambleData
+SD = ScramData
