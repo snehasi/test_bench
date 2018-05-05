@@ -1,11 +1,20 @@
 #!/usr/bin/env ruby
 
-require_relative '../lib/base'
-require_relative '../../Base/lib/base'
-require_relative '../../Base/lib/trial_settings'
-require_relative '../lib/trial_data'
+CMD = __FILE__.split("/").last
+DIR = File.expand_path(ARGV[0])
+USAGE = "Usage: #{CMD} <trial_dir>"
 
-SCRAMBLES   = TrialData.scrambles(1000)
+abort USAGE if ARGV.length != 1
+abort "#{USAGE}\nERROR: #{ARGV[0]} not a directory" unless File.directory?(DIR)
+
+TRIAL_DIR = DIR
+
+puts "TRIAL DIR IS #{TRIAL_DIR}"
+
+require_relative '../../exercise/Base/lib/trial_settings'
+require_relative './scram_data'
+
+SCRAMBLES   = ScramData.scrambles(1000)
 ANSWER_FILE = "./.trial_data/ANSWERS.txt"
 
 def body_base(scramble, level)
@@ -24,7 +33,7 @@ def pr_body(scramble, level)
   TO RESOLVE THIS ISSUE: unscramble the word, and add it to the document.
   Then submit a pull-request.  The document URL is:
   EOF
-  url = "#{TS.trial_tracker_url}/doc/#{scramble.quiz_fn(level)}"
+  url = "#{TS.repo_url}/doc/#{scramble.quiz_fn(level)}"
   body_base(scramble, level) + "\n\n#{instructions}\n#{url}"
 end
 
@@ -59,7 +68,7 @@ def write_docs(type, numdocs, maxlevel)
   end
 end
 
-Dir.chdir TS.trial_tracker_dir
+Dir.chdir TS.trial_dir
 system "mkdir -p doc"
 system "mkdir -p .trial_data"
 system "mkdir -p .trial_data/doc"

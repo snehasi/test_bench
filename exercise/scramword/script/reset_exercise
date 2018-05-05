@@ -41,7 +41,7 @@ end
 puts ''
 
 puts 'CREATE AN IORA ISSUE FOR EACH PR DOC'
-Dir.chdir TS.trial_tracker_dir
+Dir.chdir TS.trial_dir
 Dir.chdir 'doc'
 Dir.glob('*.md').each do |fn|
   body = File.read(fn)
@@ -52,7 +52,7 @@ end
 puts ''
 
 puts 'CREATE AN IORA ISSUE FOR EACH COMMENT DOC'
-Dir.chdir TS.trial_tracker_dir
+Dir.chdir TS.trial_dir
 Dir.chdir '.trial_data'
 Dir.glob('*.md').each do |fn|
   body = File.read(fn)

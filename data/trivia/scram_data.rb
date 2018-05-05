@@ -1,7 +1,8 @@
-# require_relative '../../Base/lib/base'
 require 'csv'
 
-class TrialData
+CSV_FILE = File.expand_path("./Trivia1.csv", __dir__)
+
+class ScramData
   class << self
 
     Scramble = Struct.new(:qstring, :astring) do
@@ -54,4 +55,4 @@ class TrialData
   end
 end
 
-TD = TrialData
+SD = ScrambleData

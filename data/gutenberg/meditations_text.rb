@@ -1,7 +1,6 @@
-require_relative './base'
-require_relative '../../Base/lib/base'
+DOC_FILE = File.expand_path("./Meditations.txt", __dir__)
 
-class TrialData
+class MeditationsText
   attr_reader :fname, :paras
 
   def initialize(fname = DOC_FILE)
@@ -37,4 +36,4 @@ class TrialData
   end
 end
 
-TD = TrialData
+MT = MeditationsText

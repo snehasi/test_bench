@@ -1,0 +1,55 @@
+#!/usr/bin/env ruby
+
+CMD = __FILE__.split("/").last
+DIR = File.expand_path(ARGV[0])
+USAGE = "Usage: #{CMD} <trial_dir>"
+
+abort USAGE if ARGV.length != 1
+abort "#{USAGE}\nERROR: #{ARGV[0]} not a directory" unless File.directory?(DIR)
+
+TRIAL_DIR = DI
+
+
+puts "TRIAL DIR IS #{TRIAL_DIR}"
+
+require_relative '../../exercise/Base/lib/trial_settings'
+require_relative './meditations_text'
+
+DOC_SRC  = MeditationsText.new
+TIMESTAMP = Time.now.strftime("%d%H%M")
+
+DOC_DIR = "Meditations"
+ISSUE_FILE = "#{TS.trial_dir}/.trial_data/issue_meditations.yml}"
+
+Dir.chdir TS.trial_dir
+system "mkdir -p #{DOC_DIR}"
+system "rm -f #{DOC_DIR}/*html"
+Dir.chdir DOC_DIR
+
+def fname(idx)
+  maxpad = TS.num_exercise_docs.to_s.length
+  zpad = idx.to_s.rjust(maxpad, "0")
+  "file#{zpad}_#{TIMESTAMP}.html"
+end
+
+puts "GENERATE DOCS INTO DIRECTORY #{TS.trial_dir}/#{DOC_DIR}"
+(0..TS.num_exercise_docs).to_a.each do |idx|
+  File.open(fname(idx), "w") {|f| f.puts DOC_SRC.marked_para}
+  print '.'
+end
+puts ''
+
+puts "GENERATE ISSUES INTO FILE #{ISSUE_FILE}"
+Dir.chdir TS.trial_dir
+File.open(ISSUE_FILE, 'w') do |f|
+  f.puts "---"
+  Dir.glob("#{DOC_DIR}/*.html").each do |fn|
+    title = fn.split('/').last.split('.').first
+    body = "Please remove html tags from file #{fn}"
+    f.puts "- title:  Remove html tags from #{title}"
+    f.puts "  labels: EXERCISE"
+    f.puts "  body:   #{body}"
+    print '.'
+  end
+end
+puts ''
