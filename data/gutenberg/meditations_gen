@@ -7,8 +7,7 @@ USAGE = "Usage: #{CMD} <trial_dir>"
 abort USAGE if ARGV.length != 1
 abort "#{USAGE}\nERROR: #{ARGV[0]} not a directory" unless File.directory?(DIR)
 
-TRIAL_DIR = DI
-
+TRIAL_DIR = DIR
 
 puts "TRIAL DIR IS #{TRIAL_DIR}"
 
@@ -19,7 +18,7 @@ DOC_SRC  = MeditationsText.new
 TIMESTAMP = Time.now.strftime("%d%H%M")
 
 DOC_DIR = "Meditations"
-ISSUE_FILE = "#{TS.trial_dir}/.trial_data/issue_meditations.yml}"
+TASK_FILE = "#{TS.trial_dir}/.trial_data/task_meditations.yml}"
 
 Dir.chdir TS.trial_dir
 system "mkdir -p #{DOC_DIR}"
@@ -39,9 +38,9 @@ puts "GENERATE DOCS INTO DIRECTORY #{TS.trial_dir}/#{DOC_DIR}"
 end
 puts ''
 
-puts "GENERATE ISSUES INTO FILE #{ISSUE_FILE}"
+puts "GENERATE TASKS INTO FILE #{TASK_FILE}"
 Dir.chdir TS.trial_dir
-File.open(ISSUE_FILE, 'w') do |f|
+File.open(TASK_FILE, 'w') do |f|
   f.puts "---"
   Dir.glob("#{DOC_DIR}/*.html").each do |fn|
     title = fn.split('/').last.split('.').first

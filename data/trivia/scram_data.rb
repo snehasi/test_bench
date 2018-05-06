@@ -14,8 +14,12 @@ class ScramData
         qstring.gsub(" ", "")
       end
 
+      def quiz_level(level)
+        "#{quiz_word}_#{level}"
+      end
+
       def quiz_fn(level)
-        "#{quiz_word}_#{level}.md"
+        "#{quiz_level(level)}.md"
       end
 
       def answer

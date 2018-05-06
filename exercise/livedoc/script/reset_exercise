@@ -33,6 +33,7 @@ end
 puts ''
 
 puts 'CLOSE ALL EXERCISE-TAGGED ISSUES THAT ARE OPEN'
+`rm -f #{TS.tracker_name}` if TS.tracker_type.to_s == 'yaml'
 exercise_iora = Iora.new(TS.tracker_type, TS.tracker_name, labels: "EXERCISE")
 exercise_iora.each do |el|
   exercise_iora.close(el['sequence'])
@@ -40,7 +41,8 @@ exercise_iora.each do |el|
 end
 puts ''
 
-puts 'CREATE EXERCISE-TAGGED ISSUE FOR EACH DOC'
+puts 'LOAD EXERCISE TASKS INTO TRACKER'
+task_files
 
 puts 'CREATE A BUGMARK TRACKER'
 tracker_uuid = FB.create(:tracker, name: 'Docs').tracker.uuid

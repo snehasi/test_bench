@@ -1,14 +1,13 @@
 require 'bundler'
 Bundler.setup(:test_bench)
 
-require_relative "../../../Base/lib/base"
+require_relative "../../../Base/lib/dotenv"
 require_relative "../../../Base/lib/exchange"
 require_relative "../../../Base/lib/trial_settings"
 
 WEB_DIR  = File.expand_path("../", File.dirname(__FILE__))
 
 puts "WEB DIR IS #{WEB_DIR}"
-puts "ENV FILE IS #{ENV_FILE}"
 
 Dotenv.load(ENV_FILE)
 
