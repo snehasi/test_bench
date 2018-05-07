@@ -69,11 +69,14 @@ puts 'CREATE A BUGMARK TRACKER'
 tracker_uuid = FB.create(:tracker, name: 'Docs').tracker.uuid
 
 puts 'SYNC ALL ISSUES TO BUGMARK'
-iora.issues.each do |el|
+iora2 = Iora.new(TS.tracker_type, TS.tracker_name, status: 'open', labels: "EXERCISE")
+iora2.issues.each do |el|
   base = {"stm_tracker_uuid" => tracker_uuid}
   pkg  = el.merge(base)
+  result = IssueCmd::Sync.new(pkg).project
+  require 'pry'
+  binding.pry
   print '.'
-  IssueCmd::Sync.new(pkg).project
 end
 puts ''
 
@@ -83,14 +86,16 @@ puts 'CREATE A BUY-UNFIXED OFFER FOR EACH OPEN ISSUE'
 Issue.all.open.each do |issue|
   _name, cat = issue.stm_title.split("_")
   opts = {
-    price:          TS.settings.fetch("base_price".to_sym , 1.00)   ,
-    volume:         TS.settings.fetch("base_volume".to_sym, 10)     ,
-    user_uuid:      funder.uuid                                       ,
+    price:     TS.settings.fetch("base_price".to_sym , 1.00)   ,
+    volume:    TS.settings.fetch("base_volume".to_sym, 10)     ,
+    user_uuid: funder.uuid                                     ,
     stm_issue_uuid: issue.uuid
   }
   FB.create(:offer_bu, opts).project
   print '.'
 end
 puts ''
+
+puts 'ADD A TRACKER COMMENT WITH A LINK TO EACH OFFER'
 
 puts 'DONE'
