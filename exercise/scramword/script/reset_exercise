@@ -48,8 +48,6 @@ puts ''
 
 puts 'CLOSE ALL EXISTING IORA ISSUES'
 `rm -f #{TS.tracker_name}` if TS.tracker_type.to_s == 'yaml'
-require 'pry'
-binding.pry
 iora = Iora.new(TS.tracker_type, TS.tracker_name, {labels: "EXERCISE"})
 iora.issues.each do |el|
   iora.close(el['sequence'])
@@ -57,38 +55,16 @@ iora.issues.each do |el|
 end
 puts ''
 
-puts "LOAD EXERCISE TASKS INTO TRACKER"
-task_files = Dir.glob("#{TS.trial_dir}/.trial_data/*task*.yml")
+puts 'LOAD EXERCISE TASKS INTO TRACKER'
+task_files = Dir.glob("#{File.expand_path TS.trial_dir}/.trial_data/*TASK*.yml")
 task_files.each do |file|
   tasks = YAML.load_file(file)
   tasks.each do |task|
-    iora.create(task.title, task.body, labels: task.labels)
+    iora.create(task["title"], task["body"], labels: task["labels"])
     print '.'
   end
 end
 puts ''
-
-# puts 'CREATE AN IORA ISSUE FOR EACH PR DOC'
-# Dir.chdir TS.trial_dir
-# Dir.chdir 'doc'
-# Dir.glob('*.md').each do |fn|
-#   body = File.read(fn)
-#   base, ext = fn.gsub('.md', "").split("_")
-#   iora.create("#{base}_p#{ext}", body)
-#   print '.'
-# end
-# puts ''
-#
-# puts 'CREATE AN IORA ISSUE FOR EACH COMMENT DOC'
-# Dir.chdir TS.trial_dir
-# Dir.chdir '.trial_data'
-# Dir.glob('*.md').each do |fn|
-#   body = File.read(fn)
-#   base, ext = fn.gsub('.md', '').split("_")
-#   iora.create("#{base}_c#{ext}", body)
-#   print '.'
-# end
-# puts ''
 
 puts 'CREATE A BUGMARK TRACKER'
 tracker_uuid = FB.create(:tracker, name: 'Scramword').tracker.uuid
