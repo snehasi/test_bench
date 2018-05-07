@@ -122,4 +122,7 @@ puts "WRITING PAIRS"
 write_pairs(TS.num_pairs, TS.max_hint_level)
 
 puts "WRITING TASKS"
-wite_tasks(TS.num_tasks, TS.max_hint_level)
+write_tasks(TS.num_tasks, TS.max_hint_level)
+
+puts "WRITING OFFERS"
+write_offers()

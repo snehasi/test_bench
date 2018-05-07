@@ -18,7 +18,7 @@ DOC_SRC  = MeditationsText.new
 TIMESTAMP = Time.now.strftime("%d%H%M")
 
 DOC_DIR = "Meditations"
-TASK_FILE = "#{TS.trial_dir}/.trial_data/task_meditations.yml}"
+TASK_FILE = "#{TS.trial_dir}/.trial_data/TASK_MEDITATIONS.yml"
 
 Dir.chdir TS.trial_dir
 system "mkdir -p #{DOC_DIR}"
@@ -44,10 +44,13 @@ File.open(TASK_FILE, 'w') do |f|
   f.puts "---"
   Dir.glob("#{DOC_DIR}/*.html").each do |fn|
     title = fn.split('/').last.split('.').first
-    body = "Please remove html tags from file #{fn}"
-    f.puts "- title:  Remove html tags from #{title}"
+    line1 = %Q[Please remove html tags from file #{fn}.]
+    link1 = %Q[<a href="http://#{TS.repo_url}">Document Repo</a>]
+    links = [link1].join(" | ")
+    body =  "#{line1} ( #{links} )"
+    f.puts "- title:  Strip tags from #{title}"
     f.puts "  labels: EXERCISE"
-    f.puts "  body:   #{body}"
+    f.puts "  body:   '#{body}'"
     print '.'
   end
 end
