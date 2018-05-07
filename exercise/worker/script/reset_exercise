@@ -73,9 +73,7 @@ iora2 = Iora.new(TS.tracker_type, TS.tracker_name, status: 'open', labels: "EXER
 iora2.issues.each do |el|
   base = {"stm_tracker_uuid" => tracker_uuid}
   pkg  = el.merge(base)
-  result = IssueCmd::Sync.new(pkg).project
-  require 'pry'
-  binding.pry
+  IssueCmd::Sync.new(pkg).project
   print '.'
 end
 puts ''

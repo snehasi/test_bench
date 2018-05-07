@@ -58,7 +58,7 @@ module AppHelpers
 
   def github_tracker_url(issue)
     base = "http://github.com/#{TS.tracker_name}/issues"
-    issue ? "#{base}/#{issue.exid}" : base
+    issue ? "#{base}/#{issue.sequence}" : base
   end
 
   def current_page(path)
