@@ -1,17 +1,24 @@
 #!/usr/bin/env ruby
 
-require_relative '../lib/base'
-require_relative '../../Base/lib/base'
+# ----- setup -----
+
+Dir.chdir File.expand_path(__dir__)
+require_relative '../../Base/lib/dotenv'
+TRIAL_DIR = dotenv_trial_dir(__dir__)
+
+# ----- libraries -----
+
 require_relative '../../Base/lib/exchange'
 require_relative '../../Base/lib/trial_settings'
-require_relative '../lib/trial_data'
-
 require 'awesome_print'
 
-puts "EXCHANGE_DIR=#{Exchange.src_dir}"
+# ----- info -----
 
+puts "EXCHANGE_DIR=#{Exchange.src_dir}"
 puts 'EXERCISE SETTINGS'
 ap TrialSettings.settings
+
+# ----- load -----
 
 puts 'LOADING RAILS'
 Exchange.load_rails
@@ -19,8 +26,12 @@ Exchange.load_rails
 puts 'LOADING IORA'
 require 'iora'
 
+# ----- reset -----
+
 puts 'RESET ALL BUGMARK DATA AND CREATE AN ADMIN USER'
 BugmHost.reset
+
+# ----- accounts -----
 
 puts 'CREATE A BUGMARK FUNDER ACCOUNT'
 funder = FB.create(:user, balance: 100000, email: 'funder@bugmark.net').user
@@ -32,17 +43,27 @@ TS.participants.each do |email|
 end
 puts ''
 
+# ----- issues -----
+
 puts 'CLOSE ALL EXERCISE-TAGGED ISSUES THAT ARE OPEN'
 `rm -f #{TS.tracker_name}` if TS.tracker_type.to_s == 'yaml'
-exercise_iora = Iora.new(TS.tracker_type, TS.tracker_name, labels: "EXERCISE")
-exercise_iora.each do |el|
-  exercise_iora.close(el['sequence'])
+iora = Iora.new(TS.tracker_type, TS.tracker_name, labels: "EXERCISE")
+iora.issues.each do |el|
+  iora.close(el['sequence'])
   print '.'
 end
 puts ''
 
 puts 'LOAD EXERCISE TASKS INTO TRACKER'
-task_files
+task_files = Dir.glob("#{File.expand_path TS.trial_dir}/.trial_data/*TASK*.yml")
+task_files.each do |file|
+  tasks = YAML.load_file(file)
+  tasks.each do |task|
+    iora.create(task["title"], task["body"], labels: task["labels"])
+    print '.'
+  end
+end
+puts ''
 
 puts 'CREATE A BUGMARK TRACKER'
 tracker_uuid = FB.create(:tracker, name: 'Docs').tracker.uuid
@@ -55,6 +76,8 @@ iora.issues.each do |el|
   IssueCmd::Sync.new(pkg).project
 end
 puts ''
+
+# ----- offers -----
 
 puts 'CREATE A BUY-UNFIXED OFFER FOR EACH OPEN ISSUE'
 Issue.all.open.each do |issue|
