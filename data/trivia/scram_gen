@@ -80,7 +80,7 @@ end
 def write_pair_task(scramble, level)
   write_answer_line(scramble)
   File.open(PAIR_TASKS_FILE, 'a') do |f|
-    f.puts "- title:  #{scramble.quiz_level(level)}"
+    f.puts "- title:  #{scramble.quiz_level(level, 'p')}"
     f.puts "  labels: EXERCISE HINTLEVEL_#{level} RESOLVE_WITH_PR"
     f.puts "  body:   \"#{pair_task_body(scramble, level)}\""
     f.puts ""
@@ -90,7 +90,7 @@ end
 def write_task(scramble, level)
   write_answer_line(scramble)
   File.open(TASKS_FILE, 'a') do |f|
-    f.puts "- title:  #{scramble.quiz_level(level)}"
+    f.puts "- title:  #{scramble.quiz_level(level, 't')}"
     f.puts "  labels: EXERCISE HINTLEVEL_#{level} RESOLVE_WITH_COMMENT"
     f.puts "  body:   \"#{task_body(scramble, level)}\""
     f.puts ""

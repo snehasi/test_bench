@@ -11,7 +11,7 @@ table.table#xtable
     - @offers.each do |offer|
       tr
         td
-          a[href="/offers/#{offer.uuid}"] = issue_word(offer)
+          a[href="/offers/#{offer.uuid}"] = issue_title(offer)
         td = offer.value
         td = offer.maturation_date
         td
