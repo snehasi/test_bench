@@ -59,9 +59,10 @@ task_files = Dir.glob("#{File.expand_path TS.trial_dir}/.trial_data/*TASK*.yml")
 task_files.each do |file|
   tasks = YAML.load_file(file)
   tasks.each do |task|
-    iora.create(task["title"], task["body"], labels: task["labels"])
+    iora.create(task["title"], task["body"], "labels" => task["labels"])
     print '.'
   end
+
 end
 puts ''
 
@@ -82,7 +83,7 @@ puts ''
 
 puts 'CREATE A BUY-UNFIXED OFFER FOR EACH OPEN ISSUE'
 Issue.all.open.each do |issue|
-  _name, cat = issue.stm_title.split("_")
+  # _name, cat = issue.stm_title.split("_")
   opts = {
     price:     TS.settings.fetch("base_price".to_sym , 1.00)   ,
     volume:    TS.settings.fetch("base_volume".to_sym, 10)     ,
@@ -95,5 +96,11 @@ end
 puts ''
 
 puts 'ADD A TRACKER COMMENT WITH A LINK TO EACH OFFER'
+Issue.all.open.each do |issue|
+  iora.create_comment(issue.sequence, "HEY HEY")
+  iora.create_comment(issue.sequence, "YO YO")
+  print "."
+end
+puts ""
 
 puts 'DONE'

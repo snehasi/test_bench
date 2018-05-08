@@ -15,7 +15,7 @@ require_relative '../../exercise/Base/lib/trial_settings'
 require_relative './meditations_text'
 
 DOC_SRC  = MeditationsText.new
-TIMESTAMP = Time.now.strftime("%d%H%M")
+TIMESTAMP = Time.now.strftime("%H%M")
 
 DOC_DIR = "Meditations"
 TASK_FILE = "#{TS.trial_dir}/.trial_data/TASK_MEDITATIONS.yml"
