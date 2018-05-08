@@ -21,4 +21,6 @@ table.table.table-small
     td == @issue["stm_body"].gsub("\n", "<br/>")
   tr
     td <b>Issue Comments</b>
-    td == @issue["stm_comments"]
+    td
+      - @issue["stm_comments"].each do |comment|
+        == comment["body"] + "<hr/>"

@@ -104,8 +104,11 @@ puts ''
 
 puts 'ADD A TRACKER COMMENT WITH A LINK TO EACH OFFER'
 Issue.all.open.each do |issue|
-  iora.create_comment(issue.sequence, "HEY HEY")
-  iora.create_comment(issue.sequence, "YO YO")
+  uuid    = issue.offers&.first&.uuid
+  url     = "http://#{TS.webapp_url}/offers/#{uuid}"
+  comment = "There is a Bugmark offer on this issue. "
+  link    = "<a href='#{url}'>Click here to view</a>."
+  iora.create_comment(issue.sequence, comment + link)
   print "."
 end
 puts ""
