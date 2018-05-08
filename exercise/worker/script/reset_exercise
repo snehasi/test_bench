@@ -55,14 +55,13 @@ end
 puts ''
 
 puts 'LOAD EXERCISE TASKS INTO TRACKER'
-task_files = Dir.glob("#{File.expand_path TS.trial_dir}/.trial_data/*TASK*.yml")
+task_files = Dir.glob("#{File.expand_path TS.trial_dir}/.trial_data/*task*.yml")
 task_files.each do |file|
   tasks = YAML.load_file(file)
   tasks.each do |task|
     iora.create(task["title"], task["body"], "labels" => task["labels"])
     print '.'
   end
-
 end
 puts ''
 
@@ -82,15 +81,24 @@ puts ''
 # ----- offers -----
 
 puts 'CREATE A BUY-UNFIXED OFFER FOR EACH OPEN ISSUE'
-Issue.all.open.each do |issue|
-  opts = {
-    price:     TS.settings.fetch("base_price".to_sym , 1.00)   ,
-    volume:    TS.settings.fetch("base_volume".to_sym, 10)     ,
-    user_uuid: funder.uuid                                     ,
-    stm_issue_uuid: issue.uuid
-  }
-  FB.create(:offer_bu, opts).project
-  print '.'
+term_files = Dir.glob("#{File.expand_path TS.trial_dir}/.trial_data/*term*.yml")
+term_files.each do |file|
+  terms = YAML.load_file(file)
+  terms.each do |term|
+    uuid = Issue.by_hexid(term["hexid"]).first&.uuid
+    opts = {
+      price:          term["price"]    ,
+      volume:         term["volume"]   ,
+      user_uuid:      funder.uuid      ,
+      stm_issue_uuid: uuid
+    }
+    if uuid
+      FB.create(:offer_bu, opts).project
+      print '.'
+    else
+      print 'x'
+    end
+  end
 end
 puts ''
 

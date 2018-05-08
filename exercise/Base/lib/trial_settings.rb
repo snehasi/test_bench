@@ -7,10 +7,10 @@ class TrialSettings
     end
 
     def settings
-      base_settings = {
-        trial_dir: TRIAL_DIR,
+      default_settings = {
+        trial_dir: File.expand_path(TRIAL_DIR),
       }
-      @settings ||= base_settings.merge(generator_settings).merge(base_settings)
+      @settings ||= default_settings.merge(generator_settings).merge(base_settings)
     end
 
     private
