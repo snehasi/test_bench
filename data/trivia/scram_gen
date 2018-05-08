@@ -81,7 +81,7 @@ def write_pair_task(scramble, level)
   write_answer_line(scramble)
   File.open(PAIR_TASKS_FILE, 'a') do |f|
     f.puts "- title:  #{scramble.quiz_level(level, 'p')}"
-    f.puts "  labels: EXERCISE HINTLEVEL_#{level} RESOLVE_WITH_PR"
+    f.puts "  labels: EXERCISE,SCRAMWORDS,RESOLVE_WITH_PR,HINTLEVEL_#{level}"
     f.puts "  body:   \"#{pair_task_body(scramble, level)}\""
     f.puts ""
   end
@@ -90,8 +90,8 @@ end
 def write_task(scramble, level)
   write_answer_line(scramble)
   File.open(TASKS_FILE, 'a') do |f|
-    f.puts "- title:  #{scramble.quiz_level(level, 't')}"
-    f.puts "  labels: EXERCISE HINTLEVEL_#{level} RESOLVE_WITH_COMMENT"
+    f.puts "- title:  #{scramble.quiz_level(level, 'c')}"
+    f.puts "  labels: EXERCISE,SCRAMWORDS,RESOLVE_WITH_COMMENT,HINTLEVEL_#{level}"
     f.puts "  body:   \"#{task_body(scramble, level)}\""
     f.puts ""
   end
@@ -152,6 +152,8 @@ write_pairs(TS.scram_num_pairs, TS.scram_max_hint_level)
 puts "WRITING TASKS"
 write_tasks(TS.scram_num_tasks, TS.scram_max_hint_level)
 
-puts "WRITING TERMS"
+puts "WRITING TASK TERMS"
 write_terms(TASKS_FILE     , TASKS_FILE.gsub("task", "term"))
+
+puts "WRITING PAIR TERMS"
 write_terms(PAIR_TASKS_FILE, PAIR_TASKS_FILE.gsub("task", "term"))

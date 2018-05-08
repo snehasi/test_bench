@@ -59,7 +59,7 @@ task_files = Dir.glob("#{File.expand_path TS.trial_dir}/.trial_data/*task*.yml")
 task_files.each do |file|
   tasks = YAML.load_file(file)
   tasks.each do |task|
-    iora.create(task["title"], task["body"], "labels" => task["labels"])
+    iora.create(task["title"], task["body"], labels: task["labels"])
     print '.'
   end
 end

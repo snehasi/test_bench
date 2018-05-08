@@ -47,7 +47,7 @@ def fname(idx)
 end
 
 puts "GENERATE DOCS INTO DIRECTORY #{TS.trial_dir}/#{DOC_DIR}"
-(0..TS.meditations_num_docs).to_a.each do |idx|
+(1..TS.meditations_num_docs).to_a.each do |idx|
   File.open(fname(idx), "w") {|f| f.puts DOC_SRC.marked_para}
   print '.'
 end
@@ -64,7 +64,7 @@ File.open(TASK_FILE, 'w') do |f|
     links = [link1].join(" | ")
     body =  "#{line1} ( #{links} ) /#{SecureRandom.hex(3)}"
     f.puts "- title:  Strip tags from #{title}"
-    f.puts "  labels: EXERCISE"
+    f.puts "  labels: EXERCISE,MEDITATIONS"
     f.puts "  body:   '#{body}'"
     print '.'
   end
