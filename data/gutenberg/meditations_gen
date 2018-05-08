@@ -1,15 +1,31 @@
 #!/usr/bin/env ruby
 
-CMD = __FILE__.split("/").last
-DIR = File.expand_path(ARGV[0])
+require 'securerandom'
+require 'iora'
+
+# ----- command line -----
+
+CMD   = __FILE__.split("/").last
+DIR   = File.expand_path(ARGV[0])
 USAGE = "Usage: #{CMD} <trial_dir>"
 
 abort USAGE if ARGV.length != 1
 abort "#{USAGE}\nERROR: #{ARGV[0]} not a directory" unless File.directory?(DIR)
 
+# ----- filepaths -----
+
 TRIAL_DIR = DIR
+DOC_DIR   = "Meditations"
+TASK_FILE = "#{TRIAL_DIR}/.trial_data/MEDITATION_TASKS.yml"
+TERM_FILE = "#{TRIAL_DIR}/.trial_data/MEDITATION_TERMS.yml"
+LCL_SETTINGS = File.expand_path(__dir__) + "/meditations_settings.yml"
 
 puts "TRIAL DIR IS #{TRIAL_DIR}"
+
+# ----- settings and libraries -----
+
+puts "COPY MEDITATIONS SETTINGS INTO DIRECTORY #{TRIAL_DIR}/.trial_data"
+system "cp #{LCL_SETTINGS} #{TRIAL_DIR}/.trial_data"
 
 require_relative '../../exercise/Base/lib/trial_settings'
 require_relative './meditations_text'
@@ -17,8 +33,7 @@ require_relative './meditations_text'
 DOC_SRC  = MeditationsText.new
 TIMESTAMP = Time.now.strftime("%H%M")
 
-DOC_DIR = "Meditations"
-TASK_FILE = "#{TS.trial_dir}/.trial_data/TASK_MEDITATIONS.yml"
+# ----- execution -----
 
 Dir.chdir TS.trial_dir
 system "mkdir -p #{DOC_DIR}"
@@ -32,7 +47,7 @@ def fname(idx)
 end
 
 puts "GENERATE DOCS INTO DIRECTORY #{TS.trial_dir}/#{DOC_DIR}"
-(0..TS.num_exercise_docs).to_a.each do |idx|
+(0..TS.meditations_num_docs).to_a.each do |idx|
   File.open(fname(idx), "w") {|f| f.puts DOC_SRC.marked_para}
   print '.'
 end
@@ -47,7 +62,7 @@ File.open(TASK_FILE, 'w') do |f|
     line1 = %Q[Please remove html tags from file #{fn}.]
     link1 = %Q[<a href="http://#{TS.repo_url}">Document Repo</a>]
     links = [link1].join(" | ")
-    body =  "#{line1} ( #{links} )"
+    body =  "#{line1} ( #{links} ) /#{SecureRandom.hex(3)}"
     f.puts "- title:  Strip tags from #{title}"
     f.puts "  labels: EXERCISE"
     f.puts "  body:   '#{body}'"
@@ -55,3 +70,19 @@ File.open(TASK_FILE, 'w') do |f|
   end
 end
 puts ''
+
+puts "GENERATE TERMS INTO FILE #{TERM_FILE}"
+tasks = YAML.load_file(TASK_FILE)
+File.open(TERM_FILE, 'w') do |f|
+  f.puts "---"
+  tasks.each do |task|
+    f.puts "- price:  0.80"
+    f.puts "  volume: 20"
+    f.puts "  hexid:  #{Iora.hexid_for(task)}"
+    print '.'
+  end
+end
+puts ''
+
+puts 'DONE'
+

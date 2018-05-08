@@ -83,7 +83,6 @@ puts ''
 
 puts 'CREATE A BUY-UNFIXED OFFER FOR EACH OPEN ISSUE'
 Issue.all.open.each do |issue|
-  # _name, cat = issue.stm_title.split("_")
   opts = {
     price:     TS.settings.fetch("base_price".to_sym , 1.00)   ,
     volume:    TS.settings.fetch("base_volume".to_sym, 10)     ,

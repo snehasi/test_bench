@@ -1,6 +1,9 @@
 #!/usr/bin/env ruby
 
-# ----- setup -----
+require 'securerandom'
+require 'iora'
+
+# ----- command line -----
 
 CMD = __FILE__.split("/").last
 DIR = File.expand_path(ARGV[0])
@@ -8,6 +11,8 @@ USAGE = "Usage: #{CMD} <trial_dir>"
 
 abort USAGE if ARGV.length != 1
 abort "#{USAGE}\nERROR: #{ARGV[0]} not a directory" unless File.directory?(DIR)
+
+# ----- filepaths -----
 
 TRIAL_DIR       = DIR
 DOC_DIR         = "Scramwords"
@@ -17,6 +22,11 @@ PAIR_TASKS_FILE = "./.trial_data/SCRAM_PAIR_TASKS.yml"
 
 puts "TRIAL DIR IS #{TRIAL_DIR}"
 puts "DOC DIR IS #{DOC_DIR}"
+
+# ----- settings and libraries -----
+
+puts "COPY MEDITATIONS SETTINGS INTO DIRECTORY #{TRIAL_DIR}/.trial_data"
+system "cp #{LCL_SETTINGS} #{TRIAL_DIR}/.trial_data"
 
 require_relative '../../exercise/Base/lib/trial_settings'
 require_relative './scram_data'
@@ -29,7 +39,7 @@ def body_base(scramble, level)
   base = "#{scramble.quiz}\n----------"
   hint = "HINT: word starts with '#{scramble.hint(level)}'"
   return base if level == 0
-  "#{base}\n\n#{hint}"
+  "#{base}\n\n#{hint}\n\n/#{SecureRandom.hex(3)}"
 end
 
 def pair_doc_body(scramble, level)
@@ -108,6 +118,21 @@ def write_tasks(numtasks, maxlevel)
   puts ""
 end
 
+def write_terms
+  tasks = YAML.load_file(TASK_FILE)
+  File.open(TERM_FILE, 'w') do |f|
+    f.puts "---"
+    tasks.each do |task|
+      cat = task.title.split("_").last
+      f.puts "- price:  #{TS.settings.fetch("scram_#{cat}_price".to_sym, 1.00)}"
+      f.puts "  volume: #{TS.settings.fetch("scram_#{cat}_volume".to_sym, 10)}"
+      f.puts "  hexid:  #{Iora.hexid_for(task)}"
+      print '.'
+    end
+  end
+  puts ''
+end
+
 # ----- execution -----
 
 Dir.chdir TS.trial_dir
@@ -124,5 +149,5 @@ write_pairs(TS.num_pairs, TS.max_hint_level)
 puts "WRITING TASKS"
 write_tasks(TS.num_tasks, TS.max_hint_level)
 
-puts "WRITING OFFERS"
-write_offers()
+puts "WRITING TERMS"
+write_terms

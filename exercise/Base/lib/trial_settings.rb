@@ -10,17 +10,25 @@ class TrialSettings
       base_settings = {
         trial_dir: TRIAL_DIR,
       }
-      @settings ||= base_settings.merge(yaml_settings)
-    end
-
-    def settings_file
-      File.expand_path("./.trial_data/Settings.yml", TRIAL_DIR)
+      @settings ||= base_settings.merge(generator_settings).merge(base_settings)
     end
 
     private
 
-    def yaml_settings
-       YAML.load_file(settings_file).transform_keys {|k| k.to_sym}
+    def generator_settings
+      dir  = File.expand_path("./.trial_data", TRIAL_DIR)
+      Dir.glob("#{dir}/[a-z]*settings*.yml").reduce({}) do |acc, fn|
+        acc.merge(yaml_settings(fn))
+      end
+    end
+
+    def base_settings
+       base = File.expand_path("./.trial_data/Settings.yml", TRIAL_DIR)
+      yaml_settings(base)
+    end
+
+    def yaml_settings(file)
+       YAML.load_file(file).transform_keys {|k| k.to_sym}
     end
   end
 end
