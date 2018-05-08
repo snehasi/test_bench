@@ -1,3 +1,0 @@
-# Scramword Readme
-
-Content TBD
