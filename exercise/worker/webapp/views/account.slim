@@ -1,3 +1,20 @@
-h2 Account for #{current_user.email}
-p Change your username from #{"XXX"} to TBD
-p UNDER CONSTRUCTION
+h2 Account information for #{current_user.email}
+
+.row[style='margin-top: 20px;']
+  .col-md-6
+    | Your current username is <b>#{user_name}</b>.
+      Your username is visible to other exercise participants.
+    form.form-inline[action="/set_username" method="post" style='margin-top: 10px;']
+      .form-group.mx-sm-3.mb-2
+        input[type="text" class="form-control" name="newName" placeholder="enter a new username"]
+      button.btn.btn-primary.mb-2[type="submit"] Change
+  .col-md-6
+    p Your current balance is <b>#{current_user.balance}</b> tokens.
+    p
+      | You currently have <b>#{current_user.open_contracts.length}</b> open contracts.
+      - if current_user.open_contracts.length > 0
+        span
+          '  (
+          a[href='/contracts'] View
+          '  )
+

@@ -72,6 +72,18 @@ get "/account" do
   slim :account
 end
 
+post "/set_username" do
+  protected!
+  user = current_user
+  user.name = params["newName"]
+  if user.save
+    flash[:success] = "Your new username is '#{params["newName"]}'"
+  else
+    flash[:danger] = user.errors.messages.values.flatten.join(" ")
+  end
+  redirect "/account"
+end
+
 # ----- login/logout -----
 
 get "/login" do
@@ -88,7 +100,7 @@ post "/login" do
     session[:usermail] = mail
     session[:consent]  = true
     flash[:success]    = "Logged in successfully"
-    AccessLog.new(current_user.email).logged_in
+    AccessLog.new(current_user&.email).logged_in
     path = session[:tgt_path]
     session[:tgt_path] = nil
     redirect path || "/"
@@ -117,7 +129,7 @@ end
 
 get "/consent_register" do
   authenticated!
-  AccessLog.new(current_user.email).consented
+  AccessLog.new(current_user&.email).consented
   session[:consent] = true
   path = session[:tgt_path]
   session[:tgt_path] = nil

@@ -139,7 +139,7 @@ module AppHelpers
   end
 
   def user_name
-    user_mail&.split("@")&.first
+    current_user&.name || current_user&.uuid[0..5]
   end
 
   def logged_in?
@@ -147,7 +147,7 @@ module AppHelpers
   end
 
   def valid_consent(user)
-    AccessLog.new(user.email).has_consented?
+    AccessLog.new(user&.email).has_consented?
   end
 
   def protected!

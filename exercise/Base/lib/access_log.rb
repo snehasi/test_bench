@@ -8,25 +8,29 @@ class AccessLog
 
   def initialize(email)
     @email    = email
-    @cmail    = email.alt_encrypt
+    @cmail    = email&.alt_encrypt
     @log_data = File.exists?(log_file) ? YAML.load_file(log_file) : {}
   end
 
   def has_consented?
+    return unless email
     log_data[cmail] && log_data[cmail]["consented_at"]
   end
 
   def consent_date
+    return unless email
     log_data[cmail]["consented_at"]
   end
 
   def consented
+    return unless email
     log_data[cmail] ||= {}
     log_data[cmail]["consented_at"] = Time.now
     save_log_data
   end
 
   def logged_in
+    return unless email
     log_data[cmail] ||= {}
     log_data[cmail]["login_at"] = Time.now
     log_data[cmail]["num_logins"] = (log_data[cmail][:num_logins] || 0) + 1
