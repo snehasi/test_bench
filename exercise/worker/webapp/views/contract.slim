@@ -1,4 +1,32 @@
 h2 Contract
 p Contract UUID is #{@contract.uuid}
-p CONTENT TBD
-
+.row
+  .col-md-4
+    p
+      b Contract Value:<br/>
+      == @contract.total_value
+    p
+      b Contract Maturation Date:<br/>
+      == @contract.maturation_str
+    p If the issue is closed on or before #{@contract.maturation_str}
+      you will earn #{@contract.value} tokens.
+  .col-md-8
+    p
+      b Issue Title:<br/>
+      == @contract.issue.stm_title
+      br
+      '  (see
+      == tracker_link(@contract.issue)
+      | )
+    p
+      b Issue Body:<br/>
+      == @contract.issue.stm_body.gsub("\n", "<br/>")
+hr
+.row
+  .col-md-12
+    - case @contract.status
+    - when 'open'
+      p This contract is open.  The contract matures on #{@contract.maturation}.
+    - when 'closed'
+      p
+        b This contract is closed.

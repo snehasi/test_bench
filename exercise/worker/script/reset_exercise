@@ -38,7 +38,7 @@ funder = FB.create(:user, balance: 100000, email: 'funder@bugmark.net').user
 
 puts 'CREATE BUGMARK WORKER ACCOUNTS'
 TS.participants.each do |email|
-  FB.create(:user, email: email.chomp.strip)
+  FB.create(:user, email: email.chomp.strip, balance: 0)
   print '.'
 end
 puts ''

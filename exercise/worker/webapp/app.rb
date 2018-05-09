@@ -58,6 +58,7 @@ end
 get "/transact/:offer_uuid" do
   protected!
   user_uuid = current_user.uuid
+  binding.pry
   offer     = Offer.find_by_uuid(params['offer_uuid'])
   counter   = OfferCmd::CreateCounter.new(offer, user_uuid: user_uuid).project.offer
   contract  = ContractCmd::Cross.new(counter, :expand).project.contract

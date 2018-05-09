@@ -9,9 +9,6 @@ h2 Offer
       == @offer.maturation_date
     p If the issue is closed on or before #{@offer.maturation_date}
       you will earn #{@offer.value} tokens.
-    p
-      a.btn.btn-primary[role="button" href="/transact/#{@offer.uuid}"]
-        | ACCEPT OFFER<br/>AND FORM CONTRACT
   .col-md-8
     p
       b Issue Title:<br/>
@@ -23,3 +20,21 @@ h2 Offer
     p
       b Issue Body:<br/>
       == @offer.issue.stm_body.gsub("\n", "<br/>")
+hr
+.row
+  .col-md-12
+    - case @offer.status
+    - when 'open'
+      p This offer is open.  The offer expires on #{@offer.maturation}.
+      p
+        a.btn.btn-primary[role="button" href="/transact/#{@offer.uuid}"]
+          | ACCEPT OFFER AND FORM CONTRACT
+    - when 'crossed'
+      p
+        b This offer has been accepted.<br/>
+        a[href="/contracts/#{@offer.position.contract.uuid}"] Click here
+        '  to view the contract.
+    - when 'expired'
+      p This offer has expired.
+    - else
+      p Offer Unknown Status #{@offer.status}.

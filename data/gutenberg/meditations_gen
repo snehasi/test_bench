@@ -76,8 +76,8 @@ tasks = YAML.load_file(TASK_FILE)
 File.open(TERM_FILE, 'w') do |f|
   f.puts "---"
   tasks.each do |task|
-    f.puts "- price:  0.80"
-    f.puts "  volume: 20"
+    f.puts "- price:  #{TS.meditations_price}"
+    f.puts "  volume: #{TS.meditations_volume}"
     f.puts "  hexid:  #{Iora.hexid_for(task)}"
     print '.'
   end
