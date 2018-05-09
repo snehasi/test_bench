@@ -1,22 +1,32 @@
 #!/usr/bin/env ruby
 
-require_relative '../../Base/lib/base'
-require_relative '../../Base/lib/exchange'
-require_relative '../../Base/lib//lib/trial_data'
-require_relative '../../Base/lib/trial_settings'
+# ----- setup -----
 
+Dir.chdir File.expand_path(__dir__)
+require_relative '../../Base/lib/dotenv'
+TRIAL_DIR = dotenv_trial_dir(__dir__)
+
+# ----- libraries -----
+
+require_relative '../../Base/lib/exchange'
+require_relative '../../Base/lib/trial_settings'
 require 'awesome_print'
 
-puts "EXCHANGE_DIR=#{Exchange.src_dir}"
+# ----- info -----
 
+puts "EXCHANGE_DIR=#{Exchange.src_dir}"
 puts 'EXERCISE SETTINGS'
 ap TrialSettings.settings
+
+# ----- load -----
 
 puts 'LOADING RAILS'
 Exchange.load_rails
 
 puts 'LOADING IORA'
 require 'iora'
+
+# ----- sync -----
 
 puts 'SYNC ALL ISSUES TO BUGMARK'
 iora = Iora.new(TS.tracker_type, TS.tracker_name)
