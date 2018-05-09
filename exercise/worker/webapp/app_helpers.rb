@@ -146,9 +146,8 @@ module AppHelpers
     current_user
   end
 
-  def valid_consent(_user)
-    # look up valid consent
-    false
+  def valid_consent(user)
+    AccessLog.new(user.email).has_consented?
   end
 
   def protected!

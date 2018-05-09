@@ -3,6 +3,7 @@ Bundler.setup(:test_bench)
 
 require_relative "../../../Base/lib/dotenv"
 require_relative "../../../Base/lib/exchange"
+require_relative "../../../Base/lib/access_log"
 require_relative "../../../Base/lib/trial_settings"
 
 WEB_DIR    = File.expand_path("../", File.dirname(__FILE__))

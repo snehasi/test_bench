@@ -58,7 +58,6 @@ end
 get "/transact/:offer_uuid" do
   protected!
   user_uuid = current_user.uuid
-  binding.pry
   offer     = Offer.find_by_uuid(params['offer_uuid'])
   counter   = OfferCmd::CreateCounter.new(offer, user_uuid: user_uuid).project.offer
   contract  = ContractCmd::Cross.new(counter, :expand).project.contract
@@ -89,6 +88,7 @@ post "/login" do
     session[:usermail] = mail
     session[:consent]  = true
     flash[:success]    = "Logged in successfully"
+    AccessLog.new(current_user.email).logged_in
     path = session[:tgt_path]
     session[:tgt_path] = nil
     redirect path || "/"
@@ -117,6 +117,7 @@ end
 
 get "/consent_register" do
   authenticated!
+  AccessLog.new(current_user.email).consented
   session[:consent] = true
   path = session[:tgt_path]
   session[:tgt_path] = nil
