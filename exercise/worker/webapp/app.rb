@@ -69,6 +69,7 @@ end
 
 get "/account" do
   protected!
+  @events = Event.for_user(current_user)
   slim :account
 end
 
