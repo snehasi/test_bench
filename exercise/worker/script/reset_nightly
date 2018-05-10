@@ -1,0 +1,111 @@
+#!/usr/bin/env ruby
+
+# ----- setup -----
+
+Dir.chdir File.expand_path(__dir__)
+require_relative '../../Base/lib/dotenv'
+TRIAL_DIR = dotenv_trial_dir(__dir__)
+
+# ----- libraries -----
+
+require_relative '../../Base/lib/exchange'
+require_relative '../../Base/lib/trial_settings'
+require 'awesome_print'
+
+# ----- info -----
+
+puts "EXCHANGE_DIR=#{Exchange.src_dir}"
+puts 'EXERCISE SETTINGS'
+ap TrialSettings.settings
+
+# ----- load -----
+
+puts 'LOADING RAILS'
+Exchange.load_rails
+
+puts 'LOADING IORA'
+require 'iora'
+
+# ----- data -----
+puts 'REGENERATE ALL EXERCISE DATA'
+Dir.chdir(__dir__)
+system "./gen_data"
+system "./push_trial_repo"
+
+# ----- offers -----
+puts 'CANCEL ALL OPEN OFFERS'
+Offer.open.each do |offer|
+  OfferCmd::Cancel.new(offer).project
+end
+
+# ----- issues -----
+
+puts 'CLOSE ALL EXERCISE-TAGGED ISSUES THAT ARE OPEN'
+`rm -f #{TS.tracker_name}` if TS.tracker_type.to_s == 'yaml'
+iora = Iora.new(TS.tracker_type, TS.tracker_name, labels: "EXERCISE")
+iora.issues.each do |el|
+  iora.close(el['sequence'])
+  print '.'
+end
+puts ''
+
+puts 'LOAD EXERCISE TASKS INTO TRACKER'
+task_files = Dir.glob("#{File.expand_path TS.trial_dir}/.trial_data/*task*.yml")
+task_files.each do |file|
+  tasks = YAML.load_file(file)
+  tasks.each do |task|
+    iora.create(task["title"], task["body"], labels: task["labels"])
+    print '.'
+  end
+end
+puts ''
+
+puts 'SYNC ALL ISSUES TO BUGMARK'
+tracker_uuid = Tracker.first.uuid
+iora2 = Iora.new(TS.tracker_type, TS.tracker_name, status: 'open', labels: "EXERCISE")
+iora2.issues.each do |el|
+  base = {"stm_tracker_uuid" => tracker_uuid}
+  pkg  = el.merge(base)
+  IssueCmd::Sync.new(pkg).project
+  print '.'
+end
+puts ''
+
+# ----- offers -----
+
+puts 'CREATE A BUY-UNFIXED OFFER FOR EACH OPEN ISSUE'
+funder = User.find_by_email('funder@bugmark.net')
+term_files = Dir.glob("#{File.expand_path TS.trial_dir}/.trial_data/*term*.yml")
+term_files.each do |file|
+  terms = YAML.load_file(file)
+  terms.each do |term|
+    uuid = Issue.by_hexid(term["hexid"]).first&.uuid
+    opts = {
+      price:          term["price"]       ,
+      volume:         term["volume"]      ,
+      user_uuid:      funder.uuid         ,
+      maturation:     BugmTime.end_of_day ,
+      stm_issue_uuid: uuid
+    }
+    if uuid
+      FB.create(:offer_bu, opts).project
+      print '.'
+    else
+      print 'x'
+    end
+  end
+end
+puts ''
+
+puts 'ADD A TRACKER COMMENT WITH A LINK TO EACH OFFER'
+Issue.all.open.each do |issue|
+  uuid    = issue.offers&.first&.uuid
+  url     = "http://#{TS.webapp_url}/offers/#{uuid}"
+  comment = "There is a Bugmark offer on this issue. "
+  link    = "<a href='#{url}'>Click here to view</a>."
+  iora.create_comment(issue.sequence, comment + link)
+  print "."
+end
+puts ""
+
+puts 'DONE'

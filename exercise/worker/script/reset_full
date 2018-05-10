@@ -87,9 +87,10 @@ term_files.each do |file|
   terms.each do |term|
     uuid = Issue.by_hexid(term["hexid"]).first&.uuid
     opts = {
-      price:          term["price"]    ,
-      volume:         term["volume"]   ,
-      user_uuid:      funder.uuid      ,
+      price:          term["price"]       ,
+      volume:         term["volume"]      ,
+      user_uuid:      funder.uuid         ,
+      maturation:     BugmTime.end_of_day ,
       stm_issue_uuid: uuid
     }
     if uuid
