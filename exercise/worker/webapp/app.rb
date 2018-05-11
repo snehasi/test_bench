@@ -5,6 +5,8 @@ require 'sinatra'
 require 'sinatra/flash'
 require 'sinatra/content_for'
 
+require 'securerandom'
+
 set :bind, '0.0.0.0'
 set :root, File.dirname(__FILE__)
 enable :sessions
@@ -37,6 +39,7 @@ end
 get '/badge/*' do |offer_uuid|
   content_type 'image/svg+xml'
   cache_control :no_cache, :no_store
+  etag SecureRandom.hex(10)
   @offer = Offer.find_by_uuid(offer_uuid.split(".").first)
   erb :badge
 end
