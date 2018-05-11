@@ -36,6 +36,7 @@ end
 # render a dynamic SVG for the offer
 get '/badge/*' do |offer_uuid|
   content_type 'image/svg+xml'
+  cache_control :no_cache, :no_store
   @offer = Offer.find_by_uuid(offer_uuid.split(".").first)
   erb :badge
 end
