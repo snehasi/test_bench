@@ -1,19 +1,28 @@
-h2 Open Offers (#{@offers.length})
+.row
+  .col-md-6
+    h2 Open Offers (#{@offers.open.count})
+  .col-md-6.text-right
+    small Open offers mature at midnight Pacific Time
+          (in #{distance_of_time_in_words(BugmTime.now, BugmTime.end_of_day)})
 
 table.table#xtable
   thead
     tr
-      td TITLE
-      td VALUE
-      td MATURES
-      td ACTION
+      td ID
+      td Funder
+      td Title
+      td Value
+      td Issue
+      td Action
   tbody
     - @offers.each do |offer|
       tr
+        td = offer.id
+        td = user_name(offer.user)
         td
           a[href="/offers/#{offer.uuid}"] = issue_title(offer)
-        td = offer.value
-        td = offer.maturation_date
+        td = offer.value.to_s + " tokens"
+        td == tracker_btn(offer.issue)
         td
           a[href="/offers/#{offer.uuid}"] ACCEPT
 

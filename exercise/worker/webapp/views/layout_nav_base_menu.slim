@@ -6,7 +6,7 @@ ul.navbar-nav.mr-auto
 
 ul.navbar-nav.flex-row
   - if logged_in?
-    == nav_btn("#{user_name}", "/account") if consented?
+    == nav_btn("#{user_name} / earnings: #{current_user.balance}", "/account") if consented?
     == nav_link("Logout"  , "/logout")
     == nav_link("Help"    , "/help")
   - else

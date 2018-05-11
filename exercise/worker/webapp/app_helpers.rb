@@ -1,12 +1,20 @@
 require 'time'
 
 module AppHelpers
+
+  include ActionView::Helpers::DateHelper
+
   def hello
     raw("HELLO")
   end
 
   def h(text)
     Rack::Utils.escape_html(text)
+  end
+
+  # ----- time -----
+  def timewords(alt_time)
+    time_ago_in_words(alt_time)
   end
 
   # ----- offers -----
@@ -54,6 +62,17 @@ module AppHelpers
   def repo_link
     url = TS.repo_url
     "<a href='http://#{url}' target='_blank'>Document Repo</a>"
+  end
+
+  def tracker_btn(issue = nil, label = nil)
+    type = TS.tracker_type.to_s
+    url = case type
+      when "yaml"   then yaml_tracker_url(issue)
+      when "github" then github_tracker_url(issue)
+    end
+    lbl = label || (type.capitalize + " ##{issue.sequence}")
+    kls = "btn.btn-sm.btn-primary"
+    "<a class='#{kls}' role='button' href='#{url}' target='_blank'>#{lbl}</a>"
   end
 
   def tracker_link(issue = nil, label = nil)
@@ -152,8 +171,8 @@ module AppHelpers
     current_user&.email
   end
 
-  def user_name
-    current_user&.name || current_user&.uuid[0..5]
+  def user_name(user = current_user)
+    user&.name || user&.uuid[0..5]
   end
 
   def logged_in?
