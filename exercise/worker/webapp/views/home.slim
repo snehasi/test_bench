@@ -19,11 +19,6 @@ h2 The Worker Exercise
         td <b>Leader</b>
         td #{TS.leader_name} - #{TS.leader_email}
       tr
-        td <b>Participants</b>
-        td
-          == participant_list(obfuscated: true)
-          p Contact #{TS.leader_name} if you would like to join.
-      tr
         td <b>Links</b>
         td
           == repo_link

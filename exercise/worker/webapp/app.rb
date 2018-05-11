@@ -17,6 +17,8 @@ get "/" do
   slim :home
 end
 
+# ----- offers -----
+
 # show one offer
 get "/offers/:uuid" do
   protected!
@@ -30,6 +32,14 @@ get "/offers" do
   @offers = Offer.open.with_issue.all
   slim :offers
 end
+
+# render a dynamic SVG for the offer
+get '/badge/*' do |offer_uuid|
+  @offer = Offer.find_by_uuid(offer_uuid.split(".").first)
+  erb :badge
+end
+
+# ----- contracts -----
 
 # show one contract
 get "/contracts/:uuid" do

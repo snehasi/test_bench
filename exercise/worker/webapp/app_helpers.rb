@@ -9,7 +9,21 @@ module AppHelpers
     Rack::Utils.escape_html(text)
   end
 
-  # -----
+  # ----- offers -----
+
+  def offer_status(offer)
+    offer.status
+  end
+
+  def offer_value(offer)
+    offer.value
+  end
+
+  def offer_color(offer)
+    offer.status == "open" ? "#4c1" : "#721"
+  end
+
+  # ----- contracts -----
 
   def contract_id_link(contract)
     "<a href='/contracts/#{contract.uuid}'>#{contract.xid}</a>"

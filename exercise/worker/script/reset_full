@@ -107,9 +107,12 @@ puts 'ADD A TRACKER COMMENT WITH A LINK TO EACH OFFER'
 Issue.all.open.each do |issue|
   uuid    = issue.offers&.first&.uuid
   url     = "http://#{TS.webapp_url}/offers/#{uuid}"
+  burl    = "http://#{TS.webapp_url}/badge/#{uuid}.svg"
   comment = "There is a Bugmark offer on this issue. "
-  link    = "<a href='#{url}'>Click here to view</a>."
-  iora.create_comment(issue.sequence, comment + link)
+  img     = "<img src='#{burl}' alt='Click to View Offer' style='max-width: 100%;'> "
+  obj     = "<object data='#{burl}' type='image/svg+xml'>#{img}</object>"
+  link    = "<a href='#{url}'>#{img}</a>."
+  iora.create_comment(issue.sequence, comment + link + img + obj)
   print "."
 end
 puts ""
