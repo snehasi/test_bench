@@ -110,7 +110,7 @@ end
 
 post "/login" do
   mail, pass = [params["usermail"], params["password"]]
-  user = User.find_by_email(mail)
+  user = User.find_by_email(mail) || User.find_by_name(mail)
   valid_auth    = user && user.valid_password?(pass)
   valid_consent = valid_consent(user)
   case
@@ -127,6 +127,7 @@ post "/login" do
     redirect "/login"
   when ! valid_consent
     session[:usermail] = mail
+    AccessLog.new(current_user&.email).logged_in
     redirect "/consent_form"
   end
 end
