@@ -38,23 +38,29 @@ SCRAMBLES = ScramData.scrambles(1000)
 # ----- methods -----
 
 def body_base(scramble, level)
-  base = "#{scramble.quiz}\n----------"
-  hint = "HINT: word starts with '#{scramble.hint(level)}'"
-  return base if level == 0
+  base = "#{scramble.quiz}"
+  hint = "HINT: the unscrambled word starts with '#{scramble.hint(level)}'"
+  return (base + "\n\n") if level == 0
   "#{base}\n\n#{hint}\n\n"
 end
 
 def pair_doc_body(scramble, level)
   instructions = <<~EOF.gsub("\n", " ")
   TO RESOLVE THIS ISSUE: unscramble the word, and add it to the document.
-  Then submit a pull-request.  The document URL is:
+  Then submit a pull-request.  Make sure to reference the correct issue 
+  number (using the `#NNN` syntax) in your pull-request.
   EOF
-  url = "#{TS.repo_url}/doc/#{scramble.quiz_fn(level)}"
-  body_base(scramble, level) + "\n\n#{instructions}\n#{url}"
+  body_base(scramble, level) + "\n\n#{instructions}"
 end
 
 def pair_task_body(scramble, level)
-  body_base(scramble, level) + "\n\n /#{SecureRandom.hex(3)} "
+  url  = "https://#{TS.repo_url}/blob/master/#{DOC_DIR}/#{scramble.quiz_fn(level)}"
+  link = "<a href='#{url}'>Click here</a> to open the document on GitHub."
+  pair_doc_body(scramble, level) + "\n\n#{link}\n\n/#{SecureRandom.hex(3)}"
+end
+
+def pair_task_tag_body(scramble, level)
+  pair_task_body(scramble, level).gsub("\n\n", "<p></p>")
 end
 
 def task_body(scramble, level)
@@ -62,7 +68,11 @@ def task_body(scramble, level)
   TO RESOLVE THIS ISSUE: post the unscrambled word
   in the issue comments.
   EOF
-  body_base(scramble, level) + "\n\n#{instructions}\n\n /#{SecureRandom.hex(3)} "
+  body_base(scramble, level) + "#{instructions}\n\n/#{SecureRandom.hex(3)}"
+end
+
+def task_tag_body(scramble, level)
+  task_body(scramble, level).gsub("\n\n", "<p></p>")
 end
 
 # ----- writers -----
@@ -82,7 +92,7 @@ def write_pair_task(scramble, level)
   File.open(PAIR_TASKS_FILE, 'a') do |f|
     f.puts "- title:  #{scramble.quiz_level(level, 'p')}"
     f.puts "  labels: EXERCISE,SCRAMWORDS,RESOLVE_WITH_PR,HINTLEVEL_#{level}"
-    f.puts "  body:   \"#{pair_task_body(scramble, level)}\""
+    f.puts "  body:   \"#{pair_task_tag_body(scramble, level)}\""
     f.puts ""
   end
 end
@@ -92,7 +102,7 @@ def write_task(scramble, level)
   File.open(TASKS_FILE, 'a') do |f|
     f.puts "- title:  #{scramble.quiz_level(level, 'c')}"
     f.puts "  labels: EXERCISE,SCRAMWORDS,RESOLVE_WITH_COMMENT,HINTLEVEL_#{level}"
-    f.puts "  body:   \"#{task_body(scramble, level)}\""
+    f.puts "  body:   \"#{task_tag_body(scramble, level)}\""
     f.puts ""
   end
 end

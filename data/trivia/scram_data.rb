@@ -7,7 +7,7 @@ class ScramData
 
     Scramble = Struct.new(:qstring, :astring) do
       def quiz
-        "UnScramble this Word: #{qstring}"
+        "Unscramble this word: #{qstring}"
       end
 
       def quiz_word

@@ -10,8 +10,8 @@ table.table#xtable
   thead
     tr
       td ID
-      td Funder
       td Title
+      td Funder
       td Value
       td Issue
       td Action
@@ -19,8 +19,8 @@ table.table#xtable
     - @offers.each do |offer|
       tr
         td == offer_id_link(offer)
-        td = user_name(offer.user)
         td = issue_title(offer)
+        td = user_name(offer.user)
         td = offer.value.to_s + " tokens"
         td == tracker_btn(offer.issue)
         td
