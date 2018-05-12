@@ -21,8 +21,8 @@ table.table#xtable
     - @contracts.each do |contract|
       tr
         td == contract_id_link(contract)
-        td = user_name(contract.positions.unfixed.first.user)
-        td = user_name(contract.positions.fixed.first.user)
+        td = fixed_username(contract)
+        td = unfixed_username(contract)
         td = contract.total_value
         td == tracker_btn(contract.issue)
         td == contract_mature_date(contract)

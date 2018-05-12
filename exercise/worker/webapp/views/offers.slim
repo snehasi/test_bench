@@ -3,8 +3,7 @@
     h2 Open Offers (#{@offers.open.count})
   .col-md-8.text-right
     small Open offers mature at midnight Pacific Time
-          (in #{distance_of_time_in_words(BugmTime.now, BugmTime.end_of_day)}
-          - <a href="/help/maturation">learn more</a>)
+          (in #{eod_words} #{ic_link('/help').html_safe})
 
 table.table#xtable
   thead

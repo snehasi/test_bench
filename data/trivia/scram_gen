@@ -55,7 +55,7 @@ end
 
 def pair_task_body(scramble, level)
   url  = "https://#{TS.repo_url}/blob/master/#{DOC_DIR}/#{scramble.quiz_fn(level)}"
-  link = "<a href='#{url}'>Click here</a> to open the document on GitHub."
+  link = "( view document on <a href='#{url}'>GitHub</a> )"
   pair_doc_body(scramble, level) + "\n\n#{link}\n\n/#{SecureRandom.hex(3)}"
 end
 

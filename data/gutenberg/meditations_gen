@@ -61,7 +61,7 @@ File.open(TASK_FILE, 'w') do |f|
     title = fn.split('/').last.split('.').first
     url   = "http://#{TS.repo_url}/blob/master/#{fn}"
     line1 = %Q[Please remove html tags from file "#{fn}".<br/>]
-    link1 = %Q[<a href="#{url}">view file on GitHub</a>]
+    link1 = %Q[view file on <a href="#{url}">GitHub</a>]
     body =  "#{line1} ( #{link1} )<p><p/>/#{SecureRandom.hex(3)}"
     f.puts "- title:  Strip tags from #{title}"
     f.puts "  labels: EXERCISE,MEDITATIONS"

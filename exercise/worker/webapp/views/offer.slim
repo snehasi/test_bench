@@ -1,14 +1,16 @@
-h2 Offer
+h2 Offer #{@offer.xid}
 .row
   .col-md-4
     p
-      b Offer Value:<br/>
-      == @offer.value
+      b Funder: #{ic_link('/help').html_safe}<br/>
+      == user_name(@offer.user)
     p
-      b Offer Maturation Date:<br/>
-      == @offer.maturation_date
-    p If the issue is closed on or before #{@offer.maturation_date}
-      you will earn #{@offer.value} tokens.
+      b Offer Value: #{ic_link('/help').html_safe}<br/>
+      == @offer.value.to_s + " tokens"
+    p
+      b Offer Maturation: #{ic_link('/help').html_safe}<br/>
+      == @offer.maturation_date.to_s + " at midnight Pacific Time<br/>"
+      |  (in #{eod_words})
   .col-md-8
     p
       b Issue Title:<br/>
@@ -19,19 +21,21 @@ h2 Offer
       |  )
     p
       b Issue Body:<br/>
-      == @offer.issue.stm_body.gsub("\n", "<br/>")
-hr
+      == @offer.issue.stm_body.gsub("\n", "<br/>").sans_hexid
+hr[style='margin-bottom: 28px;']
 .row
-  .col-md-12
+  .col-md-12.text-center
     - case @offer.status
     - when 'open'
-      p This offer is open.  The offer expires on #{@offer.maturation}.
+      p This offer is currently open.
+        If you accept the offer and the issue is closed before the
+        maturation date you will earn #{@offer.value} tokens.
       p
         a.btn.btn-primary[role="button" href="/transact/#{@offer.uuid}"]
           | ACCEPT OFFER AND FORM CONTRACT
     - when 'crossed'
       p
-        b This offer has been accepted.<br/>
+        b This offer has been crossed.<br/>
         a[href="/contracts/#{@offer.position.contract.uuid}"] Click here
         '  to view the contract.
     - when 'expired'

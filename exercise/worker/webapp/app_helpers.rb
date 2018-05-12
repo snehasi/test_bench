@@ -4,21 +4,28 @@ module AppHelpers
 
   include ActionView::Helpers::DateHelper
 
-  def hello
-    raw("HELLO")
-  end
-
-  def h(text)
-    Rack::Utils.escape_html(text)
-  end
-
   # ----- time -----
-  def timewords(alt_time)
+
+  def timewords(alt_time = Time.now + 1.hour)
     time_ago_in_words(alt_time)
   end
 
+  def eod_words
+    distance_of_time_in_words(BugmTime.now, BugmTime.end_of_day)
+  end
+
+  # ----- info icon -----
+
+  def i_circle
+    "<i class='fa fa-info-circle'></i>"
+  end
+
+  def ic_link(tgt)
+    "<a href='#{tgt}'>#{i_circle}</a>"
+  end
+
   # ----- offers -----
-  # 
+
   def offer_id_link(offer)
     "<a href='/offers/#{offer.uuid}'>#{offer.xid}</a>"
   end
@@ -61,7 +68,15 @@ module AppHelpers
     contract.value_for(user)
   end
 
-  # -----
+  def fixed_username(contract)
+    user_name(contract.positions.fixed.first.user)
+  end
+
+  def unfixed_username(contract)
+    user_name(contract.positions.unfixed.first.user)
+  end
+
+  # ----- links -----
 
   def repo_link
     url = TS.repo_url
@@ -251,4 +266,15 @@ module AppHelpers
     comp, ext = domain.split(".")
     "<code>#{name}@#{comp.gsub(/./, '*')}.#{ext}</code>"
   end
+
+  # ----- testing -----
+
+  def hello
+    raw("HELLO")
+  end
+
+  def h(text)
+    Rack::Utils.escape_html(text)
+  end
+
 end

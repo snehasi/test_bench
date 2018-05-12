@@ -16,4 +16,8 @@ class String
     s = [self].pack("H*").unpack("C*").pack("c*")
     cipher.update(s) + cipher.final
   end
+
+  def sans_hexid
+    self.gsub(/\/\h\h\h\h\h\h/, "")
+  end
 end
