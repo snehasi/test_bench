@@ -14,9 +14,9 @@ h2 Offer
       b Issue Title:<br/>
       == @offer.issue.stm_title
       br
-      '  (see
+      '  ( view issue at
       == tracker_link(@offer.issue)
-      | )
+      |  )
     p
       b Issue Body:<br/>
       == @offer.issue.stm_body.gsub("\n", "<br/>")
