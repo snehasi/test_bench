@@ -17,10 +17,9 @@ table.table#xtable
   tbody
     - @offers.each do |offer|
       tr
-        td = offer.id
+        td == offer_id_link(offer)
         td = user_name(offer.user)
-        td
-          a[href="/offers/#{offer.uuid}"] = issue_title(offer)
+        td = issue_title(offer)
         td = offer.value.to_s + " tokens"
         td == tracker_btn(offer.issue)
         td

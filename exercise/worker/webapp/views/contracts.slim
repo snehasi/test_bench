@@ -10,15 +10,21 @@ table.table#xtable
   thead
     tr
       td ID
-      td VALUE
-      td MATURES
-      td STATUS
-      td EARNINGS
+      td Funder
+      td Worker
+      td Value
+      td Issue
+      td Matures
+      td Status
+      td Earnings
   tbody
     - @contracts.each do |contract|
       tr
         td == contract_id_link(contract)
+        td = user_name(contract.positions.unfixed.first.user)
+        td = user_name(contract.positions.fixed.first.user)
         td = contract.total_value
+        td == tracker_btn(contract.issue)
         td == contract_mature_date(contract)
         td == contract_status(contract)
         td == contract_earnings(current_user, contract)

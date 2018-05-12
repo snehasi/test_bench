@@ -18,6 +18,10 @@ module AppHelpers
   end
 
   # ----- offers -----
+  # 
+  def offer_id_link(offer)
+    "<a href='/offers/#{offer.uuid}'>#{offer.xid}</a>"
+  end
 
   def offer_status(offer)
     offer.status

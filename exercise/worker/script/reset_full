@@ -11,6 +11,7 @@ TRIAL_DIR = dotenv_trial_dir(__dir__)
 require_relative '../../Base/lib/exchange'
 require_relative '../../Base/lib/trial_settings'
 require 'awesome_print'
+require 'securerandom'
 
 # ----- info -----
 
@@ -34,11 +35,13 @@ BugmHost.reset
 # ----- accounts -----
 
 puts 'CREATE A BUGMARK FUNDER ACCOUNT'
-funder = FB.create(:user, balance: 100000, email: 'funder@bugmark.net').user
+funder = FB.create(:user, balance: 100000, email: TS.funder_email).user
 
 puts 'CREATE BUGMARK WORKER ACCOUNTS'
 TS.participants.each do |email|
-  FB.create(:user, email: email.chomp.strip, balance: 0)
+  stripmail = email.chomp.strip
+  uname = stripmail.split('@').first
+  FB.create(:user0, email: stripmail, name: SecureRandom.hex(2))
   print '.'
 end
 puts ''
