@@ -59,10 +59,10 @@ File.open(TASK_FILE, 'w') do |f|
   f.puts "---"
   Dir.glob("#{DOC_DIR}/*.html").each do |fn|
     title = fn.split('/').last.split('.').first
-    line1 = %Q[Please remove html tags from file #{fn}.]
-    link1 = %Q[<a href="http://#{TS.repo_url}">Document Repo</a>]
-    links = [link1].join(" | ")
-    body =  "#{line1} ( #{links} ) /#{SecureRandom.hex(3)}"
+    url   = "http://#{TS.repo_url}/blob/master/#{fn}"
+    line1 = %Q[Please remove html tags from file "#{fn}".<br/>]
+    link1 = %Q[<a href="#{url}">view file on GitHub</a>]
+    body =  "#{line1} ( #{link1} )<p><p/>/#{SecureRandom.hex(3)}"
     f.puts "- title:  Strip tags from #{title}"
     f.puts "  labels: EXERCISE,MEDITATIONS"
     f.puts "  body:   '#{body}'"

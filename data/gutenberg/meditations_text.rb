@@ -24,7 +24,7 @@ class MeditationsText
 
   def markup(text)
     words = text.split(" ")
-    offsets = (1..words.length-1).to_a.shuffle[1..5]
+    offsets = (1..words.length-1).to_a.shuffle[1..3]
     offsets.each {|idx| words[idx] = "<b>#{words[idx]}</b>"}
     wrap(words.join(" "))
   end
