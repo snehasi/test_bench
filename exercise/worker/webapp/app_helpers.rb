@@ -14,6 +14,11 @@ module AppHelpers
     distance_of_time_in_words(BugmTime.now, BugmTime.end_of_day)
   end
 
+  def contract_maturation_words(contract)
+    str = distance_of_time_in_words(BugmTime.now, contract.maturation)
+    BugmTime.now > contract.maturation ? "#{str} ago" : "in #{str}"
+  end
+
   # ----- info icon -----
 
   def i_circle

@@ -24,7 +24,7 @@ h2 Offer #{@offer.xid}
       == @offer.issue.stm_body.gsub("\n", "<br/>").sans_hexid
 hr[style='margin-bottom: 28px;']
 .row
-  .col-md-12.text-center
+  .col-md-12
     - case @offer.status
     - when 'open'
       p This offer is currently open.

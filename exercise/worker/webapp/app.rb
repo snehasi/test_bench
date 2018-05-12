@@ -105,7 +105,12 @@ end
 # ----- login/logout -----
 
 get "/login" do
-  slim :login
+  if current_user
+    flash[:danger] = "You are already logged in!"
+    redirect back
+  else
+    slim :login
+  end
 end
 
 post "/login" do
@@ -122,8 +127,12 @@ post "/login" do
     path = session[:tgt_path]
     session[:tgt_path] = nil
     redirect path || "/"
+  when ! user
+    word = (/@/ =~ params["usermail"]) ? "Email Address" : "Username"
+    flash[:danger] = "Unrecognized #{word} (#{params["usermail"]}) please try again or contact #{TS.leader_name}"
+    redirect "/login"
   when ! valid_auth
-    flash[:danger] = "Invalid username or password"
+    flash[:danger] = "Invalid password - please try again or contact #{TS.leader_name}"
     redirect "/login"
   when ! valid_consent
     session[:usermail] = mail
