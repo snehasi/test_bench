@@ -33,15 +33,23 @@ puts 'RESET ALL BUGMARK DATA AND CREATE AN ADMIN USER'
 BugmHost.reset
 
 # ----- accounts -----
+def pwd_for(email)
+  name = email.split("@").first
+  "bugmark-#{name}"
+end
 
 puts 'CREATE A BUGMARK FUNDER ACCOUNT'
-funder = FB.create(:user, balance: 100000, email: TS.funder_email).user
+opts = {
+  balance: 10000,
+  email: TS.funder_email,
+  password: pwd_for(TS.funder_email)
+}
+funder = FB.create(:user, opts).user
 
 puts 'CREATE BUGMARK WORKER ACCOUNTS'
 TS.participants.each do |email|
-  stripmail = email.chomp.strip
-  uname = stripmail.split('@').first
-  FB.create(:user0, email: stripmail, name: SecureRandom.hex(2))
+  smail = email.chomp.strip
+  FB.create(:user0, email: smail, password: pwd_for(smail), name: SecureRandom.hex(2))
   print '.'
 end
 puts ''

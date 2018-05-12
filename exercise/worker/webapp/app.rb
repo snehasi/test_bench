@@ -115,7 +115,7 @@ post "/login" do
   valid_consent = valid_consent(user)
   case
   when valid_auth && valid_consent
-    session[:usermail] = mail
+    session[:usermail] = user.email
     session[:consent]  = true
     flash[:success]    = "Logged in successfully"
     AccessLog.new(current_user&.email).logged_in
