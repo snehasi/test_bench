@@ -15,7 +15,7 @@ abort "#{USAGE}\nERROR: #{ARGV[0]} not a directory" unless File.directory?(DIR)
 # ----- filepaths -----
 
 TRIAL_DIR       = DIR
-DOC_DIR         = "Scramwords"
+DOC_DIR         = "Scramword"
 ANSWER_FILE     = "./.trial_data/scram_answers.txt"
 TASKS_FILE      = "./.trial_data/scram_tasks.yml"
 TERMS_FILE      = "./.trial_data/scram_terms.yml"
@@ -82,7 +82,6 @@ def write_answer_line(scramble)
 end
 
 def write_pair_doc(scramble, level)
-  write_answer_line(scramble)
   fn = "./#{DOC_DIR}/#{scramble.quiz_fn(level)}"
   File.open(fn, 'w') {|f| f.puts(pair_doc_body(scramble, level))}
 end
