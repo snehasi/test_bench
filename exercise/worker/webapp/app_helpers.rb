@@ -19,6 +19,10 @@ module AppHelpers
     BugmTime.now > contract.maturation ? "#{str} ago" : "in #{str}"
   end
 
+  def eod_iso
+    BugmTime.end_of_day.strftime("%Y%m%dT%H%M%S")
+  end
+
   # ----- info icon -----
 
   def i_circle
