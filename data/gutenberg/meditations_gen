@@ -15,7 +15,7 @@ abort "#{USAGE}\nERROR: #{ARGV[0]} not a directory" unless File.directory?(DIR)
 # ----- filepaths -----
 
 TRIAL_DIR = DIR
-DOC_DIR   = "Meditations"
+DOC_DIR   = "Meditation"
 TASK_FILE = "#{TRIAL_DIR}/.trial_data/meditation_tasks.yml"
 TERM_FILE = "#{TRIAL_DIR}/.trial_data/meditation_terms.yml"
 LCL_SETTINGS = File.expand_path(__dir__) + "/meditations_settings.yml"
