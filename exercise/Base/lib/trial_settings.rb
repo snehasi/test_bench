@@ -23,12 +23,16 @@ class TrialSettings
     end
 
     def base_settings
-       base = File.expand_path("./.trial_data/Settings.yml", TRIAL_DIR)
+      base = File.expand_path("./.trial_data/Settings.yml", TRIAL_DIR)
       yaml_settings(base)
     end
 
     def yaml_settings(file)
-       YAML.load_file(file).transform_keys {|k| k.to_sym}
+      if File.exists?(file)
+        YAML.load_file(file).transform_keys {|k| k.to_sym}
+      else
+        {}
+      end
     end
   end
 end
