@@ -49,7 +49,7 @@ funder = FB.create(:user, opts).user
 puts 'CREATE BUGMARK WORKER ACCOUNTS'
 TS.participants.each do |email|
   smail = email.chomp.strip
-  FB.create(:user0, email: smail, password: pwd_for(smail), name: SecureRandom.hex(2))
+  FB.create(:user, email: smail, password: pwd_for(smail), name: SecureRandom.hex(2), balance: 50)
   print '.'
 end
 puts ''
