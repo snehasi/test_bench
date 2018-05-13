@@ -75,7 +75,7 @@ end
 def write_pair_task(idx)
   File.open(PAIR_TASKS_FILE, 'a') do |f|
     f.puts "- title:  #{PAIR_LIST[idx].gsub('_', ' ')}"
-    f.puts "  labels: EXERCISE,ESSAY,RESOLVE_WITH_PR"
+    f.puts "  labels: EXERCISE,ESSAY"
     f.puts "  body:   '#{pair_task_body(idx)}'"
     f.puts ""
   end
@@ -84,7 +84,7 @@ end
 def write_task(idx)
   File.open(TASKS_FILE, 'a') do |f|
     f.puts "- title:  #{PAIR_LIST[idx].gsub("_", '')}"
-    f.puts "  labels: EXERCISE,ESSAY,RESOLVE_WITH_COMMENT"
+    f.puts "  labels: EXERCISE,ESSAY"
     f.puts "  body:   '#{task_body(idx)}'"
     f.puts ""
   end
