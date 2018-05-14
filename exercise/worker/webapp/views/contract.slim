@@ -2,16 +2,16 @@ h2 Contract #{@contract.xid}
 .row
   .col-md-4
     p
-      b Funder: #{ic_link('/help').html_safe}<br/>
+      b Funder: #{ic_link('/help#funder').html_safe}<br/>
       = user_name(@contract.positions.unfixed.first.user)
     p
-      b Worker: #{ic_link('/help').html_safe}<br/>
+      b Worker: #{ic_link('/help#worker').html_safe}<br/>
       == user_name(@contract.positions.fixed.first.user)
     p
-      b Contract Value: #{ic_link('/help').html_safe}<br/>
+      b Contract Value: #{ic_link('/help#contracts').html_safe}<br/>
       == @contract.total_value.to_s + " tokens"
     p
-      b Contract Maturation: #{ic_link('/help').html_safe}<br/>
+      b Contract Maturation: #{ic_link('/help#maturation').html_safe}<br/>
       = @contract.maturation.strftime("%b-%d")
       |  at midnight Pacific Time<br/>
       |  (#{contract_maturation_words(@contract)})

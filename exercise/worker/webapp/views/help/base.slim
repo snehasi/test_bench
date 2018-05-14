@@ -1,10 +1,60 @@
 h2 Bugmark Worker Exercise
 
-p The Worker Exercise is our base case. The objective is to get participants
-  using the platform, accepting offers, performing work, and earning money
-  money. We also want feedback after this study to improve the experience for the
-  next two studies. In this study, everyone will be workers who work on
-  pre-funded tasks.
+p The Worker Exercise is the first in a series of studies:
+
+ul
+  li in the <b>Worker Exercise</b> participants complete simple tasks
+
+  li in the <b>Funder Exercise</b> participants take the Funder role
+
+  li in the <b>Trader Exercise</b> participants perform arbitrage, sell
+     partial work and set prices
+
+p The objective of the Worker Exercise is to get participants to learn the
+  platform, accept offers, perform work, and earn money.  We also want feedback
+  to improve the experience for follow-on studies.  In this study, everyone will
+  be workers who work on pre-funded tasks.
+
+p The Worker Exercise will run over a period of 3-5 days.
+
+a[name='funder']
+h3 The Funder Role
+
+p Our Exercise Leader, #{TS.leader_name} (#{TS.leader_email}) will take the
+  Funder role.  The Funder will create <a href='/offers'>Offers</a> to pay a reward if an
+  <a href='http://#{TS.tracker_url}' target='_blank'>Issue</a> closed
+  before a specific time.
+
+a[name='worker']
+h3 The Worker Role
+
+p In this exercise, all participants will act as Workers.  As a Worker, you can
+  browse the <a href='/offers'>open offers</a> and select one or more that fit
+  your interest.  When you select an offer, you form a
+  <a href='/contract' target='_blank'>Contract</a> that will pay a reward if the
+  <a href='http://#{TS.tracker_url}'>Issue</a> is closed before the maturation date.
+  In this exercise, we have #{User.count - 1} people who will act as Workers.
+
+a[name='offers']
+h3 Offers
+
+p Offers are created every day after midnight Pacific time.  Every offer has an
+  associated issue.  If an open offer is not accepted, it expires at midnight,
+  and a new offer is generated to take it's place.
+
+a[name='contracts']
+h3 Contracts
+
+p When you accept an offer, a contract is formed.  If the issue is closed
+  before the maturation date, the Worker gets the reward.
+
+a[name='maturation']
+h3 Contract Maturation Cycle
+
+p All offers mature daily at midnight Pacific time. (#{eod_words} from now)
+p New offers are automatically generated after midnight.
+p To get your local maturation time, click
+  <a target='_blank' href='https://www.timeanddate.com/worldclock/fixedtime.html?iso=#{eod_iso}&p1=217'>here</a>.
 
 a[name='currency']
 h3 Exercise Currency
@@ -48,45 +98,9 @@ ul
       of issues closed, average earnings, top earnings, time taken to complete
       issues.
 
-a[name='accept']
-h3 Get started: Accept an offer
-
-p The Offers page lists all open offers. Click on any description or on the blue
-  Accept button to see the offer description, including a link to the issue in
-  GitHub. Now, from the description page, if you would like to work on this
-  issue, click on the blue “Accept offer and form contract” button. The contracts
-  page lists all your contracts (My Contracts tab) as well as all contracts
-  currently active in the market (All Contracts tab).
-
-a[name='resolve']
-h3 Get started: Resolve an Issue
-
-p Once you have accepted an offer, a contract is formed.  All your contracts
-  are listed under the My Contracts tab set within the Contracts page.  Click on
-  the My Contracts tab and then click on a contract you would like to work on.
-  Note that your answer must be submitted before the maturation date/time
-  specified in the contract.  The description of the contract contains a link to
-  the issue in Github.  Click on this link and follow the instructions to solve
-  the problem.  There are two types of responses required.
-
-p <strong>Type 1: Solution in Comment</strong>
-  Many issues can be solve by simply posting a comment on the issue.
-
-p <strong>Type 2: Solution via Pull-Request</strong>
-  Some issues require a file in the GitHub repository to be changed.
-  These issues will include a link to a file. See our
-  <a href=https://docs.google.com/document/d/1piWe2BN6kYRTWlWH0PI5DaT3Bzn4cwyOQBQcKom1yTE/edit>
-  detailed instructions on how to create a pull request on GitHub</a>.
-
-a[name='earn']
-h3 Get started: Earn Credits
-
-p Earn money by working on issues, correctly solving these issues, and
-  submitting the correct solutions by the issue maturation date and time.  After
-  you resolved an issue, the research team will review your answer and make sure
-  the answer is correct.  Issues with correct answers will be closed.  For every
-  closed issue, that you have a contract for, you will earn the reward.  This
-  means, you have to answer issues with enough time for the research team to
-  review your answer before the contract matures and expires.  You can see the
-  total credits awarded at the top right, next to your username and on your user
-  profile in Bugmark.
+- content_for :page_js do
+  javascript:
+    var shiftWindow = function(){ scrollBy(0, -65) };
+    window.addEventListener("hashchange", shiftWindow);
+    function load(){ if (window.location.hash) shiftWindow(); }
+    $(document).ready(load);

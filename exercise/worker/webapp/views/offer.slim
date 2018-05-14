@@ -2,13 +2,13 @@ h2 Offer #{@offer.xid}
 .row
   .col-md-4
     p
-      b Funder: #{ic_link('/help').html_safe}<br/>
+      b Funder: #{ic_link('/help#funder').html_safe}<br/>
       == user_name(@offer.user)
     p
-      b Offer Value: #{ic_link('/help').html_safe}<br/>
+      b Offer Value: #{ic_link('/help#offers').html_safe}<br/>
       == @offer.value.to_s + " tokens"
     p
-      b Offer Maturation: #{ic_link('/help').html_safe}<br/>
+      b Offer Maturation: #{ic_link('/help#maturation').html_safe}<br/>
       == @offer.maturation_date.to_s + " at midnight Pacific Time<br/>"
       |  (in #{eod_words})
   .col-md-8

@@ -17,24 +17,24 @@ hr
           '  (
           a[href='/contracts'] View
           '  )
-hr
-h3 Account Timeline
-
-table.table#xtable
-  thead
-    tr
-      td EVENT
-      td TIME
-      td TYPE
-      td DETAILS
-  tbody
-    - @events.each do |event|
-      tr
-        td = event.id.to_s + "-" + event.event_uuid[0..4]
-        td = event.projected_at.strftime("%b-%d %H:%M:%S %Z")
-        td = event.event_type.split("::").last
-        td = event.payload.without("uuid", "encrypted_password").inspect
-
-- content_for :page_js do
-  javascript:
-    $('#xtable').DataTable();
+/ hr
+/ h3 Account Timeline
+/
+/ table.table#xtable
+/   thead
+/     tr
+/       td EVENT
+/       td TIME
+/       td TYPE
+/       td DETAILS
+/   tbody
+/     - @events.each do |event|
+/       tr
+/         td = event.id.to_s + "-" + event.event_uuid[0..4]
+/         td = event.projected_at.strftime("%b-%d %H:%M:%S %Z")
+/         td = event.event_type.split("::").last
+/         td = event.payload.without("uuid", "encrypted_password").inspect
+/
+/ - content_for :page_js do
+/   javascript:
+//    $('#xtable').DataTable();
