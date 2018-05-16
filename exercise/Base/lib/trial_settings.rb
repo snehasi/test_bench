@@ -1,4 +1,5 @@
 require 'yaml'
+require_relative "./hash_ext"
 
 class TrialSettings
   class << self
@@ -7,22 +8,27 @@ class TrialSettings
     end
 
     def settings
-      default_settings = {
+      default_opts = {
         trial_dir: File.expand_path(TRIAL_DIR),
       }
-      @settings ||= default_settings.merge(generator_settings).merge(base_settings)
+      @settings ||= default_opts.multi_merge(gen_opts, base_opts, dev_opts)
     end
 
     private
 
-    def generator_settings
+    def gen_opts
       dir  = File.expand_path("./.trial_data", TRIAL_DIR)
       Dir.glob("#{dir}/[a-z]*settings*.yml").reduce({}) do |acc, fn|
         acc.merge(yaml_settings(fn))
       end
     end
 
-    def base_settings
+    def dev_opts
+      base = File.expand_path("./.trial_data/Settings_dev.yml", TRIAL_DIR)
+      yaml_settings(base)
+    end
+
+    def base_opts
       base = File.expand_path("./.trial_data/Settings.yml", TRIAL_DIR)
       yaml_settings(base)
     end

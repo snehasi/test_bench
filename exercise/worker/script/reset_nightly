@@ -18,6 +18,8 @@ puts "EXCHANGE_DIR=#{Exchange.src_dir}"
 puts 'EXERCISE SETTINGS'
 ap TrialSettings.settings
 
+exit
+
 # ----- load -----
 
 puts 'LOADING RAILS'
