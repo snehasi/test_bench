@@ -9,7 +9,7 @@ h2 Issue #{@issue.xid}
       / == @issue.value.to_s + " tokens"
     p
       b Issue Maturation: #{ic_link('/help#maturation').html_safe}<br/>
-      / == @issue.maturation_date.to_s + " at midnight Pacific Time<br/>"
+      / == @issue.maturation_date.to_s + " at midnight Eastern Time<br/>"
       / |  (in #{eod_words})
   .col-md-8
     p

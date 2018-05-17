@@ -13,7 +13,7 @@ h2 Contract #{@contract.xid}
     p
       b Contract Maturation: #{ic_link('/help#maturation').html_safe}<br/>
       = @contract.maturation.strftime("%b-%d")
-      |  at midnight Pacific Time<br/>
+      |  at midnight Eastern Time<br/>
       |  (#{contract_maturation_words(@contract)})
   .col-md-8
     p

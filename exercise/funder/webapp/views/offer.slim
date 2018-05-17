@@ -9,7 +9,7 @@ h2 Offer #{@offer.xid}
       == @offer.value.to_s + " tokens"
     p
       b Offer Maturation: #{ic_link('/help#maturation').html_safe}<br/>
-      == @offer.maturation_date.to_s + " at midnight Pacific Time<br/>"
+      == @offer.maturation_date.to_s + " at midnight Eastern Time<br/>"
       |  (in #{eod_words})
   .col-md-8
     p
