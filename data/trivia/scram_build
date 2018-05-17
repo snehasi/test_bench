@@ -16,10 +16,11 @@ abort "#{USAGE}\nERROR: #{ARGV[0]} not a directory" unless File.directory?(DIR)
 
 TRIAL_DIR       = DIR
 DOC_DIR         = "Scramword"
-ANSWER_FILE     = "./.trial_data/scram_answers.txt"
-TASKS_FILE      = "./.trial_data/scram_tasks.yml"
-TERMS_FILE      = "./.trial_data/scram_terms.yml"
-PAIR_TASKS_FILE = "./.trial_data/scram_pair_tasks.yml"
+TIMESTAMP       = Time.now.strftime("%d%H%M%S")
+ANSWER_FILE     = "./.trial_data/scram_answers_#{TIMESTAMP}.txt"
+TASKS_FILE      = "./.trial_data/scram_tasks_#{TIMESTAMP}.yml"
+TERMS_FILE      = "./.trial_data/scram_terms_#{TIMESTAMP}.yml"
+PAIR_TASKS_FILE = "./.trial_data/scram_pair_tasks_#{TIMESTAMP}.yml"
 LCL_SETTINGS    = File.expand_path(__dir__) + "/scram_settings.yml"
 
 puts "TRIAL DIR IS #{TRIAL_DIR}"
@@ -27,7 +28,12 @@ puts "DOC DIR IS #{DOC_DIR}"
 
 # ----- settings and libraries -----
 
-puts "COPY SCRAMWORD SETTINGS INTO DIRECTORY #{TRIAL_DIR}/.trial_data"
+puts "ESTABLISH SCRAMWORD SETTINGS FOR #{TRIAL_DIR}"
+
+Dir.chdir TRIAL_DIR
+system "mkdir -p #{DOC_DIR}"
+system "mkdir -p .trial_data/archive"
+system "mv .trial_data/*scram* .trial_data/archive"
 system "cp #{LCL_SETTINGS} #{TRIAL_DIR}/.trial_data"
 
 require_relative '../../exercise/Base/lib/trial_settings'

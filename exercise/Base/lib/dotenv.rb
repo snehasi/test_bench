@@ -2,14 +2,12 @@ require 'dotenv'
 
 def dotenv_trial_dir(path)
   file = env_file_in_parent(path)
-  puts "ENV_FILE IS #{file}"
   Dotenv.load(file)
   ENV["TRIAL_DIR"]
 end
 
 def dotenv_trial_data(path)
   file = env_file_in_parent(path)
-  puts "ENV_FILE IS #{file}"
   Dotenv.load(file)
   ENV["TRIAL_DATA"]
 end

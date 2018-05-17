@@ -16,8 +16,9 @@ abort "#{USAGE}\nERROR: #{ARGV[0]} not a directory" unless File.directory?(DIR)
 
 TRIAL_DIR       = DIR
 DOC_DIR         = "Essay"
-TASKS_FILE      = "#{TRIAL_DIR}/.trial_data/essay_tasks.yml"
-PAIR_TASKS_FILE = "#{TRIAL_DIR}/.trial_data/essay_pair_tasks.yml"
+TIMESTAMP       = Time.now.strftime("%d%H%M%S")
+TASKS_FILE      = "#{TRIAL_DIR}/.trial_data/essay_tasks_#{TIMESTAMP}.yml"
+PAIR_TASKS_FILE = "#{TRIAL_DIR}/.trial_data/essay_pair_tasks_#{TIMESTAMP}.yml"
 DATA_DIR        = File.expand_path(__dir__)
 LCL_SETTINGS    = DATA_DIR + "/essay_settings.yml"
 
@@ -26,25 +27,21 @@ puts "DOC DIR IS #{DOC_DIR}"
 
 # ----- settings and libraries -----
 
-puts "COPY ESSAY SETTINGS INTO DIRECTORY #{TRIAL_DIR}/.trial_data"
-system "mkdir -p #{TRIAL_DIR}/.trial_data"
-system "cp #{LCL_SETTINGS} #{TRIAL_DIR}/.trial_data"
+puts "ESTABLISH ESSAY SETTINGS FOR #{TRIAL_DIR}"
 
-require_relative '../../exercise/Base/lib/trial_settings'
-
-# ----- setup -----
-
-Dir.chdir TS.trial_dir
+Dir.chdir TRIAL_DIR
 system "mkdir -p #{DOC_DIR}"
-system "rm -f #{DOC_DIR}/*.md"
-system "mkdir -p .trial_data"
+system "mkdir -p .trial_data/archive"
+system "mv .trial_data/*essay* .trial_data/archive"
+system "cp #{LCL_SETTINGS} #{TRIAL_DIR}/.trial_data"
 system "echo --- > #{TASKS_FILE}"
 system "echo --- > #{PAIR_TASKS_FILE}"
+
+require_relative '../../exercise/Base/lib/trial_settings'
 
 Dir.chdir(__dir__)
 PAIR_LIST  = Dir.glob("*md").map {|file| file.split(".").first}.shuffle
 TASK_LIST  = (Dir.glob("*txt").map {|file| file.split(".").first} - PAIR_LIST).shuffle
-TIMESTAMP  = Time.now.strftime("%H%M")
 
 # ----- generate tasks -----
 
@@ -52,7 +49,7 @@ def pair_task_body(idx)
   path  = "#{DATA_DIR}/#{PAIR_LIST[idx]}.txt"
   puts path 
   text  = File.read(path)
-  file  = PAIR_LIST[idx] + ".md"
+  file  = PAIR_LIST[idx] + "_#{TIMESTAMP}.md"
   body  = text.gsub("\n\n", "<p></p>").gsub("\n", " ")
   url   = %Q[https://#{TS.repo_url}/blob/master/#{DOC_DIR}/#{file}]
   link  = %Q[<a href="#{url}">#{url}</a>]
@@ -72,25 +69,25 @@ end
 
 def write_pair_doc(idx)
   src = "#{DATA_DIR}/#{PAIR_LIST[idx]}.md"
-  tgt = "#{TRIAL_DIR}/#{DOC_DIR}/#{PAIR_LIST[idx]}.md"
+  tgt = "#{TRIAL_DIR}/#{DOC_DIR}/#{PAIR_LIST[idx]}_#{TIMESTAMP}.md"
   system "cp #{src} #{tgt}"
 end
 
 def write_pair_task(idx)
   File.open(PAIR_TASKS_FILE, 'a') do |f|
-    f.puts "- title:  #{PAIR_LIST[idx].gsub('_', ' ')}"
-    f.puts "  labels: EXERCISE,ESSAY"
-    f.puts "  body:   '#{pair_task_body(idx)}'"
-    f.puts ""
+    f.puts %Q[- title:  #{PAIR_LIST[idx].gsub('_', ' ')}]
+    f.puts %Q[  labels: EXERCISE,ESSAY]
+    f.puts %Q[  body:   #{pair_task_body(idx)}]
+    f.puts %Q[]
   end
 end
 
 def write_task(idx)
   File.open(TASKS_FILE, 'a') do |f|
-    f.puts "- title:  #{TASK_LIST[idx].gsub("_", ' ')}"
-    f.puts "  labels: EXERCISE,ESSAY"
-    f.puts "  body:   '#{task_body(idx)}'"
-    f.puts ""
+    f.puts %Q[- title:  #{TASK_LIST[idx].gsub("_", ' ')}]
+    f.puts %Q[  labels: EXERCISE,ESSAY]
+    f.puts %Q[  body:   #{task_body(idx)}]
+    f.puts %Q[]
   end
 end
 
@@ -114,6 +111,7 @@ def write_tasks(numtasks)
 end
 
 def write_terms(task_file)
+  puts "TERMS FOR #{task_file}"
   term_file = task_file.gsub('task', 'term')
   tasks = YAML.load_file(task_file)
   File.open(term_file, 'w') do |f|

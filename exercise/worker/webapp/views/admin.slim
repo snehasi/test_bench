@@ -1,0 +1,27 @@
+.row[style='margin-bottom: 15px;']
+  .col-md-4
+    h2 Admin
+  .col-md-4.text-center
+    small
+      a[href='/admin/sync'] Sync Issues
+      '  |
+      a[href='/admin/resolve'] Resolve Contracts
+  .col-md-4.text-right
+    small Users: #{@users.count} Offers: #{@offers.count} Contracts: #{@contracts.count}
+
+table.table#xtable
+  thead
+    tr
+      td ID
+      td Username
+      td Balance
+  tbody
+    - @users.each do |user|
+      tr
+        td = user.xid
+        td = user.name
+        td = user.balance
+
+- content_for :page_js do
+  javascript:
+    $('#xtable').DataTable();

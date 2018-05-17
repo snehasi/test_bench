@@ -192,6 +192,29 @@ get "/ytrack" do
   slim :ytrack
 end
 
+# ----- admin -----
+
+get "/admin" do
+  @users = User.all
+  @contracts = Contract.open
+  @offers = Offer.open
+  slim :admin
+end
+
+get "/admin/sync" do
+  script = File.expand_path("../script/issue_sync_all", __dir__)
+  system script
+  flash[:success] = "You have synced the issue tracker"
+  redirect '/admin'
+end
+
+get "/admin/resolve" do
+  script = File.expand_path("../script/contract_resolve", __dir__)
+  system script
+  flash[:success] = "You have resolved mature contracts"
+  redirect '/admin'
+end
+
 # ----- misc / testing -----
 
 get "/tbd" do

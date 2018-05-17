@@ -11,7 +11,7 @@ class TrialSettings
       default_opts = {
         trial_dir: File.expand_path(TRIAL_DIR),
       }
-      @settings ||= default_opts.multi_merge(gen_opts, base_opts, participant_opts, dev_opts)
+      @settings ||= default_opts.multi_merge(gen_opts, base_opts, participant_opts, prod_opts)
     end
 
     private
@@ -23,8 +23,8 @@ class TrialSettings
       end
     end
 
-    def dev_opts
-      base = File.expand_path("./.trial_data/Settings_dev.yml", TRIAL_DIR)
+    def prod_opts
+      base = File.expand_path("./.trial_data/Settings_prod.yml", TRIAL_DIR)
       yaml_settings(base)
     end
 
