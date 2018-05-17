@@ -1,0 +1,106 @@
+h2 Bugmark Funder Exercise
+
+p The Funder Exercise is the second in a series of studies:
+
+ul
+  li in the <b>Worker Exercise</b> participants complete simple tasks
+
+  li in the <b>Funder Exercise</b> participants take the Funder role
+
+  li in the <b>Trader Exercise</b> participants perform arbitrage, sell
+     partial work and set prices
+
+p The objective of the Funder Exercise is to get participants to learn the
+  platform, accept offers, perform work, and earn money.  We also want feedback
+  to improve the experience for follow-on studies.  In this study, everyone will
+  be workers who work on pre-funded tasks.
+
+p The Funder Exercise will run over a period of 3-5 days.
+
+a[name='funder']
+h3 The Funder Role
+
+p Our Exercise Leader, #{TS.leader_name} (#{TS.leader_email}) will take the
+  Funder role.  The Funder will create <a href='/offers'>Offers</a> to pay a reward if an
+  <a href='http://#{TS.tracker_url}' target='_blank'>Issue</a> closed
+  before a specific time.
+
+a[name='worker']
+h3 The Worker Role
+
+p In this exercise, all participants will act as Workers.  As a Worker, you can
+  browse the <a href='/offers'>open offers</a> and select one or more that fit
+  your interest.  When you select an offer, you form a
+  <a href='/contract' target='_blank'>Contract</a> that will pay a reward if the
+  <a href='http://#{TS.tracker_url}'>Issue</a> is closed before the maturation date.
+  In this exercise, we have #{User.count - 1} people who will act as Workers.
+
+a[name='offers']
+h3 Offers
+
+p Offers are created every day after midnight Pacific time.  Every offer has an
+  associated issue.  If an open offer is not accepted, it expires at midnight,
+  and a new offer is generated to take it's place.
+
+a[name='contracts']
+h3 Contracts
+
+p When you accept an offer, a contract is formed.  If the issue is closed
+  before the maturation date, the Worker gets the reward.
+
+a[name='maturation']
+h3 Contract Maturation Cycle
+
+p All offers mature daily at midnight Pacific time. (#{eod_words} from now)
+p New offers are automatically generated after midnight.
+p To get your local maturation time, click
+  <a target='_blank' href='https://www.timeanddate.com/worldclock/fixedtime.html?iso=#{eod_iso}&p1=217'>here</a>.
+
+a[name='currency']
+h3 Exercise Currency
+
+p The experiment will be run using tokens, which map to real money (U.S.
+  dollars). At the end of the experiment participants will receive their total
+  earnings in U.S. dollars paid in the form of Amazon gift cards. The exchange
+  rate is 1 USD = 10 tokens.
+
+p At the start of the experiment all users will receive a complimentary payment
+  of 50 tokens (5 USD) for their participation. Because all users are workers in
+  this study, they must resolve issues to earn more money.
+
+h3 Exercise Setup
+
+p The setup of the experiments is as follows.
+
+ul
+  li
+    | The issues in the repository consist of a mix of different task
+      types such as python programming questions, documentation issues, essay
+      questions, html tag removal, and scrambled words. This set of task
+      types has been chosen to reflect the kinds of work done in an open source
+      ecosystem.
+  li
+    | Each issue is listed in Bugmark as a pre-funded open offer worth 20 tokens.
+  li
+    | Workers must simply decide which offers to accept and work on.
+  li
+    | In order to get paid, the work must be satisfactorily completed by the
+      maturation date which is always set to midnight Pacific Time.
+  li
+    | The merit of the work submitted is judged by the repository maintainers
+      (as in any open source project).
+  li
+    | After the maturation is reached, if the issue is closed, the worker account
+      balance is paid 20 tokens. Note that it may take time for
+      the submitted work to be evaluated by the repo maintainer.
+  li
+    | Metrics measured in this experiment are: number of issues opened, number
+      of issues closed, average earnings, top earnings, time taken to complete
+      issues.
+
+- content_for :page_js do
+  javascript:
+    var shiftWindow = function(){ scrollBy(0, -65) };
+    window.addEventListener("hashchange", shiftWindow);
+    function load(){ if (window.location.hash) shiftWindow(); }
+    $(document).ready(load);

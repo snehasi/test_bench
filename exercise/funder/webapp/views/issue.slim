@@ -1,0 +1,45 @@
+h2 Issue #{@issue.xid}
+.row
+  .col-md-4
+    p
+      b Funder: #{ic_link('/help#funder').html_safe}<br/>
+      / == user_name(@issue.user)
+    p
+      b Issue Value: #{ic_link('/help#issues').html_safe}<br/>
+      / == @issue.value.to_s + " tokens"
+    p
+      b Issue Maturation: #{ic_link('/help#maturation').html_safe}<br/>
+      / == @issue.maturation_date.to_s + " at midnight Pacific Time<br/>"
+      / |  (in #{eod_words})
+  .col-md-8
+    p
+      b Issue Title:<br/>
+      == @issue.stm_title
+      br
+      '  ( view issue at
+      == tracker_link(@issue)
+      |  )
+    p
+      b Issue Body:<br/>
+      == @issue.stm_body.gsub("\n", "<br/>").sans_hexid
+hr[style='margin-bottom: 28px;']
+.row
+  .col-md-12
+    - case @issue.stm_status
+    - when 'open'
+      p This issue is currently open.
+        If you accept the issue and the issue is closed before the
+        maturation date you will earn TBD tokens.
+      p
+        | TBD
+        / a.btn.btn-primary[role="button" href="/transact/#{@issue.uuid}"]
+        /   | ACCEPT OFFER AND FORM CONTRACT
+    - when 'crossed'
+      p
+        b This issue has been crossed.<br/>
+        a[href="/contracts/#{@issue.position.contract.uuid}"] Click here
+        '  to view the contract.
+    - when 'expired'
+      p This issue has expired.
+    - else
+      p Issue Unknown Status #{@issue.status}.

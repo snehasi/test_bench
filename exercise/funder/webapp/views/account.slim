@@ -1,0 +1,40 @@
+h2 Account information for #{current_user.email}
+hr
+.row[style='margin-top: 20px;']
+  .col-md-6
+    | Your current username is <b>#{user_name}</b>.
+      Your username is visible to other exercise participants.
+    form.form-inline[action="/set_username" method="post" style='margin-top: 10px;']
+      .form-group.mx-sm-3.mb-2
+        input[type="text" class="form-control" name="newName" placeholder="enter a new username"]
+      button.btn.btn-primary.mb-2[type="submit"] Change
+  .col-md-6
+    p Your current balance is <b>#{current_user.balance}</b> tokens.
+    p
+      | You currently have <b>#{current_user.open_contracts.length}</b> open contracts.
+      - if current_user.open_contracts.length > 0
+        span
+          '  (
+          a[href='/contracts'] View
+          '  )
+/ hr
+/ h3 Account Timeline
+/
+/ table.table#xtable
+/   thead
+/     tr
+/       td EVENT
+/       td TIME
+/       td TYPE
+/       td DETAILS
+/   tbody
+/     - @events.each do |event|
+/       tr
+/         td = event.id.to_s + "-" + event.event_uuid[0..4]
+/         td = event.projected_at.strftime("%b-%d %H:%M:%S %Z")
+/         td = event.event_type.split("::").last
+/         td = event.payload.without("uuid", "encrypted_password").inspect
+/
+/ - content_for :page_js do
+/   javascript:
+//    $('#xtable').DataTable();
