@@ -208,6 +208,24 @@ get "/ytrack" do
   slim :ytrack
 end
 
+get "/ytrack_close/:exid" do
+  @exid = params['exid']
+  iora = Iora.new(TS.tracker_type, TS.tracker_name)
+  issue = iora.issue(@exid)
+  iora.close(issue["sequence"])
+  flash[:success] = "Issue was closed"
+  redirect "/ytrack/#{@exid}"
+end
+
+get "/ytrack_open/:exid" do
+  @exid = params['exid']
+  iora = Iora.new(TS.tracker_type, TS.tracker_name)
+  issue = iora.issue(@exid)
+  iora.open(issue["sequence"])
+  flash[:success] = "Issue was opened"
+  redirect "/ytrack/#{@exid}"
+end
+
 # ----- admin -----
 
 get "/admin" do

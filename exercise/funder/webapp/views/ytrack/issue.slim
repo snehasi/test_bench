@@ -9,7 +9,11 @@ table.table.table-small
     td == @issue["exid"]
   tr
     td <b>Issue Status</b>
-    td == @issue["stm_status"]
+    td
+      == @issue["stm_status"]
+      span[style='margin-left: 120px;']
+        == ytrack_action_btn(@issue)
+
   tr
     td <b>Issue Title</b>
     td == @issue["stm_title"]

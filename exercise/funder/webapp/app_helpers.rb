@@ -112,11 +112,6 @@ module AppHelpers
     "<a href='#{url}' target='_blank'>#{lbl}</a>"
   end
 
-  def yaml_tracker_url(issue)
-    base = "http://#{TS.webapp_url}/ytrack"
-    issue ? "#{base}/#{issue.exid}" : base
-  end
-
   def github_tracker_url(issue)
     base = "http://github.com/#{TS.tracker_name}/issues"
     issue ? "#{base}/#{issue.sequence}" : base
@@ -124,6 +119,13 @@ module AppHelpers
 
   def current_page(path)
     request.path_info == path
+  end
+
+  # ----- ytrack -----
+
+  def yaml_tracker_url(issue)
+    base = "http://#{TS.webapp_url}/ytrack"
+    issue ? "#{base}/#{issue.exid}" : base
   end
 
   def ytrack_nav_menu
@@ -143,6 +145,13 @@ module AppHelpers
     #{link}
     """
   end
+
+  def ytrack_action_btn(issue)
+    lbl = issue['stm_status'] == "open" ? "close" : "open"
+    "<a href='/ytrack_#{lbl}/#{issue["exid"]}' class='btn btn-sm btn-primary'>click to #{lbl}</a>"
+  end
+
+  # -----
 
   def help_nav(label, path)
     href = "<a href='#{path}'>#{label}</a>"
