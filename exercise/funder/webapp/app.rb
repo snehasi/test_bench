@@ -28,10 +28,10 @@ get "/issues/:uuid" do
   slim :issue
 end
 
-# list all issue
+# list all issues
 get "/issues" do
   protected!
-  @issues = Issue.open.all
+  @issues = Issue.uncontracted
   slim :issues
 end
 
@@ -62,6 +62,43 @@ get '/badge/*' do |offer_uuid|
   erb :badge
 end
 
+# fund an offer
+get "/offer_fund/:issue_uuid" do
+  protected!
+  uuid  = params['issue_uuid']
+  issue = Issue.find_by_uuid(uuid)
+  opts = {
+    price:          1.00,
+    volume:         20,
+    user_uuid:      current_user.uuid,
+    maturation:     BugmTime.end_of_day,
+    expiration:     BugmTime.end_of_day,
+    stm_issue_uuid: uuid
+  }
+  if issue
+    FB.create(:offer_bu, opts).project
+    flash[:success] = "You have funded a new offer"
+  else
+    flash[:danger] = "Something went wrong"
+  end
+  redirect "/issues/#{uuid}"
+end
+
+# accept offer and form a contract
+get "/offer_accept/:issue_uuid" do
+  protected!
+  user_uuid = current_user.uuid
+  uuid      = params['issue_uuid']
+  issue     = Issue.find_by_uuid(uuid)
+  contracts = issue.offers_bu.open.map do |offer|
+    counter   = OfferCmd::CreateCounter.new(offer, user_uuid: user_uuid).project.offer
+    ContractCmd::Cross.new(counter, :expand).project.contract
+  end
+  flash[:success] = "You have formed a new contract"
+  binding.pry
+  redirect "/contracts/#{contracts.first.uuid}"
+end
+
 # ----- contracts -----
 
 # show one contract
@@ -85,17 +122,6 @@ get "/contracts_all" do
   @title     = "All Contracts"
   @contracts = Contract.all
   slim :contracts
-end
-
-# form a contract
-get "/transact/:offer_uuid" do
-  protected!
-  user_uuid = current_user.uuid
-  offer     = Offer.find_by_uuid(params['offer_uuid'])
-  counter   = OfferCmd::CreateCounter.new(offer, user_uuid: user_uuid).project.offer
-  contract  = ContractCmd::Cross.new(counter, :expand).project.contract
-  flash[:success] = "You have formed a new contract"
-  redirect "/contracts/#{contract.uuid}"
 end
 
 # ----- user account -----

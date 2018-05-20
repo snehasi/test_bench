@@ -33,6 +33,12 @@ module AppHelpers
     "<a href='#{tgt}'>#{i_circle}</a>"
   end
 
+  # ----- issues -----
+
+  def issue_id_link(issue)
+    "<a href='/issues/#{issue.uuid}'>#{issue.xid}</a>"
+  end
+
   # ----- offers -----
 
   def offer_id_link(offer)

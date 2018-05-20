@@ -31,7 +31,7 @@ hr[style='margin-bottom: 28px;']
         If you accept the offer and the issue is closed before the
         maturation date you will earn #{@offer.value} tokens.
       p
-        a.btn.btn-primary[role="button" href="/transact/#{@offer.uuid}"]
+        a.btn.btn-primary[role="button" href="/offer_accept/#{@offer.uuid}"]
           | ACCEPT OFFER AND FORM CONTRACT
     - when 'crossed'
       p

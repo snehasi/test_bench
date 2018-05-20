@@ -1,45 +1,43 @@
-h2 Issue #{@issue.xid}
+h2 #{@issue.xid.capitalize}
 .row
-  .col-md-4
-    p
-      b Funder: #{ic_link('/help#funder').html_safe}<br/>
-      / == user_name(@issue.user)
-    p
-      b Issue Value: #{ic_link('/help#issues').html_safe}<br/>
-      / == @issue.value.to_s + " tokens"
-    p
-      b Issue Maturation: #{ic_link('/help#maturation').html_safe}<br/>
-      / == @issue.maturation_date.to_s + " at midnight Eastern Time<br/>"
-      / |  (in #{eod_words})
-  .col-md-8
+  .col-md-5
     p
       b Issue Title:<br/>
       == @issue.stm_title
-      br
-      '  ( view issue at
-      == tracker_link(@issue)
-      |  )
     p
-      b Issue Body:<br/>
-      == @issue.stm_body.gsub("\n", "<br/>").sans_hexid
-hr[style='margin-bottom: 28px;']
+      b Issue Source:<br/>
+      == tracker_link(@issue)
+  .col-md-7
+    b Issue Body:<br/>
+    == @issue.stm_body.gsub("\n", "<br/>").sans_hexid
 .row
   .col-md-12
-    - case @issue.stm_status
-    - when 'open'
-      p This issue is currently open.
-        If you accept the issue and the issue is closed before the
-        maturation date you will earn TBD tokens.
-      p
-        | TBD
-        / a.btn.btn-primary[role="button" href="/transact/#{@issue.uuid}"]
-        /   | ACCEPT OFFER AND FORM CONTRACT
-    - when 'crossed'
-      p
-        b This issue has been crossed.<br/>
-        a[href="/contracts/#{@issue.position.contract.uuid}"] Click here
-        '  to view the contract.
-    - when 'expired'
-      p This issue has expired.
-    - else
-      p Issue Unknown Status #{@issue.status}.
+    b Offers ( #{@issue.offers_bu.count} / ):
+    table.table.table-sm
+      thead
+        tr
+          th ID
+          th Funder
+          th Value
+          th Offer Status
+      tbody
+        - @issue.offers_bu.each do |offer|
+          tr
+            td = offer.xid
+            td = user_name(offer.user)
+            td = offer.value
+            td = offer.status
+hr
+.row
+  - if @issue.has_contracts?
+    .col-md-12
+      | The issue has contracts
+  - else
+    .col-md-6.text-center
+      b FUND OFFER<br/>
+      a.btn.btn-primary[href='/offer_fund/#{@issue.uuid}']
+        | CREATE A NEW OFFER
+    .col-md-6.text-center
+      b ACCEPT OFFER<br/>
+      a.btn.btn-primary[href='/offer_accept/#{@issue.uuid}']
+        | ACCEPT OFFERS AND FORM CONTRACT

@@ -44,12 +44,17 @@ opts = {
   email: TS.funder_email,
   password: pwd_for(TS.funder_email)
 }
-funder = FB.create(:user, opts).user
+FB.create(:user, opts).user
 
 puts 'CREATE BUGMARK WORKER ACCOUNTS'
 TS.participants.each do |email|
-  smail = email.chomp.strip
-  FB.create(:user, email: smail, password: pwd_for(smail), name: SecureRandom.hex(2), balance: 50)
+  opts = {
+    email:    email.chomp.strip,
+    password: pwd_for(email.chomp.strip),
+    name:     SecureRandom.hex(2),
+    balance:  TS.seed_balance || 500
+  }
+  FB.create(:user, opts)
   print '.'
 end
 puts ''
@@ -57,7 +62,7 @@ puts ''
 # ----- bugmark tracker -----
 
 puts 'CREATE A BUGMARK TRACKER'
-FB.create(:tracker, name: 'Worker')
+FB.create(:tracker, name: 'FunderExercise')
 
 # ----- issues -----
 

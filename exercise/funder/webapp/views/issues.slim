@@ -1,8 +1,8 @@
 .row[style='margin-bottom: 15px;']
   .col-md-4
-    h2 Open Issues (#{@issues.open.count})
+    h2 Issues (#{@issues.open.count})
   .col-md-8.text-right
-    small Open issues mature at midnight Eastern Time
+    small Open issues mature at midnight #{BugmTime.now.strftime("%Z")}
           (in #{eod_words} #{ic_link('/help#maturation').html_safe})
 
 table.table#xtable
@@ -10,20 +10,22 @@ table.table#xtable
     tr
       td ID
       td Title
-      td Funder
-      td Value
-      td Issue
+      td Offers
+      td Source
       td Action
   tbody
     - @issues.each do |issue|
       tr
-        td = issue.xid
+        td == issue_id_link(issue)
         td = issue.stm_title
-        td TBD
-        td TBD
+        td
+          = issue.offers_bu.count
+          '  /
+          = issue.offers_bu.pluck(:value).sum
+          '  tokens
         td == tracker_btn(issue)
         td
-          a[href="/issues/#{issue.uuid}"] ACCEPT
+          a[href="/issues/#{issue.uuid}"] OFFER TO FUND
 
 - content_for :page_js do
   javascript:
