@@ -1,9 +1,4 @@
-.row[style='margin-bottom: 15px;']
-  .col-md-4
-    h2 Issues (#{@issues.open.count})
-  .col-md-8.text-right
-    small Open issues mature at midnight #{BugmTime.now.strftime("%Z")}
-          (in #{eod_words} #{ic_link('/help#maturation').html_safe})
+h2[style='margin-bottom: 15px;'] Issues (#{@issues.open.count})
 
 table.table#xtable
   thead

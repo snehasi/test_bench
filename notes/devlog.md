@@ -97,21 +97,29 @@
 
 - [x] /contracts - change xtag from "con" to "contract"
 - [x] /contract - change title `@contract.xid.capitalize`
-- [ ] /contracts - show funder count instead of name
-- [ ] /contracts - link to Bugmark issue
-- [ ] /contract - show list of funders
-- [ ] /contract - get rid of hardcoded "Eastern Time"
-- [ ] /issues - get rid of "matures"
-- [ ] /issue - add "Open issue matures" message to offer list
+- [x] /contracts - show funder count instead of name
+- [x] /contract - show list of funders
+- [x] /contract  - link to Bugmark issue
+- [x] /contracts - link to Bugmark issue
+- [x] /contract - get rid of hardcoded "Eastern Time"
+- [x] /issues - get rid of "matures"
+- [x] /issue - add "Open issue matures" message to offer list
+- [x] /issue - add issue status
+
+- [ ] /badge: make badge render from ISSUE not OFFER
+
+- [ ] exchange - add 'synced_at' to issue
+- [ ] /issue - add last-sync time
+
 - [ ] /issues - switch from 'fund an offer' to 'accept offer' per funding obligation
 - [ ] /issue - don't allow FUNDING once contract is formed
 - [ ] /issue - don't allow FUNDING if insufficient user balance
-- [ ] /issue - add issue status and last-sync time
 - [ ] /issue - don't allow ACCEPT OFFER before funding obligation is settled
-- [ ] /badge: make badge render from ISSUE not OFFER
-- [ ] system_build - top everyone up to seed_balance
-- [ ] user bubble: show earnings
 - [ ] /account - show sources of funds - break out earnings
+- [ ] /admin - test sync button
+- [ ] /admin - test resolve button
+- [ ] user bubble: show earnings
+- [ ] system_build - top everyone up to seed_balance
 - [ ] clean up documentation...
 
 ## TBD

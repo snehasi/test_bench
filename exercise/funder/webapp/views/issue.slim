@@ -7,12 +7,22 @@ h2 #{@issue.xid.capitalize}
     p
       b Issue Source:<br/>
       == tracker_link(@issue)
+      == "<br/>(last synced at #{@issue.synced_at || 'TBD'})"
+    p
+      b Issue Status:<br/>
+      = @issue.stm_status
+
   .col-md-7
     b Issue Body:<br/>
     == @issue.stm_body.gsub("\n", "<br/>").sans_hexid
 .row
+  .col-md-4
+    b Offers ( #{@issue.offers_bu.count} )
+  .col-md-8.text-right
+    small Open offers mature at midnight #{BugmTime.now.strftime("%Z")}
+          (in #{eod_words} #{ic_link('/help#maturation').html_safe})
+.row
   .col-md-12
-    b Offers ( #{@issue.offers_bu.count} / ):
     table.table.table-sm
       thead
         tr

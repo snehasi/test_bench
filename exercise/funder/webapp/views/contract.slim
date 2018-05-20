@@ -14,14 +14,17 @@ h2 #{@contract.xid.capitalize}
     p
       b Contract Maturation: #{ic_link('/help#maturation').html_safe}<br/>
       = @contract.maturation.strftime("%b-%d")
-      |  at midnight Eastern Time<br/>
+      |  at midnight #{BugmTime.now.strftime('%Z')}<br/>
       |  (#{contract_maturation_words(@contract)})
   .col-md-8
+    p
+      b Issue ID:<br/>
+      == issue_id_link(@contract.issue)
     p
       b Issue Title:<br/>
       == @contract.issue.stm_title
       br
-      '  ( view issue at
+      '  ( view issue source at
       == tracker_link(@contract.issue)
       |  )
     p

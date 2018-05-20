@@ -24,7 +24,7 @@ table.table#xtable
         td = contract.positions.unfixed.count
         td = fixed_username(contract)
         td = contract.total_value
-        td == tracker_btn(contract.issue)
+        td == issue_id_link(contract.issue)
         td == contract_mature_date(contract)
         td == contract_status(contract)
         td == contract_earnings(current_user, contract)
