@@ -22,6 +22,12 @@ class AccessLog
     log_data[cmail]["consented_at"]
   end
 
+  def formatted_consent_date
+    return unless email
+    consent_date.to_time.strftime('%b-%d %H:%M') +
+      BugmTime.now.strftime(' %Z')
+  end
+
   def consented
     return unless email
     log_data[cmail] ||= {}
@@ -33,7 +39,7 @@ class AccessLog
     return unless email
     log_data[cmail] ||= {}
     log_data[cmail]["login_at"] = Time.now
-    log_data[cmail]["num_logins"] = (log_data[cmail][:num_logins] || 0) + 1
+    log_data[cmail]["num_logins"] = (log_data[cmail]["num_logins"] || 0) + 1
     save_log_data
   end
 

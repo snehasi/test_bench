@@ -39,6 +39,18 @@ module AppHelpers
     "<a href='/issues/#{issue.uuid}'>#{issue.xid}</a>"
   end
 
+  def issue_status(issue)
+    issue.has_contracts? ? "crossed" : "open"
+  end
+
+  def issue_value(issue)
+    issue.offers.pluck(:value).sum
+  end
+
+  def issue_color(issue)
+    issue_status(issue) == "open" ? "#4c1" : "#721"
+  end
+
   # ----- offers -----
 
   def offer_id_link(offer)

@@ -17,6 +17,11 @@ hr
           '  (
           a[href='/contracts'] View
           '  )
+    p
+      ' You accepted the
+      a[href="/consent_form"] UNO Consent Form
+      '  on #{AccessLog.new(current_user.email).formatted_consent_date}
+
 / hr
 / h3 Account Timeline
 /

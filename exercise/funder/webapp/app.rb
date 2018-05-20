@@ -35,6 +35,18 @@ get "/issues" do
   slim :issues
 end
 
+# render a dynamic SVG for the issues
+get '/badge/*' do |issue_uuid|
+  content_type 'image/svg+xml'
+  cache_control :no_cache
+  expires 0
+  last_modified Time.now
+  etag SecureRandom.hex(10)
+  @issue = Issue.find_by_uuid(issue_uuid.split(".").first)
+  erb :badge
+end
+
+
 # ----- offers -----
 
 # show one offer
@@ -49,17 +61,6 @@ get "/offers" do
   protected!
   @offers = Offer.open.with_issue.all
   slim :offers
-end
-
-# render a dynamic SVG for the offer
-get '/badge/*' do |offer_uuid|
-  content_type 'image/svg+xml'
-  cache_control :no_cache
-  expires 0
-  last_modified Time.now
-  etag SecureRandom.hex(10)
-  @offer = Offer.find_by_uuid(offer_uuid.split(".").first)
-  erb :badge
 end
 
 # fund an offer
@@ -95,7 +96,6 @@ get "/offer_accept/:issue_uuid" do
     ContractCmd::Cross.new(counter, :expand).project.contract
   end
   flash[:success] = "You have formed a new contract"
-  binding.pry
   redirect "/contracts/#{contracts.first.uuid}"
 end
 

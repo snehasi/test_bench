@@ -105,20 +105,22 @@
 - [x] /issues - get rid of "matures"
 - [x] /issue - add "Open issue matures" message to offer list
 - [x] /issue - add issue status
-
-- [ ] /badge: make badge render from ISSUE not OFFER
-
-- [ ] exchange - add 'synced_at' to issue
-- [ ] /issue - add last-sync time
+- [x] /login - fix login count
+- [x] /account - add "terms acceptance date" with link to terms
+- [x] /badge: make badge render from ISSUE not OFFER
+- [x] exchange - add 'synced_at' to issue
+- [x] /issue - add last-sync time
 
 - [ ] /issues - switch from 'fund an offer' to 'accept offer' per funding obligation
 - [ ] /issue - don't allow FUNDING once contract is formed
 - [ ] /issue - don't allow FUNDING if insufficient user balance
 - [ ] /issue - don't allow ACCEPT OFFER before funding obligation is settled
 - [ ] /account - show sources of funds - break out earnings
+
+- [ ] user bubble: show earnings
+
 - [ ] /admin - test sync button
 - [ ] /admin - test resolve button
-- [ ] user bubble: show earnings
 - [ ] system_build - top everyone up to seed_balance
 - [ ] clean up documentation...
 

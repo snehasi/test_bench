@@ -7,7 +7,7 @@ h2 #{@issue.xid.capitalize}
     p
       b Issue Source:<br/>
       == tracker_link(@issue)
-      == "<br/>(last synced at #{@issue.synced_at || 'TBD'})"
+      == "<br/>(last synced at #{@issue.synced_at&.strftime("%b-%d %H:%M:%S %Z") || 'TBD'})"
     p
       b Issue Status:<br/>
       = @issue.stm_status
