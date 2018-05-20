@@ -10,7 +10,7 @@ table.table#xtable
   thead
     tr
       td ID
-      td Funder
+      td Funders
       td Worker
       td Value
       td Issue
@@ -21,7 +21,7 @@ table.table#xtable
     - @contracts.each do |contract|
       tr
         td == contract_id_link(contract)
-        td = unfixed_username(contract)
+        td = contract.positions.unfixed.count
         td = fixed_username(contract)
         td = contract.total_value
         td == tracker_btn(contract.issue)

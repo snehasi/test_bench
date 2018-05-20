@@ -95,23 +95,23 @@
 
 ## 2018-05-20 SUN
 
-- [ ] user bubble: show earnings
-- [ ] /account - show sources of funds - break out earnings
-- [ ] /issues - get rid of "matures"
-- [ ] /issues - switch from 'fund an offer' to 'accept offer'
-- [ ] /badge: make badge render from ISSUE not OFFER
-- [ ] /issue - don't allow FUNDING once contract is formed
-- [ ] /issue - don't allow FUNDING if insufficient user balance
-- [ ] /issue - add "Open issue matures" message to offer list
-- [ ] /issue - add issue status and last-sync time
-- [ ] /issue - don't allow ACCEPT OFFER before funding obligation is settled
-- [ ] system_build - top everyone up to seed_balance
+- [x] /contracts - change xtag from "con" to "contract"
+- [x] /contract - change title `@contract.xid.capitalize`
 - [ ] /contracts - show funder count instead of name
 - [ ] /contracts - link to Bugmark issue
-- [ ] /contracts - change xtag from "con" to "contract"
-- [ ] /contract - change title `@contract.xid.capitalize`
 - [ ] /contract - show list of funders
 - [ ] /contract - get rid of hardcoded "Eastern Time"
+- [ ] /issues - get rid of "matures"
+- [ ] /issue - add "Open issue matures" message to offer list
+- [ ] /issues - switch from 'fund an offer' to 'accept offer' per funding obligation
+- [ ] /issue - don't allow FUNDING once contract is formed
+- [ ] /issue - don't allow FUNDING if insufficient user balance
+- [ ] /issue - add issue status and last-sync time
+- [ ] /issue - don't allow ACCEPT OFFER before funding obligation is settled
+- [ ] /badge: make badge render from ISSUE not OFFER
+- [ ] system_build - top everyone up to seed_balance
+- [ ] user bubble: show earnings
+- [ ] /account - show sources of funds - break out earnings
 - [ ] clean up documentation...
 
 ## TBD

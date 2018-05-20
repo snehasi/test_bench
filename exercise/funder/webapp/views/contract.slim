@@ -1,9 +1,10 @@
-h2 Contract #{@contract.xid}
+h2 #{@contract.xid.capitalize}
 .row
   .col-md-4
     p
-      b Funder: #{ic_link('/help#funder').html_safe}<br/>
-      = user_name(@contract.positions.unfixed.first.user)
+      b Funders: #{ic_link('/help#funder').html_safe}<br/>
+      - @contract.positions.unfixed.each do |pos|
+        == user_name(pos.user) + " (#{pos.offer.value} tokens)<br/>"
     p
       b Worker: #{ic_link('/help#worker').html_safe}<br/>
       == user_name(@contract.positions.fixed.first.user)
