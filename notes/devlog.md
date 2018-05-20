@@ -111,6 +111,19 @@
 - [x] exchange - add 'synced_at' to issue
 - [x] /issue - add last-sync time
 
+- [ ] predicate: funding_done?
+- [ ] query: number of offers funded since last period
+- [ ] #seed_money -> balance - offer_bu.sum
+- [ ] #escrow -> TBD
+- [ ] #earnings -> TBD
+- [ ] successful fundings
+- [ ] funding payout: 50 / number of funders
+
+- [ ] /issues - checklist for multi-offer funding
+
+- [ ] /issue - don't allow more than one funding per issue
+- [ ] /issue - don't allow accepting your own offer
+
 - [ ] /issues - switch from 'fund an offer' to 'accept offer' per funding obligation
 - [ ] /issue - don't allow FUNDING once contract is formed
 - [ ] /issue - don't allow FUNDING if insufficient user balance
