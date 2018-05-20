@@ -69,6 +69,17 @@ module AppHelpers
     offer.status == "open" ? "#4c1" : "#721"
   end
 
+  def offer_worker_link(offer)
+    case offer.status
+    when 'crossed'
+      user_name(offer.position.counterusers.first)
+    when 'expired'
+      'EXPIRED'
+    when 'open'
+      "<a href='/offer_accept/#{offer.uuid}'>ACCEPT OFFER</a>"
+    end
+  end
+
   # ----- contracts -----
 
   def contract_id_link(contract)

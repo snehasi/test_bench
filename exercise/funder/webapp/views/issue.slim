@@ -19,35 +19,30 @@ h2 #{@issue.xid.capitalize}
   .col-md-4
     b Offers ( #{@issue.offers_bu.count} )
   .col-md-8.text-right
-    small Open offers mature at midnight #{BugmTime.now.strftime("%Z")}
-          (in #{eod_words} #{ic_link('/help#maturation').html_safe})
-.row
-  .col-md-12
-    table.table.table-sm
-      thead
-        tr
-          th ID
-          th Funder
-          th Value
-          th Offer Status
-      tbody
-        - @issue.offers_bu.each do |offer|
-          tr
-            td = offer.xid
-            td = user_name(offer.user)
-            td = offer.value
-            td = offer.status
+    a.btn.btn-primary.btn-sm[href='/offer_fund/#{@issue.uuid}']
+      | CREATE A NEW OFFER
+table.table.table-sm[style='margin-top: 10px;']
+  thead
+    tr
+      th ID
+      th Funder
+      th Volume
+      th Price
+      th Value
+      th Offer Status
+      th Worker
+  tbody
+    - @issue.offers_bu.each do |offer|
+      tr
+        td = offer.xid
+        td = user_name(offer.user)
+        td = offer.volume
+        td = offer.price
+        td = offer.value
+        td = offer.status
+        td == offer_worker_link(offer)
 hr
 .row
-  - if @issue.has_contracts?
-    .col-md-12
-      | The issue has contracts
-  - else
-    .col-md-6.text-center
-      b FUND OFFER<br/>
-      a.btn.btn-primary[href='/offer_fund/#{@issue.uuid}']
-        | CREATE A NEW OFFER
-    .col-md-6.text-center
-      b ACCEPT OFFER<br/>
-      a.btn.btn-primary[href='/offer_accept/#{@issue.uuid}']
-        | ACCEPT OFFERS AND FORM CONTRACT
+  .col-md-12.text-right
+    small Open offers mature at midnight #{BugmTime.now.strftime("%Z")}
+          (in #{eod_words} #{ic_link('/help#maturation').html_safe})

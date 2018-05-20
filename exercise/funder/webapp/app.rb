@@ -69,7 +69,7 @@ get "/offer_fund/:issue_uuid" do
   uuid  = params['issue_uuid']
   issue = Issue.find_by_uuid(uuid)
   opts = {
-    price:          1.00,
+    price:          0.50,
     volume:         20,
     user_uuid:      current_user.uuid,
     maturation:     BugmTime.end_of_day,
@@ -86,17 +86,15 @@ get "/offer_fund/:issue_uuid" do
 end
 
 # accept offer and form a contract
-get "/offer_accept/:issue_uuid" do
+get "/offer_accept/:offer_uuid" do
   protected!
   user_uuid = current_user.uuid
-  uuid      = params['issue_uuid']
-  issue     = Issue.find_by_uuid(uuid)
-  contracts = issue.offers_bu.open.map do |offer|
-    counter   = OfferCmd::CreateCounter.new(offer, user_uuid: user_uuid).project.offer
-    ContractCmd::Cross.new(counter, :expand).project.contract
-  end
+  uuid      = params['offer_uuid']
+  offer     = Offer.find_by_uuid(uuid)
+  counter   = OfferCmd::CreateCounter.new(offer, user_uuid: user_uuid).project.offer
+  contract  = ContractCmd::Cross.new(counter, :expand).project.contract
   flash[:success] = "You have formed a new contract"
-  redirect "/contracts/#{contracts.first.uuid}"
+  redirect "/contracts/#{contract.uuid}"
 end
 
 # ----- contracts -----

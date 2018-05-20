@@ -111,6 +111,9 @@
 - [x] exchange - add 'synced_at' to issue
 - [x] /issue - add last-sync time
 
+- [ ] add .5 pricing
+- [ ] add individual offer matching
+
 - [ ] predicate: funding_done?
 - [ ] query: number of offers funded since last period
 - [ ] #seed_money -> balance - offer_bu.sum
