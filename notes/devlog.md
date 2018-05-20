@@ -84,26 +84,36 @@
 
 ## 2018-04-25 WED
 
-- [ ] show balance and history on account page
+- [x] show balance and history on account page
+- [x] add OPEN/CLOSE actions to IORA tracker
+- [x] add comments to the IORA tracker
+- [x] update home-page text
+- [x] fill out account page
+- [x] sync_issues script 
+- [x] cron - issue sync
+- [x] Add dynamically rendered SVG
 
-- [ ] add OPEN/CLOSE actions to IORA tracker
-- [ ] add comments to the IORA tracker
+## 2018-05-20 SUN
 
-- [ ] update home-page text
-- [ ] fill out account page
-
-- [ ] sync_issues script 
-- [ ] cron - issue sync
-
-- [ ] Add dynamically rendered SVG
+- [ ] user bubble: show earnings
+- [ ] /account - show sources of funds - break out earnings
+- [ ] /issues - get rid of "matures"
+- [ ] /issues - switch from 'fund an offer' to 'accept offer'
+- [ ] /badge: make badge render from ISSUE not OFFER
+- [ ] /issue - don't allow FUNDING once contract is formed
+- [ ] /issue - don't allow FUNDING if insufficient user balance
+- [ ] /issue - add "Open issue matures" message to offer list
+- [ ] /issue - add issue status and last-sync time
+- [ ] /issue - don't allow ACCEPT OFFER before funding obligation is settled
+- [ ] system_build - top everyone up to seed_balance
+- [ ] /contracts - show funder count instead of name
+- [ ] /contracts - link to Bugmark issue
+- [ ] /contracts - change xtag from "con" to "contract"
+- [ ] /contract - change title `@contract.xid.capitalize`
+- [ ] /contract - show list of funders
+- [ ] /contract - get rid of hardcoded "Eastern Time"
+- [ ] clean up documentation...
 
 ## TBD
 
-- [ ] Add SSL
-- [ ] Create a SystemD deploy script
-- [ ] Create an Nginx config
-
-- [ ] create dogfood1 exercise
-- [ ] create funder1 exercise
-- [ ] create trader1 exercise
-
+- [ ] TBD
