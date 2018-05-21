@@ -1,13 +1,14 @@
 .row
-  .col-md-4
+  .col-md-12
     h2 #{@issue.xid.capitalize}
-  .col-md-8.text-right
-    == "Status: <b>#{@issue.stm_status}</b>"
 .row
   .col-md-5
     p
       b Issue Title:<br/>
       == @issue.stm_title
+    p
+      b Status:<br/>
+      == @issue.stm_status
     p
       b Issue Source:<br/>
       == tracker_link(@issue)
