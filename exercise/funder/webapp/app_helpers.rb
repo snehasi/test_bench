@@ -19,7 +19,7 @@ module AppHelpers
   end
 
   def account_lbl(user)
-    warn = funding_hold?(user) ? " / * " : ""
+    warn = funding_hold?(user) ? " / *HOLD* " : ""
     "#{user_name(user)}#{warn} / balance: #{user.balance}"
   end
 
