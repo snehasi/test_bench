@@ -97,6 +97,14 @@ module AppHelpers
     offer.status == "open" ? "#4c1" : "#721"
   end
 
+  def offer_maturation_date(offer)
+    color = BugmTime.now > offer.expiration ? "red" : "green"
+    date = offer.expiration.strftime("%m-%d %H:%M %Z")
+    date_iso = offer.expiration.strftime("%Y%m%dT%H%M%S")
+    # "<span style='color: #{color};'>#{date}</span>"
+    "<a target='_blank' style='color: #{color}' href='https://www.timeanddate.com/worldclock/fixedtime.html?iso=#{date_iso}&p1=217'>#{date}</a>"
+  end
+
   def offer_status_link(offer)
     case offer.status
     when 'crossed'
@@ -107,7 +115,7 @@ module AppHelpers
   end
 
   def offer_worker_link(user, offer)
-    return "My Offer" if offer.user.uuid == user.uuid
+    #return "My Offer" if offer.user.uuid == user.uuid
     case offer.status
     when 'crossed'
       user_name(offer.position.counterusers.first)
@@ -116,16 +124,33 @@ module AppHelpers
     when 'open'
       if funding_hold?(user)
         "FUNDING HOLD"
+      elsif offer.user.uuid == user.uuid
+        "My Offer"
+      elsif offer.issue.offers.where(type: "Offer::Buy::Unfixed").pluck(:user_uuid).include?(user.uuid)
+        "You funded this issue"
       else
-        "<a href='/offer_accept/#{offer.uuid}'>ACCEPT OFFER</a>"
+        "<a class='btn btn-primary' href='/offer_accept/#{offer.uuid}'>ACCEPT OFFER (cost: 10 tokens)</a>"
       end
     end
   end
 
   def offer_fund_link(user, issue)
     return "Low Balance - Can't Fund Offers" if user.token_available < 10
-    return "You funded one open offer" if issue.offers.open.pluck(:user_uuid).include?(user.uuid)
-    "<a class='btn btn-primary' href='/offer_fund/#{issue.uuid}'>FUND A NEW OFFER</a>"
+    return "You already placed an offer today" if issue.offers.where('expiration > ?', BugmTime.now).pluck(:user_uuid).include?(user.uuid)
+    "<a class='btn btn-primary' href='/offer_fund/#{issue.uuid}'>FUND A NEW OFFER (cost: 10 tokens)</a> <i>Funder and worker both have to pay 10 tokens and one of them receives 20 tokens on maturation.</i>"
+  end
+
+  def offer_awardee(offer)
+    return "offer needs to be accepted by worker" if offer.status != 'crossed'
+    return "waiting for maturation" if offer.position.contract.status != 'resolved'
+    user = Position.where("amendment_uuid = '#{offer.position.amendment.uuid}' AND side = '#{offer.position.contract.awardee}'").first.user
+    # user = offer.escrow.where(side: contract.awardee).first.user
+    if user.uuid == offer.user.uuid then
+      user_type = "funder"
+    else
+      user_type = "worker"
+    end
+    "#{user_type} <b>#{user_name(user)}</b> received #{offer.volume.to_i} tokens"
   end
 
   # ----- contracts -----
@@ -150,7 +175,7 @@ module AppHelpers
   end
 
   def contract_earnings(user, contract)
-    return "NA" unless contract.resolved?
+    return "waiting for maturation" unless contract.resolved?
     contract.value_for(user)
   end
 
@@ -163,8 +188,9 @@ module AppHelpers
   end
 
   def escrow_awardee(escrow)
-    return "NA" if escrow.contract.status != 'closed'
-    user = escrow.where(side: contract.awardee).first.user
+    return "NA" if escrow.contract.status != 'resolved'
+    user = Position.where("amendment_uuid = '#{escrow.amendment.uuid}' AND side = '#{escrow.contract.awardee}'").first.user
+    # user = escrow.position.where(side: contract.awardee).first.user
     user_name(user)
   end
 

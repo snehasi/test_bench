@@ -19,29 +19,33 @@
 hr
 .row
   .col-md-12
-    b Open Offers ( #{@issue.offers_bu.open.count} )
-    span[style='margin-left: 20px;'] == offer_fund_link(current_user, @issue)
+    b Offers ( #{@issue.offers_bu.count} )
+    span[style='margin-left: 20px;margin-right:10px;'] == offer_fund_link(current_user, @issue)
 
 table.table.table-sm[style='margin-top: 10px;']
   thead
     tr
-      th ID
+      / th ID
       th Funder
-      th Volume
-      th Price
-      th Value
-      th Offer Status
+      th Funder cost
+      th Payout
+      th Worker cost
+      / th Offer Status
       th Worker
+      th Maturation
+      th Resolution
   tbody
     - @issue.offers_bu.each do |offer|
       tr
-        td = offer.xid
+        / td = offer.xid
         td = user_name(offer.user)
-        td = offer.volume
-        td = offer.price
-        td = offer.value
-        td == offer_status_link(offer)
+        td #{offer.value.to_i} tokens
+        td #{offer.volume} tokens
+        td #{(offer.volume * (1 - offer.price)).to_i} tokens
+        / td == offer_status_link(offer)
         td == offer_worker_link(current_user, offer)
+        td == offer_maturation_date(offer)
+        td == offer_awardee(offer)
 hr
 .row
   .col-md-6

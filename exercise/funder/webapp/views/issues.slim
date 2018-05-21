@@ -6,7 +6,7 @@ table.table#xtable
       td ID
       td Title
       td Open Offers
-      td Accepted Offers
+      td Contracts
       td Source
       td Action
   tbody
@@ -21,9 +21,9 @@ table.table#xtable
           '  tokens
           == "<b>*</b>" if issue.offers_bu.open.pluck(:user_uuid).include?(current_user.uuid)
         td
-          = issue.offers_bf.count
+          = (issue.offers.crossed.count.to_f / 2 ).to_i
           '  /
-          = issue.offers_bf.pluck(:value).sum
+          = issue.offers.crossed.pluck(:value).sum
           '  tokens
           == "<b>*</b>" if issue.offers_bf.pluck(:user_uuid).include?(current_user.uuid)
         td == tracker_btn(issue)
