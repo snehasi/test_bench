@@ -95,7 +95,7 @@ get "/offer_accept/:offer_uuid" do
   counter   = OfferCmd::CreateCounter.new(offer, poolable: false, user_uuid: user_uuid).project.offer
   contract  = ContractCmd::Cross.new(counter, :expand).project.contract
   flash[:success] = "You have formed a new contract"
-  redirect "/contracts/#{contract.uuid}"
+  redirect "/issues/#{contract.issue.uuid}"
 end
 
 # ----- contracts -----
