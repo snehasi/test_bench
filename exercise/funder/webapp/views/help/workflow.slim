@@ -3,20 +3,21 @@ h2 Exercise Workflow
 a[name='fund']
 h3 Get started: Fund an Offer
 
-p CONTENT TBD
+p Drill down into an <a href='/issues'>Issue</a>, then click on the link
+  <b>FUND A NEW OFFER</b>.  You can fund only <b>one</b> offer per issue.
 
 a[name='accept']
 h3 Get started: Accept an Offer
 
-p The Offers page lists all open offers. Click on any description or on the blue
-  Accept button to see the offer description, including a link to the issue in
-  GitHub. Now, from the description page, if you would like to work on this
-  issue, click on the blue “Accept offer and form contract” button. The contracts
+p Each issue page lists all open offers. Click on the blue Accept link to see
+  the issue description. If you would like to work on this
+  issue, click on the blue “Accept offer and form contract” button.
+  The contracts
   page lists all your contracts (My Contracts tab) as well as all contracts
   currently active in the market (All Contracts tab).
 
 a[name='resolve']
-h3 Get started: Resolve an Issue
+h3 Get started: Resolve Issues
 
 p Once you have accepted an offer, a contract is formed.  All your contracts
   are listed under the My Contracts tab set within the Contracts page.  Click on
@@ -38,12 +39,25 @@ p <strong>Type 2: Solution via Pull-Request</strong>
 a[name='earn']
 h3 Get started: Earn Credits
 
-p Earn money by working on issues, correctly solving these issues, and
-  submitting the correct solutions by the issue maturation date and time.  After
-  you resolved an issue, the research team will review your answer and make sure
-  the answer is correct.  Issues with correct answers will be closed.  For every
-  closed issue, that you have a contract for, you will earn the reward.  This
-  means, you have to answer issues with enough time for the research team to
-  review your answer before the contract matures and expires.  You can see the
-  total credits awarded at the top right, next to your username and on your user
-  profile in Bugmark.
+p There are four ways to earn credits in this exercise:
+
+ol
+  li All users who accept the
+     <a href='/consent_form' target='_blank'>consent form</a> receive a
+     complimentary payment of 50 tokens (5 USD) for participation.
+
+  li Users will earn #{TS.fee_funding} tokens for every successful offer
+     that they fund.
+     A successful offer is one that is matched by a worker and where the
+     issue is closed before the offer maturation date.
+
+  li If a user offer is accepted and the worker delivery is unsuccessful,
+     then the contract funds are given to the funder.
+
+  li When a user accepts and offer as a worker and the issue is closed
+     before the maturation date, then funds are given to the worker.
+
+p Note that seed funds are <b>not</b> included in the Participant Earnings.
+
+p View your earnings on your <a href='/account'>account page</a>.
+

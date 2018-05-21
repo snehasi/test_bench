@@ -121,21 +121,36 @@
 - [x] /issue - don't allow FUNDING once issue is closed
 - [x] funding payout: 50 / number of funders
 - [x] query for successful fundings
+- [x] #seed_money -> 200
+- [x] #escrow -> TBD
+- [x] #earnings -> TBD
+- [x] clean up documentation...
+- [x] system_build - top everyone up to seed_balance
+- [x] /issue - don't allow more than one funding per issue
+- [x] /issue - don't allow accepting your own offer
+- [x] /issue - don't allow FUNDING if insufficient user balance
+- [x] can you make multiple offers on an issue? (no)
+- [x] can you accept your own offer? (no)
+- [x] documentation
+- [x] how much money is paid for a successful funding? (15 tokens)
+- [x] user.token_balance - does it work with poolable?
+- [x] /issues - indicate where you have open offers
 
-- [ ] #seed_money -> 200
-- [ ] #escrow -> TBD
-- [ ] #earnings -> TBD
-
-- [ ] /issue - don't allow more than one funding per issue
-- [ ] /issue - don't allow accepting your own offer
-
-- [ ] /issue - don't allow FUNDING if insufficient user balance
 - [ ] /account - show sources of funds - break out earnings
 
 - [ ] /admin - test sync button
 - [ ] /admin - test resolve button
-- [ ] system_build - top everyone up to seed_balance
-- [ ] clean up documentation...
+- [ ] /admin - test nightly rebuild
+
+- [ ] calculate user payout (on '/accounts' page)
+- [ ] cleanup contracts pages
+
+
+
+
+
+
+
 
 ## TBD
 

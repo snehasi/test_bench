@@ -74,6 +74,7 @@ get "/offer_fund/:issue_uuid" do
     user_uuid:      current_user.uuid,
     maturation:     BugmTime.end_of_day,
     expiration:     BugmTime.end_of_day,
+    poolable:       false,
     stm_issue_uuid: uuid
   }
   if issue
@@ -91,7 +92,7 @@ get "/offer_accept/:offer_uuid" do
   user_uuid = current_user.uuid
   uuid      = params['offer_uuid']
   offer     = Offer.find_by_uuid(uuid)
-  counter   = OfferCmd::CreateCounter.new(offer, user_uuid: user_uuid).project.offer
+  counter   = OfferCmd::CreateCounter.new(offer, poolable: false, user_uuid: user_uuid).project.offer
   contract  = ContractCmd::Cross.new(counter, :expand).project.contract
   flash[:success] = "You have formed a new contract"
   redirect "/contracts/#{contract.uuid}"

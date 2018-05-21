@@ -20,8 +20,8 @@ module AppHelpers
 
   def account_lbl(user)
     count = funding_count(user)
-    warn = funding_hold?(user) ? " / HOLD (#{count} of 5) " : ""
-    "#{user_name(user)}#{warn} / balance: #{user.balance}"
+    warn = funding_hold?(user) ? " / FUND - #{count} of 5 " : ""
+    "#{user_name(user)}#{warn} / balance: #{user.token_available}"
   end
 
   def successful_fundings(user)
@@ -29,6 +29,10 @@ module AppHelpers
   end
 
   # ----- time -----
+
+  def timezone
+    BugmTime.now.strftime("%Z")
+  end
 
   def timewords(alt_time = Time.now + 1.hour)
     time_ago_in_words(alt_time)
@@ -103,6 +107,7 @@ module AppHelpers
   end
 
   def offer_worker_link(user, offer)
+    return "My Offer" if offer.user.uuid == user.uuid
     case offer.status
     when 'crossed'
       user_name(offer.position.counterusers.first)
@@ -115,6 +120,12 @@ module AppHelpers
         "<a href='/offer_accept/#{offer.uuid}'>ACCEPT OFFER</a>"
       end
     end
+  end
+
+  def offer_fund_link(user, issue)
+    return "Low Balance - Can't Fund Offers" if user.token_available < 10
+    return "You funded one open offer" if issue.offers.open.pluck(:user_uuid).include?(user.uuid)
+    "<a href='/offer_fund/#{issue.uuid}'>FUND A NEW OFFER</a>"
   end
 
   # ----- contracts -----

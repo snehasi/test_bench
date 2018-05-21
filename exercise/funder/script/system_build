@@ -73,6 +73,7 @@ term_files.each do |file|
       user_uuid:      funder.uuid         ,
       maturation:     BugmTime.end_of_day ,
       expiration:     BugmTime.end_of_day ,
+      poolable:       false,
       stm_issue_uuid: uuid
     }
     if uuid

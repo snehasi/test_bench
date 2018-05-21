@@ -18,6 +18,7 @@ table.table#xtable
           '  /
           = issue.offers_bu.open.pluck(:value).sum
           '  tokens
+          == "<b>*</b>" if issue.offers.open.pluck(:user_uuid).include?(current_user.uuid)
         td == tracker_btn(issue)
         td
           a[href="/issues/#{issue.uuid}"] View Offers
