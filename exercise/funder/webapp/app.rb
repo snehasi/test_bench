@@ -31,7 +31,7 @@ end
 # list all issues
 get "/issues" do
   protected!
-  @issues = Issue.uncontracted
+  @issues = Issue.open
   slim :issues
 end
 
@@ -77,8 +77,8 @@ get "/offer_fund/:issue_uuid" do
     stm_issue_uuid: uuid
   }
   if issue
-    FB.create(:offer_bu, opts).project
-    flash[:success] = "You have funded a new offer"
+    offer = FB.create(:offer_bu, opts).project.offer
+    flash[:success] = "You have funded a new offer (#{offer.xid})"
   else
     flash[:danger] = "Something went wrong"
   end

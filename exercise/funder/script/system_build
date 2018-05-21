@@ -90,7 +90,7 @@ Issue.all.open.each do |issue|
   uuid    = issue.uuid
   url     = "http://#{TS.webapp_url}/issues/#{uuid}"
   burl    = "http://#{TS.webapp_url}/badge/#{uuid}.svg"
-  comment = "Bugmark is tracking this issue. "
+  comment = "Bugmark is trading this issue. "
   img     = "<img src='#{burl}' alt='Click to View on Bugmark' style='max-width: 100%;'> "
   link    = "<a href='#{url}'>#{img}</a>"
   iora.create_comment(issue.sequence, comment + "<br/>" + link)

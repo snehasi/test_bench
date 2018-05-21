@@ -10,8 +10,7 @@ table.table#xtable
   thead
     tr
       td ID
-      td Funders
-      td Worker
+      td Positions
       td Value
       td Issue
       td Matures
@@ -22,7 +21,6 @@ table.table#xtable
       tr
         td == contract_id_link(contract)
         td = contract.positions.unfixed.count
-        td = fixed_username(contract)
         td = contract.total_value
         td == issue_id_link(contract.issue)
         td == contract_mature_date(contract)

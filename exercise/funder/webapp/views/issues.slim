@@ -1,11 +1,11 @@
-h2[style='margin-bottom: 15px;'] Issues (#{@issues.open.count})
+h2[style='margin-bottom: 15px;'] Open Issues (#{@issues.open.count})
 
 table.table#xtable
   thead
     tr
       td ID
       td Title
-      td Offers
+      td Open Offers
       td Source
       td Action
   tbody
@@ -14,13 +14,13 @@ table.table#xtable
         td == issue_id_link(issue)
         td = issue.stm_title
         td
-          = issue.offers_bu.count
+          = issue.offers_bu.open.count
           '  /
-          = issue.offers_bu.pluck(:value).sum
+          = issue.offers_bu.open.pluck(:value).sum
           '  tokens
         td == tracker_btn(issue)
         td
-          a[href="/issues/#{issue.uuid}"] FUND AN OFFER
+          a[href="/issues/#{issue.uuid}"] View Offers
 
 - content_for :page_js do
   javascript:

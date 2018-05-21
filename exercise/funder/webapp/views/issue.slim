@@ -1,4 +1,8 @@
-h2 #{@issue.xid.capitalize}
+.row
+  .col-md-4
+    h2 #{@issue.xid.capitalize}
+  .col-md-8.text-right
+    == "Status: <b>#{@issue.stm_status}</b>"
 .row
   .col-md-5
     p
@@ -8,19 +12,18 @@ h2 #{@issue.xid.capitalize}
       b Issue Source:<br/>
       == tracker_link(@issue)
       == "<br/>(last synced at #{@issue.synced_at&.strftime("%b-%d %H:%M:%S %Z") || 'TBD'})"
-    p
-      b Issue Status:<br/>
-      = @issue.stm_status
-
   .col-md-7
     b Issue Body:<br/>
     == @issue.stm_body.gsub("\n", "<br/>").sans_hexid
+hr
 .row
-  .col-md-4
+  .col-md-2.text-center
     b Offers ( #{@issue.offers_bu.count} )
-  .col-md-8.text-right
-    a.btn.btn-primary.btn-sm[href='/offer_fund/#{@issue.uuid}']
-      | CREATE A NEW OFFER
+  .col-md-7
+  .col-md-3
+    - if current_user.token_reserve >= 10
+      a[href='/offer_fund/#{@issue.uuid}']
+        | FUND A NEW OFFER
 table.table.table-sm[style='margin-top: 10px;']
   thead
     tr
@@ -39,8 +42,8 @@ table.table.table-sm[style='margin-top: 10px;']
         td = offer.volume
         td = offer.price
         td = offer.value
-        td = offer.status
-        td == offer_worker_link(offer)
+        td == offer_status_link(offer)
+        td == offer_worker_link(current_user, offer)
 hr
 .row
   .col-md-12.text-right

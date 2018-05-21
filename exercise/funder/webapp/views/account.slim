@@ -18,28 +18,18 @@ hr
           a[href='/contracts'] View
           '  )
     p
+      | You have funded <b>#{funding_count(current_user)}</b> offers.
+      - if funding_hold?(current_user)
+        | You will be on #{funding_hold_link.html_safe}, ineligible to accept
+          offers until first you fund five offers.
+    - if funding_count(current_user) > 0
+      p
+        | Of your funded offers, <b>#{successful_fundings(current_user)}</b>
+          have resolved sucessfully.  You will earn TBD tokens for each
+          successful resolution.
+          <a href='/help#funding' target='_blank'>Learn More</a>
+    p
       ' You accepted the
       a[href="/consent_form"] UNO Consent Form
       '  on #{AccessLog.new(current_user.email).formatted_consent_date}
 
-/ hr
-/ h3 Account Timeline
-/
-/ table.table#xtable
-/   thead
-/     tr
-/       td EVENT
-/       td TIME
-/       td TYPE
-/       td DETAILS
-/   tbody
-/     - @events.each do |event|
-/       tr
-/         td = event.id.to_s + "-" + event.event_uuid[0..4]
-/         td = event.projected_at.strftime("%b-%d %H:%M:%S %Z")
-/         td = event.event_type.split("::").last
-/         td = event.payload.without("uuid", "encrypted_password").inspect
-/
-/ - content_for :page_js do
-/   javascript:
-//    $('#xtable').DataTable();

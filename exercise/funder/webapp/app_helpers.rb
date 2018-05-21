@@ -4,6 +4,29 @@ module AppHelpers
 
   include ActionView::Helpers::DateHelper
 
+  # ----- funding hold -----
+
+  def funding_count(user)
+    user.offers.is_buy_unfixed.count
+  end
+
+  def funding_hold?(user)
+    funding_count(user) < 5
+  end
+
+  def funding_hold_link
+    "<a href='/help#funder' target='_blank'>* FUNDING HOLD *</a>"
+  end
+
+  def account_lbl(user)
+    warn = funding_hold?(user) ? " / * " : ""
+    "#{user_name(user)}#{warn} / balance: #{user.balance}"
+  end
+
+  def successful_fundings(user)
+    user.positions.unfixed.resolved.losing.count
+  end
+
   # ----- time -----
 
   def timewords(alt_time = Time.now + 1.hour)
@@ -40,11 +63,11 @@ module AppHelpers
   end
 
   def issue_status(issue)
-    issue.has_contracts? ? "crossed" : "open"
+    issue.stm_status
   end
 
   def issue_value(issue)
-    issue.offers.pluck(:value).sum
+    issue.offers.open.pluck(:value).sum
   end
 
   def issue_color(issue)
@@ -69,14 +92,27 @@ module AppHelpers
     offer.status == "open" ? "#4c1" : "#721"
   end
 
-  def offer_worker_link(offer)
+  def offer_status_link(offer)
+    case offer.status
+    when 'crossed'
+      "<a href='/contracts/#{offer.position.contract.uuid}'>crossed</a>"
+    else
+      offer.status
+    end
+  end
+
+  def offer_worker_link(user, offer)
     case offer.status
     when 'crossed'
       user_name(offer.position.counterusers.first)
     when 'expired'
       'EXPIRED'
     when 'open'
-      "<a href='/offer_accept/#{offer.uuid}'>ACCEPT OFFER</a>"
+      if funding_hold?(user)
+        funding_hold_link
+      else
+        "<a href='/offer_accept/#{offer.uuid}'>ACCEPT OFFER</a>"
+      end
     end
   end
 

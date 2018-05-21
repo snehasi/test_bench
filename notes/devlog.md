@@ -110,30 +110,27 @@
 - [x] /badge: make badge render from ISSUE not OFFER
 - [x] exchange - add 'synced_at' to issue
 - [x] /issue - add last-sync time
+- [x] add .5 pricing
+- [x] add individual offer matching
+- [x] set opening balance to 200
+- [x] /issues - switch from 'fund an offer' to 'accept offer' per funding obligation
+- [x] user bubble: show balance
+- [x] predicate: funding_done?
+- [x] query: number of offers funded 
+- [x] /issue - don't allow ACCEPT OFFER before funding obligation is settled
+- [x] /issue - don't allow FUNDING once issue is closed
+- [x] funding payout: 50 / number of funders
+- [x] query for successful fundings
 
-- [ ] add .5 pricing
-- [ ] add individual offer matching
-
-- [ ] predicate: funding_done?
-- [ ] query: number of offers funded since last period
-- [ ] #seed_money -> balance - offer_bu.sum
+- [ ] #seed_money -> 200
 - [ ] #escrow -> TBD
 - [ ] #earnings -> TBD
-- [ ] successful fundings
-- [ ] funding payout: 50 / number of funders
-
-- [ ] /issues - checklist for multi-offer funding
 
 - [ ] /issue - don't allow more than one funding per issue
 - [ ] /issue - don't allow accepting your own offer
 
-- [ ] /issues - switch from 'fund an offer' to 'accept offer' per funding obligation
-- [ ] /issue - don't allow FUNDING once contract is formed
 - [ ] /issue - don't allow FUNDING if insufficient user balance
-- [ ] /issue - don't allow ACCEPT OFFER before funding obligation is settled
 - [ ] /account - show sources of funds - break out earnings
-
-- [ ] user bubble: show earnings
 
 - [ ] /admin - test sync button
 - [ ] /admin - test resolve button
