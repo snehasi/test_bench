@@ -125,7 +125,7 @@ module AppHelpers
   def offer_fund_link(user, issue)
     return "Low Balance - Can't Fund Offers" if user.token_available < 10
     return "You funded one open offer" if issue.offers.open.pluck(:user_uuid).include?(user.uuid)
-    "<a href='/offer_fund/#{issue.uuid}'>FUND A NEW OFFER</a>"
+    "<a class='btn btn-primary' href='/offer_fund/#{issue.uuid}'>FUND A NEW OFFER</a>"
   end
 
   # ----- contracts -----

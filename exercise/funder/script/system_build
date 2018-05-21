@@ -61,30 +61,30 @@ end
 puts ""
 
 puts 'CREATE A BUY-UNFIXED OFFER FOR EACH OPEN ISSUE'
-funder = User.find_by_email(TS.funder_email)
-term_files = Dir.glob("#{File.expand_path TS.trial_dir}/.trial_data/**/*term*.yml")
-term_files.each do |file|
-  terms = YAML.load_file(file)
-  terms.each do |term|
-    uuid = Issue.by_hexid(term["hexid"]).open.first&.uuid
-    opts = {
-      price:          term["price"]       ,
-      volume:         term["volume"]      ,
-      user_uuid:      funder.uuid         ,
-      maturation:     BugmTime.end_of_day ,
-      expiration:     BugmTime.end_of_day ,
-      poolable:       false,
-      stm_issue_uuid: uuid
-    }
-    if uuid
-      FB.create(:offer_bu, opts).project
-      print '.'
-    else
-      print 'x'
-    end
-  end
-end
-puts ''
+# funder = User.find_by_email(TS.funder_email)
+# term_files = Dir.glob("#{File.expand_path TS.trial_dir}/.trial_data/**/*term*.yml")
+# term_files.each do |file|
+#   terms = YAML.load_file(file)
+#   terms.each do |term|
+#     uuid = Issue.by_hexid(term["hexid"]).open.first&.uuid
+#     opts = {
+#       price:          term["price"]       ,
+#       volume:         term["volume"]      ,
+#       user_uuid:      funder.uuid         ,
+#       maturation:     BugmTime.end_of_day ,
+#       expiration:     BugmTime.end_of_day ,
+#       poolable:       false,
+#       stm_issue_uuid: uuid
+#     }
+#     if uuid
+#       FB.create(:offer_bu, opts).project
+#       print '.'
+#     else
+#       print 'x'
+#     end
+#   end
+# end
+# puts ''
 
 puts 'ADD A TRACKER COMMENT WITH A LINK TO EACH OFFER'
 Issue.all.open.each do |issue|
