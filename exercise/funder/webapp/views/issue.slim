@@ -21,7 +21,7 @@ hr
     b Offers ( #{@issue.offers_bu.count} )
   .col-md-7
   .col-md-3
-    - if current_user.token_reserve >= 10
+    - if current_user.token_available >= 10
       a[href='/offer_fund/#{@issue.uuid}']
         | FUND A NEW OFFER
 table.table.table-sm[style='margin-top: 10px;']
