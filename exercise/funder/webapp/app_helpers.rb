@@ -162,6 +162,12 @@ module AppHelpers
     user_name(contract.positions.unfixed.first.user)
   end
 
+  def escrow_awardee(escrow)
+    return "NA" if escrow.contract.status != 'closed'
+    user = escrow.where(side: contract.awardee).first.user
+    user_name(user)
+  end
+
   # ----- links -----
 
   def repo_link

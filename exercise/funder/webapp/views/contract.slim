@@ -2,13 +2,6 @@ h2 #{@contract.xid.capitalize}
 .row
   .col-md-4
     p
-      b Funders: #{ic_link('/help#funder').html_safe}<br/>
-      - @contract.positions.unfixed.each do |pos|
-        == user_name(pos.user) + " (#{pos.offer.value} tokens)<br/>"
-    p
-      b Worker: #{ic_link('/help#worker').html_safe}<br/>
-      == user_name(@contract.positions.fixed.first.user)
-    p
       b Contract Value: #{ic_link('/help#contracts').html_safe}<br/>
       == @contract.total_value.to_s + " tokens"
     p
@@ -16,6 +9,9 @@ h2 #{@contract.xid.capitalize}
       = @contract.maturation.strftime("%b-%d")
       |  at midnight #{BugmTime.now.strftime('%Z')}<br/>
       |  (#{contract_maturation_words(@contract)})
+    p
+      b Contract Status:<br/>
+      = @contract.status
   .col-md-8
     p
       b Issue ID:<br/>
@@ -30,14 +26,21 @@ h2 #{@contract.xid.capitalize}
     p
       b Issue Body:<br/>
       == @contract.issue.stm_body.gsub("\n", "<br/>").sans_hexid
-hr
 .row
   .col-md-12
-    - case @contract.status
-    - when 'open'
-      p This contract is open.  If the issue is closed before the maturation
-        date, <b>#{fixed_username(@contract)}</b> will earn
-        #{@contract.value.unfixed} tokens.
-    - when 'closed'
-      p
-        b This contract is closed.
+    table.table.table-sm[style='margin-top: 10px;']
+      thead
+        tr
+          th Position ID
+          th Funder
+          th Worker
+          th Value
+          th Awardee
+      tbody
+        - @contract.escrows.each do |escrow|
+          tr
+            td = escrow.id
+            td = user_name(escrow.positions.unfixed.first.user)
+            td = user_name(escrow.positions.fixed.first.user)
+            td = escrow.value
+            td = escrow_awardee(escrow)

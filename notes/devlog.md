@@ -136,21 +136,16 @@
 - [x] user.token_balance - does it work with poolable?
 - [x] /issues - indicate where you have open offers
 
+## 2018-05-21 MON
+
+- [x] /contracts - cleanup
+- [x] /contract  - cleanup
+
 - [ ] /account - show sources of funds - break out earnings
 
 - [ ] /admin - test sync button
 - [ ] /admin - test resolve button
 - [ ] /admin - test nightly rebuild
-
-- [ ] calculate user payout (on '/accounts' page)
-- [ ] cleanup contracts pages
-
-
-
-
-
-
-
 
 ## TBD
 
