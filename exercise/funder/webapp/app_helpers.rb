@@ -15,11 +15,12 @@ module AppHelpers
   end
 
   def funding_hold_link
-    "<a href='/help#funder' target='_blank'>* FUNDING HOLD *</a>"
+    "<a href='/help#funder' target='_blank'>*FUNDING HOLD*</a>"
   end
 
   def account_lbl(user)
-    warn = funding_hold?(user) ? " / *HOLD* " : ""
+    count = funding_count(user)
+    warn = funding_hold?(user) ? " / *HOLD (#{count} of 5)* " : ""
     "#{user_name(user)}#{warn} / balance: #{user.balance}"
   end
 
