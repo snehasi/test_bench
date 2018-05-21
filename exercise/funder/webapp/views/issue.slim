@@ -17,10 +17,8 @@
     == @issue.stm_body.gsub("\n", "<br/>").sans_hexid
 hr
 .row
-  .col-md-2.text-center
+  .col-md-12
     b Offers ( #{@issue.offers_bu.count} )
-  .col-md-7
-  .col-md-3
     == offer_fund_link(current_user, @issue)
 table.table.table-sm[style='margin-top: 10px;']
   thead
