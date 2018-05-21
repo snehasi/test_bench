@@ -140,7 +140,11 @@
 
 - [x] /contracts - cleanup
 - [x] /contract  - cleanup
+- [x] '*' add explaination
+- [x] accepted offers with '*'
+- [x] funding hold on page footer
 
+- [ ] /issues - My Issues / All Issues button
 - [ ] /account - show sources of funds - break out earnings
 
 - [ ] /admin - test sync button

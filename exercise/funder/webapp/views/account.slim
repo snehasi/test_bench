@@ -9,7 +9,7 @@ hr
         input[type="text" class="form-control" name="newName" placeholder="enter a new username"]
       button.btn.btn-primary.mb-2[type="submit"] Change
   .col-md-6
-    p Your current balance is <b>#{current_user.balance}</b> tokens.
+    p Your current balance is <b>#{current_user.token_available}</b> tokens.
     p
       | You currently have <b>#{current_user.open_contracts.length}</b> open contracts.
       - if current_user.open_contracts.length > 0

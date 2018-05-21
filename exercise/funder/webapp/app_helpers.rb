@@ -20,7 +20,7 @@ module AppHelpers
 
   def account_lbl(user)
     count = funding_count(user)
-    warn = funding_hold?(user) ? " / FUND - #{count} of 5 " : ""
+    warn = funding_hold?(user) ? " / FUNDED #{count} of 5 " : ""
     "#{user_name(user)}#{warn} / balance: #{user.token_available}"
   end
 
@@ -115,7 +115,7 @@ module AppHelpers
       'EXPIRED'
     when 'open'
       if funding_hold?(user)
-        funding_hold_link
+        "FUNDING HOLD"
       else
         "<a href='/offer_accept/#{offer.uuid}'>ACCEPT OFFER</a>"
       end
