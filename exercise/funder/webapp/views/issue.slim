@@ -19,8 +19,9 @@
 hr
 .row
   .col-md-12
-    b Offers ( #{@issue.offers_bu.count} )
+    b Open Offers ( #{@issue.offers_bu.open.count} )
     span[style='margin-left: 20px;'] == offer_fund_link(current_user, @issue)
+
 table.table.table-sm[style='margin-top: 10px;']
   thead
     tr
