@@ -34,7 +34,7 @@ hr
             td #{TS.fee_participation + current_user.token_available + underactivity_penalty(current_user)} tokens
             td Convertable at a rate of US-$1 = 10 tokens.
   .col-md-6
-    p Your current seed balance is <b>#{current_user.token_available}</b> tokens.
+    p Your current balance is <b>#{current_user.token_available}</b> tokens.
     p
       | You currently have <b>#{current_user.open_contracts.length}</b> open contracts.
       - if current_user.open_contracts.length > 0
@@ -67,7 +67,7 @@ hr
             td #{TS.seed_balance}.0 tokens
           tr
             td Investment Amount
-            td = invested_tokens(current_user)
+            td #{invested_tokens(current_user)}.tokens
           tr
             td Underactivity Penalty
             td #{underactivity_penalty(current_user)} tokens

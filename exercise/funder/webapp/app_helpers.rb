@@ -145,7 +145,7 @@ module AppHelpers
         "FUNDING HOLD"
       elsif offer.user.uuid == user.uuid
         "My Offer"
-      elsif offer.issue.offers.where(type: "Offer::Buy::Unfixed").pluck(:user_uuid).include?(user.uuid)
+      elsif offer.issue.offers.where('expiration > ?', BugmTime.now).where(type: "Offer::Buy::Unfixed").pluck(:user_uuid).include?(user.uuid)
         "You funded this issue"
       else
         "<a class='btn btn-primary btn-sm' href='/offer_accept/#{offer.uuid}'>ACCEPT OFFER (cost: 10 tokens)</a>"
@@ -154,6 +154,7 @@ module AppHelpers
   end
 
   def offer_fund_link(user, issue)
+    return "Already 3 offers today" if issue.offers_bu.where('expiration > ?', BugmTime.now).count > 2
     return "Low Balance - Can't Fund Offers" if user.token_available < 10
     return "You already placed an offer today" if issue_offerable?(user, issue)
     "<a class='btn btn-primary btn-sm' href='/offer_fund/#{issue.uuid}'>FUND A NEW OFFER (cost: 10 tokens)</a>"
