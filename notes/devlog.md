@@ -144,6 +144,9 @@
 - [x] accepted offers with '*'
 - [x] funding hold on page footer
 
+- [ ] no accept if open offer
+- [ ] how to expire offers?
+
 - [ ] /issues - My Issues / All Issues button
 - [ ] /account - show sources of funds - break out earnings
 
