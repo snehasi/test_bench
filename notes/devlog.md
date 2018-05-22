@@ -148,12 +148,12 @@
 
 ## 2018-05-22 TUE
 
-- [ ] /account table align bottom
+- [x] /account table align bottom
+- [x] fix PDT on offer maturation
 
-- [ ] fix PDT on offer maturation
-- [ ] three offers per issue
-- [ ] double check 
+- [ ] double check contract offers
 - [ ] pay bonus upon successful contract resolution
+- [ ] three offers per issue
 
 - [ ] add labels, comments to event record
 - [ ] how to expire offers?
