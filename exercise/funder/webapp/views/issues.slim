@@ -1,4 +1,12 @@
-h2[style='margin-bottom: 15px;'] Open Issues (#{@issues.open.count})
+.row
+  .col-md-4
+    h2[style='margin-bottom: 15px;'] Open Issues (#{@issues.open.count})
+  .col-md-8.text-right
+    .btn-group.btn-group-toggle.btn-group-sm[data-toggle="buttons"]
+      label.btn.btn-secondary.active
+        input#allIssues[type="radio" name="options" autocomplete="off" checked] All Issues
+      label.btn.btn-secondary
+        input#myIssues[type="radio" name="options" autocomplete="off"] My Issues
 
 table.table#xtable
   thead
@@ -34,5 +42,12 @@ table.table#xtable
     small <b>*</b> issues where you have an offer or contract
 
 - content_for :page_js do
-  javascript:
-    $('#xtable').DataTable();
+  coffee:
+    table = $('#xtable').DataTable();
+    setMyIssues  = -> table.search("*").draw()
+    setAllIssues = -> table.search("").draw()
+    $('document').ready ->
+      $('#myIssues').on  "focus", setMyIssues
+      $('#allIssues').on "focus", setAllIssues
+
+

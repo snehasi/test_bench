@@ -153,17 +153,25 @@
 - [x] expire offers
 - [x] double check contract offers
 - [x] pay bonus upon successful contract resolution
+- [x] /admin - disable sync button
+- [x] /admin - disable resolve button
 
-- [ ] add cycling to data generators
-- [ ] add labels, comments to event record
 - [ ] /issues - My Issues / All Issues button
+- [ ] add cycling to data generators
 
-- [ ] three offers per issue
+- [ ] test nightly cycle
 
-- [ ] /admin - test sync button
-- [ ] /admin - test resolve button
-- [ ] /admin - test nightly rebuild
+- [ ] fix event generation
+- [ ] add issue event history
+- [ ] add user event history
+- [ ] add OfferCmd::Expire class
+- [ ] add labels, comments to event record
+
+- [ ] trade on identity
+
+- [ ] add user registers
 
 ## TBD
 
+- [ ] three offers per issue
 - [ ] TBD
