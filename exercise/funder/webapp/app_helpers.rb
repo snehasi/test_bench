@@ -79,7 +79,7 @@ module AppHelpers
   # ----- issues -----
 
   def issue_offerable?(user, issue)
-    issue.offers_bu.where('expiration > ?', BugmTime.now).pluck(:user_uuid).include?(user.uuid)
+    issue.offers.where('expiration > ?', BugmTime.now).pluck(:user_uuid).include?(user.uuid)
   end
 
   def issue_id_link(issue)

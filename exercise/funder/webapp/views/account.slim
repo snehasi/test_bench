@@ -12,22 +12,27 @@ hr
       table.table.table-sm.table-bordered.table-hover
         tbody
           tr
-            td[colspan=2] <b>Earnings</b>
+            td[colspan=3] <b>Earnings</b>
           tr
             td[style='width: 170px;'] Participation Bonus
             td #{TS.fee_participation}.0 tokens
+            td For participating
           tr
-            td Funding Bonus
-            td #{funding_bonus(current_user)} tokens
-          tr
-            td Worker Earnings
-            td #{"TBD"} tokens
+            td Account Balance
+            td #{current_user.token_available} tokens
+            td
+          /tr
+            /td Worker Earnings
+            /td #{"TBD"} tokens
+            /td
           tr
             td Underactivity Penalty
             td #{underactivity_penalty(current_user)} tokens
+            td Reduced to 0 by funding more offers.
           tr
             td TOTAL EARNINGS
-            td #{"TBD"} tokens
+            td #{TS.fee_participation + current_user.token_available + underactivity_penalty(current_user)} tokens
+            td Convertable at a rate of US-$1 = 10 tokens.
   .col-md-6
     p Your current seed balance is <b>#{current_user.token_available}</b> tokens.
     p
