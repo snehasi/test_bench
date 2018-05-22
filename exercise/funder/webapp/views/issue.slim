@@ -18,31 +18,30 @@
     == @issue.stm_body.gsub("\n", "<br/>").sans_hexid
 hr
 .row
-  .col-md-12
+  .col-md-6
     b Offers ( #{@issue.offers_bu.count} )
     span[style='margin-left: 20px;margin-right:10px;'] == offer_fund_link(current_user, @issue)
+  .col-md-6[style='padding: 0; margin: 0;']
+    small[style='padding: 0; margin: 0;']
+      == offer_fund_message(current_user, @issue)
 
 table.table.table-sm[style='margin-top: 10px;']
   thead
     tr
-      / th ID
       th Funder
       th Funder cost
       th Payout
       th Worker cost
-      / th Offer Status
       th Worker
       th Maturation
       th Resolution
   tbody
     - @issue.offers_bu.each do |offer|
       tr
-        / td = offer.xid
         td = user_name(offer.user)
         td #{offer.value.to_i} tokens
         td #{offer.volume} tokens
         td #{(offer.volume * (1 - offer.price)).to_i} tokens
-        / td == offer_status_link(offer)
         td == offer_worker_link(current_user, offer)
         td == offer_maturation_date(offer)
         td == offer_awardee(offer)

@@ -143,12 +143,11 @@
 - [x] '*' add explaination
 - [x] accepted offers with '*'
 - [x] funding hold on page footer
+- [x] no accept if open offer
 
-- [ ] no accept if open offer
 - [ ] how to expire offers?
-
-- [ ] /issues - My Issues / All Issues button
 - [ ] /account - show sources of funds - break out earnings
+- [ ] /issues - My Issues / All Issues button
 
 - [ ] /admin - test sync button
 - [ ] /admin - test resolve button

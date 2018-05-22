@@ -4,6 +4,17 @@ module AppHelpers
 
   include ActionView::Helpers::DateHelper
 
+  # ----- investment -----
+
+  def invested_tokens(user)
+    user.offers.pluck(:value).sum
+  end
+
+  def underactivity_penalty(user)
+    spread = invested_tokens(user) - TS.seed_balance
+    [ 0, spread ].min
+  end
+
   # ----- funding hold -----
 
   def funding_count(user)
@@ -26,6 +37,10 @@ module AppHelpers
 
   def successful_fundings(user)
     user.positions.unfixed.resolved.losing.count
+  end
+
+  def funding_bonus(user)
+    (successful_fundings(user) * TS.fee_funding.to_i).to_f
   end
 
   # ----- time -----
@@ -62,6 +77,10 @@ module AppHelpers
   end
 
   # ----- issues -----
+
+  def issue_offerable?(user, issue)
+    issue.offers_bu.where('expiration > ?', BugmTime.now).pluck(:user_uuid).include?(user.uuid)
+  end
 
   def issue_id_link(issue)
     "<a href='/issues/#{issue.uuid}'>#{issue.xid}</a>"
@@ -129,19 +148,25 @@ module AppHelpers
       elsif offer.issue.offers.where(type: "Offer::Buy::Unfixed").pluck(:user_uuid).include?(user.uuid)
         "You funded this issue"
       else
-        "<a class='btn btn-primary' href='/offer_accept/#{offer.uuid}'>ACCEPT OFFER (cost: 10 tokens)</a>"
+        "<a class='btn btn-primary btn-sm' href='/offer_accept/#{offer.uuid}'>ACCEPT OFFER (cost: 10 tokens)</a>"
       end
     end
   end
 
   def offer_fund_link(user, issue)
     return "Low Balance - Can't Fund Offers" if user.token_available < 10
-    return "You already placed an offer today" if issue.offers.where('expiration > ?', BugmTime.now).pluck(:user_uuid).include?(user.uuid)
-    "<a class='btn btn-primary' href='/offer_fund/#{issue.uuid}'>FUND A NEW OFFER (cost: 10 tokens)</a> <i>Funder and worker both have to pay 10 tokens and one of them receives 20 tokens on maturation.</i>"
+    return "You already placed an offer today" if issue_offerable?(user, issue)
+    "<a class='btn btn-primary btn-sm' href='/offer_fund/#{issue.uuid}'>FUND A NEW OFFER (cost: 10 tokens)</a>"
+  end
+
+  def offer_fund_message(user, issue)
+    return "" if user.token_available < 10
+    return "" if issue_offerable?(user, issue)
+    "<i>Funder and worker both pay 10 tokens. Winner receives 20 tokens on maturation.</i>"
   end
 
   def offer_awardee(offer)
-    return "offer needs to be accepted by worker" if offer.status != 'crossed'
+    return "needs to be accepted" if offer.status != 'crossed'
     return "waiting for maturation" if offer.position.contract.status != 'resolved'
     user = Position.where("amendment_uuid = '#{offer.position.amendment.uuid}' AND side = '#{offer.position.contract.awardee}'").first.user
     # user = offer.escrow.where(side: contract.awardee).first.user

@@ -8,8 +8,28 @@ hr
       .form-group.mx-sm-3.mb-2
         input[type="text" class="form-control" name="newName" placeholder="enter a new username"]
       button.btn.btn-primary.mb-2[type="submit"] Change
+    p
+      table.table.table-sm.table-bordered.table-hover
+        tbody
+          tr
+            td[colspan=2] <b>Earnings</b>
+          tr
+            td[style='width: 170px;'] Participation Bonus
+            td #{TS.fee_participation}.0 tokens
+          tr
+            td Funding Bonus
+            td #{funding_bonus(current_user)} tokens
+          tr
+            td Worker Earnings
+            td #{"TBD"} tokens
+          tr
+            td Underactivity Penalty
+            td #{underactivity_penalty(current_user)} tokens
+          tr
+            td TOTAL EARNINGS
+            td #{"TBD"} tokens
   .col-md-6
-    p Your current balance is <b>#{current_user.token_available}</b> tokens.
+    p Your current seed balance is <b>#{current_user.token_available}</b> tokens.
     p
       | You currently have <b>#{current_user.open_contracts.length}</b> open contracts.
       - if current_user.open_contracts.length > 0
@@ -32,3 +52,17 @@ hr
       ' You accepted the
       a[href="/consent_form"] UNO Consent Form
       '  on #{AccessLog.new(current_user.email).formatted_consent_date}
+    p
+      table.table.table-sm.table-bordered.table-hover
+        tbody
+          tr
+            td[colspan=2] <b>Seed Utilization</b>
+          tr
+            td[style='width: 170px;'] Seed Balance
+            td #{TS.seed_balance}.0 tokens
+          tr
+            td Investment Amount
+            td = invested_tokens(current_user)
+          tr
+            td Underactivity Penalty
+            td #{underactivity_penalty(current_user)} tokens
