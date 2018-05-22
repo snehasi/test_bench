@@ -150,12 +150,12 @@
 
 - [x] /account table align bottom
 - [x] fix PDT on offer maturation
+- [x] expire offers
+- [x] double check contract offers
+- [x] pay bonus upon successful contract resolution
 
-- [ ] double check contract offers
-- [ ] pay bonus upon successful contract resolution
-
+- [ ] add cycling to data generators
 - [ ] add labels, comments to event record
-- [ ] how to expire offers?
 - [ ] /issues - My Issues / All Issues button
 
 - [ ] three offers per issue

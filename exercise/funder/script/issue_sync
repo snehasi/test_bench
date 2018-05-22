@@ -27,6 +27,7 @@ puts 'LOADING IORA'
 require 'iora'
 
 # ----- expired offers -----
+
 puts 'MARK ALL EXPIRED OFFERS'
 Offer.open.expired_by_time.each do |offer|
   offer.update_attribute(:status, 'expired')
@@ -34,15 +35,15 @@ Offer.open.expired_by_time.each do |offer|
 end
 puts ""
 
-# ----- resolve -----
+# ----- sync -----
 
-puts 'RESOLVE ALL EXPIRED/UNRESOLVED CONTRACTS'
-Contract.expired.unresolved.each do |contract|
-  result = ContractCmd::Resolve.new(contract).project
-  if result.contract.awardee == 'fixed'
-    funder = contract.positions.unfixed.user
-    UserCmd::Deposit.new(user: funder, amount: 15.0).project
-  end
-  print "."
+puts 'SYNC ALL ISSUES TO BUGMARK'
+iora = Iora.new(TS.tracker_type, TS.tracker_name)
+tracker_uuid = Tracker.first.uuid
+iora.issues.each do |el|
+  base = {"stm_tracker_uuid" => tracker_uuid}
+  pkg  = el.merge(base)
+  print '.'
+  IssueCmd::Sync.new(pkg).project
 end
-puts ""
+puts ''

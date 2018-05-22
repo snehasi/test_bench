@@ -64,8 +64,8 @@ hr
           tr
             td Underactivity Penalty
             td #{underactivity_penalty(current_user)} tokens
-            td <small>Reduced to 0 by funding more offers.</small>
+            td <small>Reduce to zero by funding more offers.</small>
           tr
-            td TOTAL EARNINGS
+            td <b>TOTAL EARNINGS</b>
             td #{TS.fee_participation + current_user.token_available + underactivity_penalty(current_user)} tokens
-            td <small>Convertable at a rate of $1USD = 10 tokens.</small>
+            td <small>Conversion rate: 10 tokens = $1USD.</small>
