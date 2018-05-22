@@ -144,9 +144,19 @@
 - [x] accepted offers with '*'
 - [x] funding hold on page footer
 - [x] no accept if open offer
+- [x] /account - show sources of funds - break out earnings
 
+## 2018-05-22 TUE
+
+- [ ] /account table align bottom
+
+- [ ] fix PDT on offer maturation
+- [ ] three offers per issue
+- [ ] double check 
+- [ ] pay bonus upon successful contract resolution
+
+- [ ] add labels, comments to event record
 - [ ] how to expire offers?
-- [ ] /account - show sources of funds - break out earnings
 - [ ] /issues - My Issues / All Issues button
 
 - [ ] /admin - test sync button
