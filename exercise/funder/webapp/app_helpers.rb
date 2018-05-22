@@ -119,8 +119,6 @@ module AppHelpers
   def offer_maturation_date(offer)
     color = BugmTime.now > offer.expiration ? "red" : "green"
     date = offer.expiration.strftime("%m-%d %H:%M %Z")
-    require 'pry'
-    binding.pry
     date_iso = offer.expiration.strftime("%Y%m%dT%H%M%S")
     "<a target='_blank' style='color: #{color}' href='https://www.timeanddate.com/worldclock/fixedtime.html?iso=#{date_iso}&p1=217'>#{date}</a>"
   end

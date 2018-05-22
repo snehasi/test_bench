@@ -153,11 +153,12 @@
 
 - [ ] double check contract offers
 - [ ] pay bonus upon successful contract resolution
-- [ ] three offers per issue
 
 - [ ] add labels, comments to event record
 - [ ] how to expire offers?
 - [ ] /issues - My Issues / All Issues button
+
+- [ ] three offers per issue
 
 - [ ] /admin - test sync button
 - [ ] /admin - test resolve button
