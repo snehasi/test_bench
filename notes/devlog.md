@@ -156,8 +156,7 @@
 - [x] /admin - disable sync button
 - [x] /admin - disable resolve button
 - [x] /issues - My Issues / All Issues button
-
-- [ ] add cycling to python generators
+- [x] add cycling to python generators
 
 - [ ] test nightly cycle
 

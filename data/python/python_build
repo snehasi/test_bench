@@ -48,17 +48,18 @@ end
 
 puts "GENERATE LIST OF SOURCE FILES"
 DOC_SRC_DIR   = File.expand_path("./Scripts", __dir__)
-HASH_LOGS     = File.exist?(HASH_FILE) ? File.each_line(HASH_FILE) : []
+HASH_LOGS     = File.exist?(HASH_FILE) ? File.readlines(HASH_FILE) : []
 DOC_SRC_RAW   = Dir.glob("#{DOC_SRC_DIR}/*py").shuffle
 
-if (DOC_SRC_DIR.length - HASH_LOGS.length) < TS.python_num_docs
-  system "rm -f #{HASH_LOGS}"
+
+if (DOC_SRC_RAW.length - HASH_LOGS.length) < TS.python_num_docs
+  system "rm -f #{HASH_FILE}"
 end
 
 DOC_SRC_FILES = DOC_SRC_RAW - HASH_LOGS
 
 puts "GENERATE DOCS INTO DIRECTORY #{TS.trial_dir}/#{DOC_DIR}"
-File.open(HASH_LOGS, 'a') do |hash_file|
+File.open(HASH_FILE, 'a') do |hash_file|
   (1..TS.python_num_docs).to_a.each do |idx|
     hash_file.puts DOC_SRC_FILES[idx]
     src = DOC_SRC_FILES[idx]

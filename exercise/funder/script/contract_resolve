@@ -40,8 +40,8 @@ puts 'RESOLVE ALL EXPIRED/UNRESOLVED CONTRACTS'
 Contract.expired.unresolved.each do |contract|
   result = ContractCmd::Resolve.new(contract).project
   if result.contract.awardee == 'fixed'
-    funder = contract.positions.unfixed.user
-    UserCmd::Deposit.new(user: funder, amount: 15.0).project
+    funder = contract.positions.unfixed.first.user
+    UserCmd::Deposit.new(uuid: funder.uuid, amount: 15.0).project
   end
   print "."
 end
