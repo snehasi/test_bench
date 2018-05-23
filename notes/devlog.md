@@ -157,7 +157,7 @@
 - [x] /admin - disable resolve button
 - [x] /issues - My Issues / All Issues button
 
-- [ ] add cycling to data generators
+- [ ] add cycling to python generators
 
 - [ ] test nightly cycle
 
