@@ -21,7 +21,13 @@ a[name='funder']
 h3 The Funder Role
 
 p Each Participant will fund offers.  Participants are given a seed
-  fund of 200 tokens to create Offers.
+  fund of 200 tokens to create offers. Any unused seed money is deducted
+  from a participant's account balance as penalty for underactivity.
+
+p Funders incur a cost of 10 tokens to fund an offer, and earn #{TS.fee_funding}
+  tokens for every successful offer that they fund. A successful offer
+  is one that is matched by a worker and where the issue is closed by
+  the offer maturation date.
 
 p About the <b>FUNDING HOLD:</b> each participant must fund <b>five</b>
   offers before being able to accept offers as a Worker.
@@ -35,12 +41,13 @@ p Once five offers have been created, all participants can act as Workers.
   your interest.  When you select an open offer, you form a
   <a href='/contracts' target='_blank'>Contract</a> that will pay a reward if the
   <a href='http://#{TS.tracker_url}' target='_blank'>Issue</a> is closed before the maturation date.
+  Workers incur a cost of 10 tokens for each offer accepted.
 
 a[name='offers']
 h3 Issues and Offers
 
 p New issues are created every day after midnight Eastern time.  Every offer has an
-  associated issue.  If an open offer is not accepted, it expires at midnight.
+  associated issue.  If an open offer is not accepted, it expires at midnight Eastern time.
 
 a[name='contracts']
 h3 Contracts
@@ -78,9 +85,11 @@ ul
       types has been chosen to reflect the kinds of work done in an open source
       ecosystem.
   li
-    | Each issue is listed in Bugmark as a pre-funded open offer worth 20 tokens.
+    | Each issue is listed in Bugmark.
   li
-    | Workers must simply decide which offers to accept and work on.
+    | Funders must decide which issues to fund.
+  li
+    | Workers must decide which offers to accept and work on.
   li
     | In order to get paid, the work must be satisfactorily completed by the
       maturation date which is always set to midnight Eastern Time.
