@@ -155,8 +155,8 @@
 - [x] pay bonus upon successful contract resolution
 - [x] /admin - disable sync button
 - [x] /admin - disable resolve button
+- [x] /issues - My Issues / All Issues button
 
-- [ ] /issues - My Issues / All Issues button
 - [ ] add cycling to data generators
 
 - [ ] test nightly cycle

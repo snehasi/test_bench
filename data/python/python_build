@@ -31,7 +31,7 @@ puts "ESTABLISH MEDITATIONS SETTINGS FOR #{TRIAL_DIR}"
 Dir.chdir TRIAL_DIR
 system "mkdir -p #{DOC_DIR}"
 system "mkdir -p .trial_data/archive"
-system "mv .trial_data/*python* .trial_data/archive"
+system "mv .trial_data/*python* .trial_data/archive 2> /dev/null"
 system "cp #{LCL_SETTINGS} #{TRIAL_DIR}/.trial_data"
 
 require_relative '../../exercise/Base/lib/trial_settings'

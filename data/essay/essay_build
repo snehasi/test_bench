@@ -32,7 +32,7 @@ puts "ESTABLISH ESSAY SETTINGS FOR #{TRIAL_DIR}"
 Dir.chdir TRIAL_DIR
 system "mkdir -p #{DOC_DIR}"
 system "mkdir -p .trial_data/archive"
-system "mv .trial_data/*essay* .trial_data/archive"
+system "mv .trial_data/*essay* .trial_data/archive 2> /dev/null"
 system "cp #{LCL_SETTINGS} #{TRIAL_DIR}/.trial_data"
 system "echo --- > #{TASKS_FILE}"
 system "echo --- > #{PAIR_TASKS_FILE}"
