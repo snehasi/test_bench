@@ -148,21 +148,29 @@
 
 ## 2018-05-22 TUE
 
-- [ ] /account table align bottom
+- [x] /account table align bottom
+- [x] fix PDT on offer maturation
+- [x] expire offers
+- [x] double check contract offers
+- [x] pay bonus upon successful contract resolution
+- [x] /admin - disable sync button
+- [x] /admin - disable resolve button
+- [x] /issues - My Issues / All Issues button
+- [x] add cycling to python generators
 
-- [ ] fix PDT on offer maturation
-- [ ] three offers per issue
-- [ ] double check 
-- [ ] pay bonus upon successful contract resolution
+- [ ] test nightly cycle
 
+- [ ] fix event generation
+- [ ] add issue event history
+- [ ] add user event history
+- [ ] add OfferCmd::Expire class
 - [ ] add labels, comments to event record
-- [ ] how to expire offers?
-- [ ] /issues - My Issues / All Issues button
 
-- [ ] /admin - test sync button
-- [ ] /admin - test resolve button
-- [ ] /admin - test nightly rebuild
+- [ ] trade on identity
+
+- [ ] add user registers
 
 ## TBD
 
+- [ ] three offers per issue
 - [ ] TBD

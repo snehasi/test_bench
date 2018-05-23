@@ -19,6 +19,7 @@ DOC_DIR   = "Python"
 TIMESTAMP = Time.now.strftime("%d%H%M%S")
 TASK_FILE = "#{TRIAL_DIR}/.trial_data/python_tasks_#{TIMESTAMP}.yml"
 TERM_FILE = "#{TRIAL_DIR}/.trial_data/python_terms_#{TIMESTAMP}.yml"
+HASH_FILE = "#{TRIAL_DIR}/.trial_data/python-hashlog.txt"
 LCL_SETTINGS = File.expand_path(__dir__) + "/python_settings.yml"
 
 puts "TRIAL DIR IS #{TRIAL_DIR}"
@@ -31,7 +32,7 @@ puts "ESTABLISH MEDITATIONS SETTINGS FOR #{TRIAL_DIR}"
 Dir.chdir TRIAL_DIR
 system "mkdir -p #{DOC_DIR}"
 system "mkdir -p .trial_data/archive"
-system "mv .trial_data/*python* .trial_data/archive"
+system "mv .trial_data/*python_* .trial_data/archive 2> /dev/null"
 system "cp #{LCL_SETTINGS} #{TRIAL_DIR}/.trial_data"
 
 require_relative '../../exercise/Base/lib/trial_settings'
@@ -45,14 +46,27 @@ def ftgt(idx, inputs)
   "#{fbase}_#{TIMESTAMP}.py"
 end
 
-puts "GENERATE DOCS INTO DIRECTORY #{TS.trial_dir}/#{DOC_DIR}"
+puts "GENERATE LIST OF SOURCE FILES"
 DOC_SRC_DIR   = File.expand_path("./Scripts", __dir__)
-DOC_SRC_FILES = Dir.glob("#{DOC_SRC_DIR}/*py").shuffle
-(1..TS.python_num_docs).to_a.each do |idx|
-  src = DOC_SRC_FILES[idx]
-  tgt = ftgt(idx, DOC_SRC_FILES)
-  system "cp #{src} #{tgt}"
-  print '.'
+HASH_LOGS     = File.exist?(HASH_FILE) ? File.readlines(HASH_FILE) : []
+DOC_SRC_RAW   = Dir.glob("#{DOC_SRC_DIR}/*py").shuffle
+
+
+if (DOC_SRC_RAW.length - HASH_LOGS.length) < TS.python_num_docs
+  system "rm -f #{HASH_FILE}"
+end
+
+DOC_SRC_FILES = DOC_SRC_RAW - HASH_LOGS
+
+puts "GENERATE DOCS INTO DIRECTORY #{TS.trial_dir}/#{DOC_DIR}"
+File.open(HASH_FILE, 'a') do |hash_file|
+  (1..TS.python_num_docs).to_a.each do |idx|
+    hash_file.puts DOC_SRC_FILES[idx]
+    src = DOC_SRC_FILES[idx]
+    tgt = ftgt(idx, DOC_SRC_FILES)
+    system "cp #{src} #{tgt}"
+    print '.'
+  end
 end
 puts ''
 

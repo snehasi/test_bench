@@ -20,7 +20,7 @@ DATA_FILE       = "scram"
 puts "Clean #{DOC_DIR} Data"
 
 Dir.chdir TRIAL_DIR
-system "rm -rf #{DOC_DIR}"
+system "rm -rf #{DOC_DIR}*"
 system "rm -f  .trial_data/*#{DATA_FILE}*"
-system "rm -f  .trial_data/archive/*#{DATA_FILE}*yml"
+system "rm -f  .trial_data/archive/*#{DATA_FILE}*"
 

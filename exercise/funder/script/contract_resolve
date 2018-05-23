@@ -26,11 +26,23 @@ Exchange.load_rails
 puts 'LOADING IORA'
 require 'iora'
 
+# ----- expired offers -----
+puts 'MARK ALL EXPIRED OFFERS'
+Offer.open.expired_by_time.each do |offer|
+  offer.update_attribute(:status, 'expired')
+  print "."
+end
+puts ""
+
 # ----- resolve -----
 
 puts 'RESOLVE ALL EXPIRED/UNRESOLVED CONTRACTS'
 Contract.expired.unresolved.each do |contract|
-  ContractCmd::Resolve.new(contract).project
+  result = ContractCmd::Resolve.new(contract).project
+  if result.contract.awardee == 'fixed'
+    funder = contract.positions.unfixed.first.user
+    UserCmd::Deposit.new(uuid: funder.uuid, amount: 15.0).project
+  end
   print "."
 end
 puts ""

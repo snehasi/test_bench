@@ -120,7 +120,6 @@ module AppHelpers
     color = BugmTime.now > offer.expiration ? "red" : "green"
     date = offer.expiration.strftime("%m-%d %H:%M %Z")
     date_iso = offer.expiration.strftime("%Y%m%dT%H%M%S")
-    # "<span style='color: #{color};'>#{date}</span>"
     "<a target='_blank' style='color: #{color}' href='https://www.timeanddate.com/worldclock/fixedtime.html?iso=#{date_iso}&p1=217'>#{date}</a>"
   end
 

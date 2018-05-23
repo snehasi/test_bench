@@ -62,7 +62,6 @@ end
 puts ""
 
 # puts 'CREATE A BUY-UNFIXED OFFER FOR EACH OPEN ISSUE'
-#
 # funder = User.find_by_email(TS.funder_email)
 # term_files = Dir.glob("#{File.expand_path TS.trial_dir}/.trial_data/**/*term*.yml")
 # term_files.each do |file|
@@ -89,7 +88,7 @@ puts ""
 # puts ''
 
 puts 'ADD A TRACKER COMMENT WITH A LINK TO EACH OFFER'
-# Ideally, only do this to new issues, not existing issues.
+# TODO: don't re-post comment...
 Issue.all.open.each do |issue|
   uuid    = issue.uuid
   url     = "http://#{TS.webapp_url}/issues/#{uuid}"
