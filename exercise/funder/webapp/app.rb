@@ -19,6 +19,20 @@ get "/" do
   slim :home
 end
 
+# ----- events -----
+
+get "/events" do
+  @events = Event.all
+  slim :events
+end
+
+get "/events_user/:user_uuid" do
+  user = User.find_by_uuid(params['user_uuid'])
+  @title  = user.email
+  @events = Event.for_user(user)
+  slim :events
+end
+
 # ----- issues -----
 
 # show one issue

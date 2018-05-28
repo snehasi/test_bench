@@ -15,6 +15,23 @@ module AppHelpers
     [ 0, spread ].min
   end
 
+  # ----- events -----
+
+  def clean_type(event)
+    event.event_type.gsub("Event::", "")
+  end
+
+  def clean_payload(event)
+    ex = %w(uuid encrypted_password exid stm_body stm_tracker_uuid html_url)
+    event.payload.except(*ex)
+  end
+
+  def user_links(event)
+    event.user_uuids.map do |x|
+      "<a href='/events_user/#{x}'>#{x[0..5]}</a>"
+    end.join(", ")
+  end
+
   # ----- funding hold -----
 
   def funding_count(user)

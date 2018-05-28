@@ -157,20 +157,9 @@
 - [x] /admin - disable resolve button
 - [x] /issues - My Issues / All Issues button
 - [x] add cycling to python generators
-
-- [ ] test nightly cycle
-
-- [ ] fix event generation
-- [ ] add issue event history
-- [ ] add user event history
-- [ ] add OfferCmd::Expire class
-- [ ] add labels, comments to event record
-
-- [ ] trade on identity
-
-- [ ] add user registers
+- [x] test nightly cycle
+- [x] fix github sync bug
 
 ## TBD
 
-- [ ] three offers per issue
 - [ ] TBD
