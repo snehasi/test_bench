@@ -86,3 +86,26 @@ ul
     b What can I do for anonymity?
     p You can create an anonymous username and create an anonymous GitHub account. 
 
+  li
+    b Suppose I fund an offer with 10 tokens and no one accepts it, do I get 15 tokens after the maturation date?
+    p No. An offer that no one accepts will be refunded, so you get 10 tokens back.
+
+  li
+    b When do I get 15 tokens after the maturation date?
+    p Only if you fund a successful offer. That is, the offer is accepted and the issue is closed by the maturation date.
+
+  li
+    b Suppose that an offer is funded and accepted, and thus a contract is formed. How does the contract pay out at maturation?
+    p If the issue is closed by the maturation date, the worker gets the contract payout of 20 tokens. Else the funder gets the contract payout.
+
+  li
+    b Is the contract payout reversed if an issue is reopened?
+    p No. All payouts are final.
+
+  li
+    b Why are contracts not paid as soon as issues are closed? Instead we have to wait until the maturation date.
+    p The design of our marketplace needs contracts to remain open and not be paid out until maturation. In a full implementation trading can continue to take place until the maturation date and issues might be reopened before the maturation date.
+
+  li
+    b Why do workers incur a cost of 10 tokens when they accept an offer?
+    p If the issue is closed then the worker receives the 10 tokens back in the contract payout of 20 tokens. If the issue remains open then think of this as a form of compensation to the funder for not delivering the work.

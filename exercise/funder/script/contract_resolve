@@ -46,3 +46,13 @@ Contract.expired.unresolved.each do |contract|
   print "."
 end
 puts ""
+
+# ----- expire -----
+
+puts 'MARK ALL EXPIRED OFFERS'
+Offer.open.expired_by_time.each do |offer|
+  # Is there no OfferCmd:: comand to maintain the event stream?
+  offer.update_attribute(:status, 'expired')
+  print "."
+end
+puts ""
