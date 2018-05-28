@@ -112,6 +112,14 @@ get "/offer_accept/:offer_uuid" do
   redirect "/issues/#{contract.issue.uuid}"
 end
 
+# ----- positions -----
+
+get "/positions" do
+  protected!
+  @positions = Position.all
+  slim :positions
+end
+
 # ----- contracts -----
 
 # show one contract

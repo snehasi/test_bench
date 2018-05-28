@@ -62,7 +62,7 @@ puts ''
 # ----- bugmark tracker -----
 
 puts 'CREATE A BUGMARK TRACKER'
-FB.create(:tracker, name: 'FunderExercise')
+FB.create(:tracker, name: 'TraderExercise')
 
 # ----- issues -----
 
