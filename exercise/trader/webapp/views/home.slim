@@ -1,0 +1,50 @@
+h2 The Trader Exercise
+.row
+  .col-md-7
+    p This is simple Bugmark Exercise - funding offers, then making edits
+      and changes on a Document Repository.
+      <a href="/help">Learn about this exercise</a>.
+    table.table.table-small
+      tr
+        td <b>Objective</b>
+        td Give Participants basic experience with the idea of funding offers.
+      tr
+        td <b>Start Date</b>
+        td = start_date
+      tr
+        td <b>Finish Date</b>
+        td = finish_date
+      tr
+        td <b>Leader</b>
+        td #{TS.leader_name} - #{TS.leader_email}
+      tr
+        td <b>Links</b>
+        td
+          == repo_link
+          '  |
+          == tracker_link(nil, "Issue Tracker")
+  .col-md-5
+    p Get started:
+    ol
+      li == base_link("Login"            , "/login")
+      li == base_link("Fund Offers"      , "/help/workflow#fund")
+      li == base_link("Accept an Offer"  , "/help/workflow#accept")
+      li == base_link("Resolve Issues"   , "/help/workflow#resolve")
+      li == base_link("Earn Credits"     , "/help/workflow#earn")
+    p Get help:
+    ol
+      li
+        ' View the
+        == base_link("Help Pages", "/help")
+      li
+        ' Contact
+        == base_link(TS.leader_name, "mailto:" + TS.leader_email)
+      li
+        ' Use
+        == base_link("Bugmark Slack", "https://bugmark.slack.com", :new_tab)
+    p Learn more:
+    ul
+      li == base_link("About Bugmark"          , "/help/about")
+      li == base_link("Markets and Open Source", "/help/markets")
+      li == base_link("Bugmark Research"       , "/help/research")
+

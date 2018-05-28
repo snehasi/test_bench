@@ -1,0 +1,14 @@
+ul.navbar-nav.mr-auto
+  - if logged_in? && consented?
+    == nav_link("Home"      , "/")
+    == nav_link("Issues-#{Issue.open.count}"                 , "/issues")
+    == nav_link("Contracts-#{current_user.contracts.length}" , "/contracts")
+
+ul.navbar-nav.flex-row
+  - if logged_in?
+    == nav_btn(account_lbl(current_user), "/account") if consented?
+    == nav_link("Logout"  , "/logout")
+    == nav_link("Help"    , "/help")
+  - else
+    == nav_link("Login"   , "/login")
+    == nav_link("Help"    , "/help")
