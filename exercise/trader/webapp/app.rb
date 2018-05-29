@@ -124,7 +124,7 @@ end
 
 get "/position_sell/:position_uuid" do
   protected!
-  position = Position.find_by_uuid(params['uuid'])
+  position = Position.find_by_uuid(params['position_uuid'])
   result = OfferCmd::CreateSell.new(position)
   alt = result.project
   flash[:success] = "You have made an offer to sell your position"
