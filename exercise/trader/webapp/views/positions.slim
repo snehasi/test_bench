@@ -1,3 +1,11 @@
 h2 Positions
 
-| UNDER CONSTRUCTION
+p <b>Sellable</b> #{@sellable.count}
+- @sellable.each do |pos|
+  p <a href="/position_sell/#{pos.uuid}">#{pos.uuid}</a>
+
+hr
+p <b>Buyable</b> #{@buyable.count}
+- @buyable.each do |buy|
+  p <a href="/position_buy/#{buy.uuid}">#{buy.uuid}</a>
+
