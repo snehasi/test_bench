@@ -22,9 +22,11 @@ html[lang="en-US"]
       footer
         small
           .row
-            .col-md-6.text-center
+            .col-md-4.text-center
               | Powered by Bugmark
-            .col-md-6.text-center
+            .col-md-4.text-center
+              == base_link("Positions-#{position_count(current_user)}"  , "/positions")
+            .col-md-4.text-center
               == BugmTime.now.strftime("%B-%d %H:%M %Z")
     script[crossorigin="anonymous" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" src="https://code.jquery.com/jquery-3.2.1.slim.min.js"                              ]
     script[crossorigin="anonymous" integrity="sha384-lZmvU/TzxoIQIOD9yQDEpvxp6wEU32Fy0ckUgOH4EIlMOCdR823rg4+3gWRwnX1M" src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.bundle.min.js" ]

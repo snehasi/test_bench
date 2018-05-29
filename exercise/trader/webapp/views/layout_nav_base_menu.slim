@@ -2,7 +2,6 @@ ul.navbar-nav.mr-auto
   - if logged_in? && consented?
     == nav_link("Home"      , "/")
     == nav_link("Issues-#{Issue.open.count}"                 , "/issues")
-    == nav_link("Positions-#{Position.count}"                , "/positions")
     == nav_link("Contracts-#{current_user.contracts.length}" , "/contracts")
 
 ul.navbar-nav.flex-row

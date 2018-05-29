@@ -4,6 +4,21 @@ module AppHelpers
 
   include ActionView::Helpers::DateHelper
 
+  # ----- positions -----
+
+  def position_count(user)
+    return 0 unless user
+    sellable_positions(user).count + buyable_positions.count
+  end
+
+  def sellable_positions(user)
+    user.positions.unresolved.fixed.unoffered
+  end
+
+  def buyable_positions
+    Offer::Sell::Fixed.open
+  end
+
   # ----- investment -----
 
   def invested_tokens(user)
@@ -149,11 +164,23 @@ module AppHelpers
     end
   end
 
+  def offer_sell_link(offer)
+    counter = offer.position.counterpositions.first
+    "
+    <a href='#' class='ttip' data-toggle='tooltip' id='#{counter.uuid}'>
+    #{user_name(offer.position.counterusers.first)}
+    </a>
+    "
+  end
+
   def offer_worker_link(user, offer)
-    #return "My Offer" if offer.user.uuid == user.uuid
     case offer.status
     when 'crossed'
-      user_name(offer.position.counterusers.first)
+      if current_user == offer.position.counterusers.first
+        offer_sell_link(offer)
+      else
+        user_name(offer.position.counterusers.first)
+      end
     when 'expired'
       'EXPIRED'
     when 'open'

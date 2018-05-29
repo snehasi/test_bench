@@ -116,16 +116,15 @@ end
 
 get "/positions" do
   protected!
-  @positions = Position.all
-  @sellable = current_user.positions.unresolved.fixed.unoffered
-  @buyable = Offer::Sell::Fixed.open
+  @sellable = sellable_positions(current_user)
+  @buyable  = buyable_positions
   slim :positions
 end
 
-get "/position_sell/:position_uuid" do
+post "/position_sell/:position_uuid" do
   protected!
   position = Position.find_by_uuid(params['position_uuid'])
-  result = OfferCmd::CreateSell.new(position)
+  result = OfferCmd::CreateSell.new(position, price: params['price'].to_f)
   alt = result.project
   flash[:success] = "You have made an offer to sell your position"
   redirect "/positions"
@@ -133,17 +132,13 @@ end
 
 get "/position_buy/:offer_uuid" do
   protected!
-  require 'pry'
-  binding.pry
   user_uuid = current_user.uuid
   uuid      = params['offer_uuid']
   offer     = Offer.find_by_uuid(uuid)
   result    = OfferCmd::CreateCounter.new(offer, poolable: false, user_uuid: user_uuid)
   counter   = result.project.offer
   obj       = ContractCmd::Cross.new(counter, :transfer)
-  binding.pry
   contract  = obj.project.contract
-  binding.pry
   flash[:success] = "You have formed a new contract"
   redirect "/issues/#{contract.issue.uuid}"
 end
