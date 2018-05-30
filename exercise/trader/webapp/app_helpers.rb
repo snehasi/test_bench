@@ -173,10 +173,16 @@ module AppHelpers
     "
   end
 
+  def sellable_offer(user, offer)
+    return false unless user == offer.position.counterusers.first
+    poz  =  offer.position.counterpositions.first
+    user.positions.unresolved.fixed.unoffered.include?(poz)
+  end
+
   def offer_worker_link(user, offer)
     case offer.status
     when 'crossed'
-      if current_user == offer.position.counterusers.first
+      if sellable_offer(current_user, offer)
         offer_sell_link(offer)
       else
         user_name(offer.position.counterusers.first)
