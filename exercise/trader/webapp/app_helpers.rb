@@ -149,6 +149,7 @@ module AppHelpers
   end
 
   def offer_maturation_date(offer)
+    return "TBD" if offer.expiration.nil?
     color = BugmTime.now > offer.expiration ? "red" : "green"
     date = offer.expiration.strftime("%m-%d %H:%M %Z")
     date_iso = offer.expiration.strftime("%Y%m%dT%H%M%S")
