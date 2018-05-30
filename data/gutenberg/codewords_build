@@ -1,0 +1,110 @@
+#!/usr/bin/env ruby
+
+require 'securerandom'
+require 'iora'
+
+# ----- command line -----
+
+CMD = __FILE__.split("/").last
+DIR = File.expand_path(ARGV[0]) if ARGV[0]
+USAGE = "Usage: #{CMD} <trial_dir>"
+
+abort USAGE if ARGV.length != 1
+abort "#{USAGE}\nERROR: #{ARGV[0]} not a directory" unless File.directory?(DIR)
+
+# ----- filepaths -----
+
+TRIAL_DIR       = DIR
+TIMESTAMP       = Time.now.strftime("%d%H%M%S")
+TASKS_FILE      = "./.trial_data/code_tasks_#{TIMESTAMP}.yml"
+TERMS_FILE      = "./.trial_data/code_terms_#{TIMESTAMP}.yml"
+LCL_SETTINGS    = File.expand_path(__dir__) + "/code_settings.yml"
+
+puts "TRIAL DIR IS #{TRIAL_DIR}"
+
+# ----- settings and libraries -----
+
+puts "ESTABLISH CODEWORD SETTINGS FOR #{TRIAL_DIR}"
+
+Dir.chdir TRIAL_DIR
+system "mkdir -p .trial_data/archive"
+system "mv .trial_data/*code* .trial_data/archive 2> /dev/null"
+system "cp #{LCL_SETTINGS} #{TRIAL_DIR}/.trial_data"
+
+require_relative '../../exercise/Base/lib/trial_settings'
+ 
+CODELIST = File.readlines("#{__dir__}/code_groups.txt").map do |line| 
+  line.split(",")
+end
+
+# ----- methods -----
+
+def body_base(codeline)
+  # base = "#{codeline.quiz}"
+  base = "ASDF"
+  hint = "HINT: the uncodelined word starts with 'TBD'"
+  return (base + "\n\n") 
+  "#{base}\n\n#{hint}\n\n"
+end
+
+def task_body(codeline)
+  instructions = <<~EOF.gsub("\n", " ")
+  TO RESOLVE THIS ISSUE: post the uncodelined word
+  in the issue comments.
+  EOF
+  body_base(codeline) + "#{instructions}\n\n/#{SecureRandom.hex(3)}"
+end
+
+def task_tag_body(codeline)
+  task_body(codeline).gsub("\n\n", "<p></p>")
+end
+
+# ----- writers -----
+
+def write_task(codeline)
+  File.open(TASKS_FILE, 'a') do |f|
+    f.puts "- title:  TBD"
+    f.puts "  labels: EXERCISE,CODEWORDS,RESOLVE_WITH_COMMENT"
+    f.puts "  body:   \"#{task_tag_body(codeline)}\""
+    f.puts ""
+  end
+end
+
+# ----- loops -----
+
+def write_tasks(numtasks)
+  CODELIST.sample(numtasks).each do |codeline|
+    write_task(codeline)
+    print "."
+  end
+  puts ""
+end
+
+def write_terms(task_file, term_file)
+  tasks = YAML.load_file(task_file)
+  File.open(term_file, 'w') do |f|
+    f.puts "---"
+    tasks.each do |task|
+      cat   = task["title"].split("_").last
+      hexid = Iora.hexid_for(task)
+      f.puts "- price:  #{TS.settings.fetch("code_price".to_sym, 1.00)}"
+      f.puts "  volume: #{TS.settings.fetch("code_volume".to_sym, 10)}"
+      f.puts "  hexid:  #{hexid}"
+      print '.'
+    end
+  end
+  puts ''
+end
+
+# ----- execution -----
+
+Dir.chdir TS.trial_dir
+system "mkdir -p .trial_data"
+system "echo --- > #{TASKS_FILE}"
+
+puts "WRITING TASKS"
+write_tasks(TS.code_num_tasks)
+
+puts "WRITING TASK TERMS"
+write_terms(TASKS_FILE     , TASKS_FILE.gsub("task", "term"))
+
