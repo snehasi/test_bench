@@ -41,43 +41,44 @@ end
 
 # ----- methods -----
 
-def body_base(codeline)
-  base = "The codeword for this issue is '#{codeline.first}'"
+def body_base(hexid)
+  base = "Codeword #{hexid.upcase}"
   "#{base}\n\n"
 end
 
-def code_link 
-  "<a target='_blank' href='http://#{TS.webap_url}/codewords'>/codewords</a>"
+def code_link(hexid)
+  "<a target='_blank' href='http://#{TS.webapp_url}/codewords/#{hexid}'>click here</a>"
 end
 
-def task_body(codeline)
+def task_body(hexid)
   instructions = <<~EOF #.gsub("\n", " ")
-  Resolving the issue requires two people to supply two separate codeword responses.
+  Resolving the issue requires two people to supply two separate keywords.
 
-  The first person accepts the offer to fix this issue, then looks up the codeword response on the #{code_link} page.
+  Two keywords are associated with this issue, each assigned to random user groups.
 
-  Then the first person posts the codeword response as an issue comment, and sells the partially completed work on the market.
+  The keywords must be combined to generate a solution.
 
-  A second person buys the partially completed work, then looks up the first codeword response on the #{code_link} page.
+  To see if you have a keyword for this issue, #{code_link(hexid)}.
 
-  The second person posts the second codeword response as an issue comment.
+  To combine keywords and generate a solution, #{code_link(hexid)}.
 
-  Then project maintainer validates the responses, closes the issue, and both workers get paid.
+  Once the solution is posted on the issue comments, the maintainer will close the issue.
   EOF
-  body_base(codeline) + "#{instructions}\n\n/#{SecureRandom.hex(3)}"
+  body_base(hexid) + "#{instructions}\n\n/#{hexid}"
 end
 
-def task_tag_body(codeline)
-  task_body(codeline).gsub("\n\n", "<p></p>")
+def task_tag_body(hexid)
+  task_body(hexid).gsub("\n\n", "<p></p>")
 end
 
 # ----- writers -----
 
-def write_task(codeline)
+def write_task
+  hexid = SecureRandom.hex(3)
   File.open(TASKS_FILE, 'a') do |f|
-    f.puts "- title:  Codeword '#{codeline.first}'"
+    f.puts "- title:  Codeword #{hexid.upcase}"
     f.puts "  labels: EXERCISE,CODEWORDS,RESOLVE_WITH_COMMENT"
-    f.puts "  body:   \"#{task_tag_body(codeline)}\""
+    f.puts "  body:   \"#{task_tag_body(hexid)}\""
     f.puts ""
   end
 end
@@ -86,7 +87,7 @@ end
 
 def write_tasks(numtasks)
   CODELIST.sample(numtasks).each do |codeline|
-    write_task(codeline)
+    write_task
     print "."
   end
   puts ""
@@ -99,8 +100,8 @@ def write_terms(task_file, term_file)
     tasks.each do |task|
       cat   = task["title"].split("_").last
       hexid = Iora.hexid_for(task)
-      f.puts "- price:  #{TS.settings.fetch("code_price".to_sym, 1.00)}"
-      f.puts "  volume: #{TS.settings.fetch("code_volume".to_sym, 10)}"
+      f.puts "- price:  #{TS.settings.fetch("code_price".to_sym, 0.50)}"
+      f.puts "  volume: #{TS.settings.fetch("code_volume".to_sym, 20)}"
       f.puts "  hexid:  #{hexid}"
       print '.'
     end

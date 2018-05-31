@@ -21,11 +21,9 @@ end
 
 # ----- codewords -----
 
-get "/codewords_solutions" do
-  slim :codewords_solutions
-end
-
-get "/codewords/:issue_seq" do
+get "/codewords/:hexid" do
+  @hexid = params["hexid"]
+  @issue = Issue.by_hexid(@hexid).first
   slim :codeword
 end
 
