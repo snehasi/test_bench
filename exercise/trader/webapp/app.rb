@@ -19,6 +19,22 @@ get "/" do
   slim :home
 end
 
+# ----- codewords -----
+
+get "/codewords_solutions" do
+  slim :codewords_solutions
+end
+
+get "/codewords/:issue_seq" do
+  slim :codeword
+end
+
+get "/codewords" do
+  protected!
+  @cwrd = CodeWord.new
+  slim :codewords
+end
+
 # ----- events -----
 
 get "/events" do
@@ -42,6 +58,13 @@ get "/issues/:uuid" do
   slim :issue
 end
 
+# show one issue
+get "/issues_ex/:exid" do
+  protected!
+  issue = Issue.find_by_exid(params['exid'])
+  redirect "/issues/#{issue.uuid}"
+end
+
 # list all issues
 get "/issues" do
   protected!
@@ -50,16 +73,15 @@ get "/issues" do
 end
 
 # render a dynamic SVG for the issues
-get '/badge/*' do |issue_uuid|
+get '/badge_ex/*' do |issue_exid|
   content_type 'image/svg+xml'
   cache_control :no_cache
   expires 0
   last_modified Time.now
   etag SecureRandom.hex(10)
-  @issue = Issue.find_by_uuid(issue_uuid.split(".").first)
+  @issue = Issue.find_by_exid(issue_exid.split(".").first)
   erb :badge
 end
-
 
 # ----- offers -----
 

@@ -1,0 +1,21 @@
+h2 Codewords
+
+.row
+  .col-md-2
+  .col-md-8
+    table.table#xtable
+      thead
+        tr
+          th Issue ID
+          th Keyword
+      tbody
+        - @cwrd.issues_for_user(current_user.uuid).each do |seq, issue|
+          tr
+            td = seq
+            td = issue.keyword_for(current_user.uuid)
+  .col-md-2
+
+- content_for :page_js do
+  coffee:
+    $('#xtable').DataTable();
+

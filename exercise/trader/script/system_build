@@ -31,14 +31,47 @@ require 'iora'
 puts 'LOAD EXERCISE TASKS INTO TRACKER'
 iora = Iora.new(TS.tracker_type, TS.tracker_name, labels: "EXERCISE")
 task_files = Dir.glob("#{File.expand_path TS.trial_dir}/.trial_data/*task*.yml")
-task_files.each do |file|
+new_issues = task_files.map do |file|
   tasks = YAML.load_file(file)
-  tasks.each do |task|
-    iora.create(task["title"], task["body"], labels: task["labels"])
+  tasks.map do |task|
     print '.'
+    iora.create(task["title"], task["body"], labels: task["labels"])
   end
+end.flatten.map {|el| el.stringify_keys}
+puts ''
+
+puts 'CREATE COMMENTS FOR ALL NEW ISSUES'
+new_issues.each do |issue|
+  exid    = issue["exid"]
+  url     = "http://#{TS.webapp_url}/issues_ex/#{exid}"
+  burl    = "http://#{TS.webapp_url}/badge_ex/#{exid}.svg"
+  comment = "Bugmark is trading this issue. "
+  img     = "<img src='#{burl}' alt='Click to View on Bugmark' style='max-width: 100%;'> "
+  link    = "<a target='_blank' href='#{url}'>#{img}</a>"
+  iora.create_comment(issue["sequence"], comment + "<br/>" + link)
+  print '.'
 end
 puts ''
+
+puts 'CREATE KEYWORD STRUCTURE WITH ALL NEW ISSUE DATA'
+timestamp = BugmTime.now.strftime("%d%H%M%S")
+KEY_FILE  = File.expand_path(TS.trial_dir + "/.trial_data/code_hash_#{timestamp}.yml")
+GROUPS    = File.readlines(TS.trial_dir + "/.trial_data/code_groups.txt").map {|line| line.chomp.strip.split(",")}.shuffle
+users     = User.all.pluck(:uuid).map {|el| el.gsub("'", "")}.shuffle
+utake     = ( users.length / 3 ) + 1
+hash = {}
+new_issues.each_with_index do |issue, idx|
+  ele = {}
+  ele["solution"] = GROUPS[idx][0]
+  ele["keyword1"] = GROUPS[idx][1]
+  ele["keyword2"] = GROUPS[idx][2]
+  ele["users1"]   = users.shift(utake)
+  users           = users + ele["users1"]
+  ele["users2"]   = users.shift(utake)
+  users           = users + ele["users2"]
+  hash[issue["sequence"]] = ele
+end
+File.open(KEY_FILE, 'w') {|kf| kf.puts hash.to_yaml}
 
 puts 'SYNC ALL ISSUES TO BUGMARK'
 tracker_uuid = Tracker.first.uuid
@@ -89,19 +122,5 @@ if @build_offers
   end
   puts ''
 end
-
-puts 'ADD A TRACKER COMMENT WITH A LINK TO EACH OFFER'
-# TODO: don't re-post comment...
-Issue.all.open.each do |issue|
-  uuid    = issue.uuid
-  url     = "http://#{TS.webapp_url}/issues/#{uuid}"
-  burl    = "http://#{TS.webapp_url}/badge/#{uuid}.svg"
-  comment = "Bugmark is trading this issue. "
-  img     = "<img src='#{burl}' alt='Click to View on Bugmark' style='max-width: 100%;'> "
-  link    = "<a href='#{url}'>#{img}</a>"
-  iora.create_comment(issue.sequence, comment + "<br/>" + link)
-  print "."
-end
-puts ""
 
 puts 'DONE'

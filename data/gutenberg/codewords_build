@@ -19,6 +19,7 @@ TIMESTAMP       = Time.now.strftime("%d%H%M%S")
 TASKS_FILE      = "./.trial_data/code_tasks_#{TIMESTAMP}.yml"
 TERMS_FILE      = "./.trial_data/code_terms_#{TIMESTAMP}.yml"
 LCL_SETTINGS    = File.expand_path(__dir__) + "/code_settings.yml"
+LCL_CODEGRPS    = File.expand_path(__dir__) + "/code_groups.txt"
 
 puts "TRIAL DIR IS #{TRIAL_DIR}"
 
@@ -30,27 +31,38 @@ Dir.chdir TRIAL_DIR
 system "mkdir -p .trial_data/archive"
 system "mv .trial_data/*code* .trial_data/archive 2> /dev/null"
 system "cp #{LCL_SETTINGS} #{TRIAL_DIR}/.trial_data"
+system "cp #{LCL_CODEGRPS} #{TRIAL_DIR}/.trial_data"
 
 require_relative '../../exercise/Base/lib/trial_settings'
  
 CODELIST = File.readlines("#{__dir__}/code_groups.txt").map do |line| 
-  line.split(",")
+  line.split(",").map {|el| el.chomp.strip}
 end
 
 # ----- methods -----
 
 def body_base(codeline)
-  # base = "#{codeline.quiz}"
-  base = "ASDF"
-  hint = "HINT: the uncodelined word starts with 'TBD'"
-  return (base + "\n\n") 
-  "#{base}\n\n#{hint}\n\n"
+  base = "The codeword for this issue is '#{codeline.first}'"
+  "#{base}\n\n"
+end
+
+def code_link 
+  "<a target='_blank' href='http://#{TS.webap_url}/codewords'>/codewords</a>"
 end
 
 def task_body(codeline)
-  instructions = <<~EOF.gsub("\n", " ")
-  TO RESOLVE THIS ISSUE: post the uncodelined word
-  in the issue comments.
+  instructions = <<~EOF #.gsub("\n", " ")
+  Resolving the issue requires two people to supply two separate codeword responses.
+
+  The first person accepts the offer to fix this issue, then looks up the codeword response on the #{code_link} page.
+
+  Then the first person posts the codeword response as an issue comment, and sells the partially completed work on the market.
+
+  A second person buys the partially completed work, then looks up the first codeword response on the #{code_link} page.
+
+  The second person posts the second codeword response as an issue comment.
+
+  Then project maintainer validates the responses, closes the issue, and both workers get paid.
   EOF
   body_base(codeline) + "#{instructions}\n\n/#{SecureRandom.hex(3)}"
 end
@@ -63,7 +75,7 @@ end
 
 def write_task(codeline)
   File.open(TASKS_FILE, 'a') do |f|
-    f.puts "- title:  TBD"
+    f.puts "- title:  Codeword '#{codeline.first}'"
     f.puts "  labels: EXERCISE,CODEWORDS,RESOLVE_WITH_COMMENT"
     f.puts "  body:   \"#{task_tag_body(codeline)}\""
     f.puts ""
