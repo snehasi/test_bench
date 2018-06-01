@@ -14,18 +14,18 @@ abort "#{USAGE}\nERROR: #{ARGV[0]} not a directory" unless File.directory?(DIR)
 
 # ----- filepaths -----
 
-TRIAL_DIR       = DIR
-TIMESTAMP       = Time.now.strftime("%d%H%M%S")
-TASKS_FILE      = "./.trial_data/code_tasks_#{TIMESTAMP}.yml"
-TERMS_FILE      = "./.trial_data/code_terms_#{TIMESTAMP}.yml"
-LCL_SETTINGS    = File.expand_path(__dir__) + "/code_settings.yml"
-LCL_CODEGRPS    = File.expand_path(__dir__) + "/code_groups.txt"
+TRIAL_DIR    = DIR
+TIMESTAMP    = Time.now.strftime("%d%H%M%S")
+TASKS_FILE   = "./.trial_data/code_tasks_#{TIMESTAMP}.yml"
+TERMS_FILE   = "./.trial_data/code_terms_#{TIMESTAMP}.yml"
+LCL_SETTINGS = File.expand_path(__dir__) + "/code_settings.yml"
+LCL_CODEGRPS = File.expand_path(__dir__) + "/code_groups.txt"
 
 puts "TRIAL DIR IS #{TRIAL_DIR}"
 
 # ----- settings and libraries -----
 
-puts "ESTABLISH CODEWORD SETTINGS FOR #{TRIAL_DIR}"
+puts "ESTABLISH CODEHUNT SETTINGS FOR #{TRIAL_DIR}"
 
 Dir.chdir TRIAL_DIR
 system "mkdir -p .trial_data/archive"
@@ -42,25 +42,27 @@ end
 # ----- methods -----
 
 def body_base(hexid)
-  base = "Codeword #{hexid.upcase}"
+  base = "Codehunt #{hexid.upcase}"
   "#{base}\n\n"
 end
 
 def code_link(hexid)
-  "<a target='_blank' href='http://#{TS.webapp_url}/codewords/#{hexid}'>click here</a>"
+  "<a target='_blank' href='http://#{TS.webapp_url}/codehunt/#{hexid}'>Codehunt #{hexid.upcase}</a>"
 end
 
 def task_body(hexid)
   instructions = <<~EOF #.gsub("\n", " ")
-  Resolving the issue requires two people to supply two separate keywords.
+  Resolving the issue requires two separate codewords.
 
-  Two keywords are associated with this issue, each assigned to random user groups.
+  Two codewords are associated with this issue, each assigned to one or more random users.
 
-  The keywords must be combined to generate a solution.
+  The codewords must be combined to generate a solution.
 
-  To see if you have a keyword for this issue, #{code_link(hexid)}.
-
-  To combine keywords and generate a solution, #{code_link(hexid)}.
+  View #{code_link(hexid)}:
+  <ul>
+  <li>to see if you have a codeword for this issue</li>
+  <li>to combine codewords and generate a solution</li>
+  </ul>
 
   Once the solution is posted on the issue comments, the maintainer will close the issue.
   EOF
@@ -76,8 +78,8 @@ end
 def write_task
   hexid = SecureRandom.hex(3)
   File.open(TASKS_FILE, 'a') do |f|
-    f.puts "- title:  Codeword #{hexid.upcase}"
-    f.puts "  labels: EXERCISE,CODEWORDS,RESOLVE_WITH_COMMENT"
+    f.puts "- title:  Codehunt #{hexid.upcase}"
+    f.puts "  labels: EXERCISE,CODEHUNT,RESOLVE_WITH_COMMENT"
     f.puts "  body:   \"#{task_tag_body(hexid)}\""
     f.puts ""
   end

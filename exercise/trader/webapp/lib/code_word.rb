@@ -10,9 +10,9 @@ class CodeIssue
     @issue[arg]
   end
 
-  def keyword_for(user_uuid)
-    return issue["keyword1"] if issue["users1"].include?(user_uuid)
-    return issue["keyword2"] if issue["users2"].include?(user_uuid)
+  def codeword_for(user_uuid)
+    return issue["codeword1"] if issue["users1"].include?(user_uuid)
+    return issue["codeword2"] if issue["users2"].include?(user_uuid)
     nil
   end
 
@@ -41,31 +41,35 @@ class CodeWord
     end
   end
 
-  def issue_sequence_for(keyword1, keyword2)
-    issue1 = issue_for_keyword(keyword1)
-    issue2 = issue_for_keyword(keyword2)
-    return issue1["sequence"] if issue1 == issue2
+  def codeword_for_user(issue_sequence, user_uuid)
+    issues[issue_sequence.to_i]&.codeword_for(user_uuid)
+  end
+
+  def issue_sequence_for(codeword1, codeword2)
+    issue1 = issue_for_codeword(codeword1)
+    issue2 = issue_for_codeword(codeword2)
+    return issue1 if issue1 == issue2
     nil
   end
 
-  def solution_for(keyword1, keyword2)
-    seq = issue_sequence_for(keyword1, keyword2)
+  def solution_for(codeword1, codeword2)
+    seq = issue_sequence_for(codeword1, codeword2)
     return data[seq]["solution"] if seq
     nil
   end
 
   private
 
-  def issue_for_keyword(keyword)
+  def issue_for_codeword(codeword)
     # noinspection RubyArgCount
-    keycap = keyword.capitalize.chomp.strip
+    keycap = codeword.capitalize.chomp.strip
     data.select do |_k, v|
-      v["keyword1"] == keycap || v["keyword2"] == keycap
+      v["codeword1"] == keycap || v["codeword2"] == keycap
      end.keys.first
   end
 
-  def has_word(issue, keyword)
-    issue["keyword1"] == keyword || issue["keyword2"] == keyword
+  def has_word(issue, codeword)
+    issue["codeword1"] == codeword || issue["codeword2"] == codeword
   end
 
   def load_yaml_files

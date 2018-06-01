@@ -21,15 +21,37 @@ end
 
 # ----- codewords -----
 
-get "/codewords/:hexid" do
-  @hexid = params["hexid"]
-  @issue = Issue.by_hexid(@hexid).first
-  slim :codeword
+get "/codehunt/:hexid" do
+  protected!
+  @hexid  = params["hexid"].upcase
+  @issue  = Issue.by_hexid(@hexid).first
+  @cwrd   = CodeWord.new
+  @issues = @cwrd.issues_for_user(current_user.uuid)
+  @kwd    = @cwrd.codeword_for_user(@issue.sequence, current_user.uuid)
+  slim :codehunt
+end
+
+post "/codehunt/:hexid" do
+  protected!
+  cwrd = CodeWord.new
+  c1, c2 = [params['codeword1'].capitalize, params['codeword2'].capitalize]
+  if solution = cwrd.solution_for(c1, c2)
+    flash[:success] = "The solution for / #{c1} / #{c2} / is <b>#{solution}</b>"
+  else
+    flash[:danger] = "No solution was found for / #{c1} / #{c2} /"
+  end
+  redirect "/codehunt/#{params["hexid"]}"
+end
+
+get "/codehunt" do
+  protected!
+  @issues = CodeWord.new.issues_for_user(current_user.uuid)
+  slim :codehunt
 end
 
 get "/codewords" do
   protected!
-  @cwrd = CodeWord.new
+  @cwrd = CodeWord.new.issues
   slim :codewords
 end
 

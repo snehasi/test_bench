@@ -60,15 +60,16 @@ GROUPS    = File.readlines(TS.trial_dir + "/.trial_data/code_groups.txt").map {|
 users     = User.all.pluck(:uuid).map {|el| el.gsub("'", "")}.shuffle
 utake     = ( users.length / 3 ) + 1
 hash = {}
-new_issues.each_with_index do |issue, idx|
+flt_issues = new_issues.select {|el| /^Code/ =~ el["title"]}
+flt_issues.each_with_index do |issue, idx|
   ele = {}
-  ele["solution"] = GROUPS[idx][0]
-  ele["keyword1"] = GROUPS[idx][1]
-  ele["keyword2"] = GROUPS[idx][2]
-  ele["users1"]   = users.shift(utake)
-  users           = users + ele["users1"]
-  ele["users2"]   = users.shift(utake)
-  users           = users + ele["users2"]
+  ele["solution"]  = GROUPS[idx][0]
+  ele["codeword1"] = GROUPS[idx][1]
+  ele["codeword2"] = GROUPS[idx][2]
+  ele["users1"]    = users.shift(utake)
+  users            = users + ele["users1"]
+  ele["users2"]    = users.shift(utake)
+  users            = users + ele["users2"]
   hash[issue["sequence"]] = ele
 end
 File.open(KEY_FILE, 'w') {|kf| kf.puts hash.to_yaml}

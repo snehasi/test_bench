@@ -379,6 +379,15 @@ module AppHelpers
     """
   end
 
+  def link_uc(label, path, opts = {})
+    if current_page(path)
+      return "" if opts[:hide] || opts["hide"]
+      label
+    else
+      "<a href='#{path}'>#{label}</a>"
+    end
+  end
+
   # ----- auth / consent -----
 
   def current_user
