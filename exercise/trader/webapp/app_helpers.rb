@@ -186,7 +186,8 @@ module AppHelpers
       if sellable_offer(current_user, offer)
         offer_sell_link(offer)
       else
-        user_name(offer.position.counterusers.first)
+        user = offer.position.counterusers.first
+        user_name(user)
       end
     when 'expired'
       'EXPIRED'
@@ -403,7 +404,11 @@ module AppHelpers
   end
 
   def user_name(user = current_user)
-    user&.name || user&.uuid[0..5]
+    if user
+      user&.name || user&.uuid&[0..5]
+    else
+      "err"
+    end
   end
 
   def logged_in?

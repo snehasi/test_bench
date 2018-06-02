@@ -166,10 +166,11 @@ end
 post "/position_sell/:position_uuid" do
   protected!
   position = Position.find_by_uuid(params['position_uuid'])
-  result = OfferCmd::CreateSell.new(position, price: params['price'].to_f)
+  issue    = position.offer.issue
+  result   = OfferCmd::CreateSell.new(position, price: params['price'].to_f)
   alt = result.project
   flash[:success] = "You have made an offer to sell your position"
-  redirect "/positions"
+  redirect "/issues/#{issue.uuid}"
 end
 
 get "/position_buy/:offer_uuid" do

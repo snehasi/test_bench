@@ -54,7 +54,7 @@ table.table.table-sm[style='margin-top: 10px;']
         td == offer_awardee(offer)
     - @issue.offers_sf.each do |offer|
       tr
-        td = user_name(offer.user)
+        td > #{user_name(offer.user)}
         td #{offer.value.to_i} tokens
         td == offer_worker_link(current_user, offer)
         td #{(offer.volume * (1 - offer.price)).to_i} tokens
