@@ -180,7 +180,7 @@ module AppHelpers
     user.positions.unresolved.fixed.unoffered.include?(poz)
   end
 
-  def offer_worker_link(user, offer)
+  def offer_worker_link(user, offer, action = "offer_accept")
     case offer.status
     when 'crossed'
       if sellable_offer(current_user, offer)
@@ -196,10 +196,9 @@ module AppHelpers
         "FUNDING HOLD"
       elsif offer.user.uuid == user.uuid
         "My Offer"
-      elsif offer.issue.offers.where('expiration > ?', BugmTime.now).where(type: "Offer::Buy::Unfixed").pluck(:user_uuid).include?(user.uuid)
-        "You funded this issue"
       else
-        "<a class='btn btn-primary btn-sm' href='/offer_accept/#{offer.uuid}'>ACCEPT OFFER (cost: 10 tokens)</a>"
+        cost = 20 - offer.value.to_i
+        "<a class='btn btn-primary btn-sm' href='/#{action}/#{offer.uuid}'>ACCEPT OFFER (cost: #{cost} tokens)</a>"
       end
     end
   end

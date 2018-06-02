@@ -18,6 +18,6 @@ class String
   end
 
   def sans_hexid
-    self.gsub(/(^| )\/\h\h\h\h\h\h/) {|el| el.gsub(/\/\h\h\h\h\h\h/, "")}
+    self.gsub(/(^| |>)\/\h\h\h\h\h\h/) {|el| el.gsub(/\/\h\h\h\h\h\h/, "")}
   end
 end
