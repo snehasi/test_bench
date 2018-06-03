@@ -167,8 +167,10 @@ module AppHelpers
 
   def offer_sell_link(offer)
     counter = offer.position.counterpositions.first
+    ixid = offer.issue.xid
+    oval = offer.value
     "
-    <a href='#' class='ttip' data-toggle='tooltip' id='#{counter.uuid}'>
+    <a href='#' class='ttip' data-oval='#{oval}' data-ixid='#{ixid}' data-toggle='tooltip' id='#{counter.uuid}'>
     #{user_name(offer.position.counterusers.first)}
     </a>
     "

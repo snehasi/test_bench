@@ -173,7 +173,6 @@ post "/position_sell/:position_uuid" do
   price    = (20 - value) / 20.0
   result   = OfferCmd::CreateSell.new(position, price: price)
   alt = result.project
-  binding.pry
   flash[:success] = "You have made an offer to sell your position"
   redirect "/issues/#{issue.uuid}"
 end
