@@ -16,38 +16,38 @@ abort "#{USAGE}\nERROR: #{ARGV[0]} not a directory" unless File.directory?(DIR)
 
 TRIAL_DIR    = DIR
 TIMESTAMP    = Time.now.strftime("%d%H%M%S")
-TASKS_FILE   = "./.trial_data/code_tasks_#{TIMESTAMP}.yml"
-TERMS_FILE   = "./.trial_data/code_terms_#{TIMESTAMP}.yml"
-LCL_SETTINGS = File.expand_path(__dir__) + "/code_settings.yml"
-LCL_CODEGRPS = File.expand_path(__dir__) + "/code_groups.txt"
+TASKS_FILE   = "./.trial_data/quest_tasks_#{TIMESTAMP}.yml"
+TERMS_FILE   = "./.trial_data/quest_terms_#{TIMESTAMP}.yml"
+LCL_SETTINGS = File.expand_path(__dir__) + "/quest_settings.yml"
+LCL_CODEGRPS = File.expand_path(__dir__) + "/quest_groups.txt"
 
 puts "TRIAL DIR IS #{TRIAL_DIR}"
 
 # ----- settings and libraries -----
 
-puts "ESTABLISH CODEHUNT SETTINGS FOR #{TRIAL_DIR}"
+puts "ESTABLISH WORDQUEST SETTINGS FOR #{TRIAL_DIR}"
 
 Dir.chdir TRIAL_DIR
 system "mkdir -p .trial_data/archive"
-system "mv .trial_data/*code* .trial_data/archive 2> /dev/null"
+system "mv .trial_data/*quest* .trial_data/archive 2> /dev/null"
 system "cp #{LCL_SETTINGS} #{TRIAL_DIR}/.trial_data"
 system "cp #{LCL_CODEGRPS} #{TRIAL_DIR}/.trial_data"
 
 require_relative '../../exercise/Base/lib/trial_settings'
  
-CODELIST = File.readlines("#{__dir__}/code_groups.txt").map do |line| 
+CODELIST = File.readlines("#{__dir__}/quest_groups.txt").map do |line|
   line.split(",").map {|el| el.chomp.strip}
 end
 
 # ----- methods -----
 
 def body_base(hexid)
-  base = "Codehunt #{hexid.upcase}"
+  base = "Wordquest #{hexid.upcase}"
   "#{base}\n\n"
 end
 
-def code_link(hexid)
-  "<a target='_blank' href='http://#{TS.webapp_url}/codehunt/#{hexid}'>Codehunt #{hexid.upcase}</a>"
+def quest_link(hexid)
+  "<a target='_blank' href='http://#{TS.webapp_url}/wordquest/#{hexid}'>Wordquest #{hexid.upcase}</a>"
 end
 
 def task_body(hexid)
@@ -58,7 +58,7 @@ def task_body(hexid)
 
   The codewords must be combined to generate a solution.
 
-  View #{code_link(hexid)}:
+  View #{quest_link(hexid)}:
   <ul>
   <li>to see if you have a codeword for this issue</li>
   <li>to combine codewords and generate a solution</li>
@@ -66,10 +66,11 @@ def task_body(hexid)
 
   Once the solution is posted on the issue comments, the maintainer will close the issue.
   EOF
+  # noinspection RubyArgCount
   body_base(hexid) + "#{instructions}\n\n/#{hexid}"
 end
 
-def task_tag_body(hexid)
+def task_tag_body(hexid, _noop = {})
   task_body(hexid).gsub("\n\n", "<p></p>")
 end
 
@@ -78,9 +79,9 @@ end
 def write_task
   hexid = SecureRandom.hex(3)
   File.open(TASKS_FILE, 'a') do |f|
-    f.puts "- title:  Codehunt #{hexid.upcase}"
-    f.puts "  labels: EXERCISE,CODEHUNT,RESOLVE_WITH_COMMENT"
-    f.puts "  body:   \"#{task_tag_body(hexid)}\""
+    f.puts "- title:  Wordquest #{hexid.upcase}"
+    f.puts "  labels: EXERCISE,WORDQUEST,RESOLVE_WITH_COMMENT"
+    f.puts "  body:   \"#{task_tag_body(hexid, "NA")}\""
     f.puts ""
   end
 end
@@ -88,7 +89,8 @@ end
 # ----- loops -----
 
 def write_tasks(numtasks)
-  CODELIST.sample(numtasks).each do |codeline|
+  numtasks.times do
+    # noinspection RubyArgCount
     write_task
     print "."
   end
@@ -102,8 +104,8 @@ def write_terms(task_file, term_file)
     tasks.each do |task|
       cat   = task["title"].split("_").last
       hexid = Iora.hexid_for(task)
-      f.puts "- price:  #{TS.settings.fetch("code_price".to_sym, 0.50)}"
-      f.puts "  volume: #{TS.settings.fetch("code_volume".to_sym, 20)}"
+      f.puts "- price:  #{TS.settings.fetch("quest_price".to_sym, 0.50)}"
+      f.puts "  volume: #{TS.settings.fetch("quest_volume".to_sym, 20)}"
       f.puts "  hexid:  #{hexid}"
       print '.'
     end
@@ -118,8 +120,9 @@ system "mkdir -p .trial_data"
 system "echo --- > #{TASKS_FILE}"
 
 puts "WRITING TASKS"
-write_tasks(TS.code_num_tasks)
+write_tasks(TS.quest_num_tasks)
 
 puts "WRITING TASK TERMS"
+# noinspection RubyArgCount
 write_terms(TASKS_FILE     , TASKS_FILE.gsub("task", "term"))
 

@@ -55,12 +55,12 @@ puts ''
 
 puts 'CREATE KEYWORD STRUCTURE WITH ALL NEW ISSUE DATA'
 timestamp = BugmTime.now.strftime("%d%H%M%S")
-KEY_FILE  = File.expand_path(TS.trial_dir + "/.trial_data/code_hash_#{timestamp}.yml")
-GROUPS    = File.readlines(TS.trial_dir + "/.trial_data/code_groups.txt").map {|line| line.chomp.strip.split(",")}.shuffle
+KEY_FILE  = File.expand_path(TS.trial_dir + "/.trial_data/quest_hash#{timestamp}.yml")
+GROUPS    = File.readlines(TS.trial_dir + "/.trial_data/quest_groups.txt").map {|line| line.chomp.strip.split(",")}.shuffle
 users     = User.all.pluck(:uuid).map {|el| el.gsub("'", "")}.shuffle
 utake     = ( users.length / 3 ) + 1
 hash = {}
-flt_issues = new_issues.select {|el| /^Code/ =~ el["title"]}
+flt_issues = new_issues.select {|el| /^Wordquest/ =~ el["title"]}
 flt_issues.each_with_index do |issue, idx|
   ele = {}
   ele["solution"]  = GROUPS[idx][0]

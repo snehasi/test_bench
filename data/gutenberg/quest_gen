@@ -29,7 +29,7 @@ data = File.read("./Beowulf.txt").gsub(/\W+/, " ").gsub("_", " ").split(" ").sel
 #   f.puts(data.join("\n")) 
 # end
 
-File.open("code_groups.txt", 'w') do |f|
+File.open("quest_groups.txt", 'w') do |f|
   data.shuffle.in_groups_of(3, "Abandons") do |grp|
     f.puts grp.join(",") unless grp.length != 3
   end

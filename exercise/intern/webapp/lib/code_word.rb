@@ -73,7 +73,7 @@ class CodeWord
   end
 
   def load_yaml_files
-    files = Dir.glob(TS.trial_dir + "/.trial_data/**/code_hash*yml")
+    files = Dir.glob(TS.trial_dir + "/.trial_data/**/quest_hash*yml")
     files.reduce({}) do |acc, file|
       acc.merge YAML.load_file(file)
     end

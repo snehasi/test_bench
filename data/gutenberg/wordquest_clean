@@ -13,7 +13,7 @@ abort "#{USAGE}\nERROR: #{ARGV[0]} not a directory" unless File.directory?(DIR)
 # ----- filepaths -----
 
 TRIAL_DIR       = DIR
-DATA_FILE       = "code"
+DATA_FILE       = "quest"
 
 # ----- setup -----
 

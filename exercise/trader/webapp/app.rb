@@ -19,19 +19,19 @@ get "/" do
   slim :home
 end
 
-# ----- codewords -----
+# ----- wordquest -----
 
-get "/codehunt/:hexid" do
+get "/wordquest/:hexid" do
   protected!
   @hexid  = params["hexid"].upcase
   @issue  = Issue.by_hexid(@hexid).first
   @cwrd   = CodeWord.new
   @issues = @cwrd.issues_for_user(current_user.uuid)
   @kwd    = @cwrd.codeword_for_user(@issue.sequence, current_user.uuid)
-  slim :codehunt
+  slim :wordquest
 end
 
-post "/codehunt/:hexid" do
+post "/wordquest/:hexid" do
   protected!
   cwrd = CodeWord.new
   c1, c2 = [params['codeword1'].capitalize, params['codeword2'].capitalize]
@@ -40,19 +40,19 @@ post "/codehunt/:hexid" do
   else
     flash[:danger] = "No solution was found for / #{c1} / #{c2} /"
   end
-  redirect "/codehunt/#{params["hexid"]}"
+  redirect "/wordquest/#{params["hexid"]}"
 end
 
-get "/codehunt" do
+get "/wordquest" do
   protected!
   @issues = CodeWord.new.issues_for_user(current_user.uuid)
-  slim :codehunt
+  slim :wordquest
 end
 
-get "/codewords" do
+get "/wordkeys" do
   protected!
   @cwrd = CodeWord.new.issues
-  slim :codewords
+  slim :wordkeys
 end
 
 # ----- events -----
