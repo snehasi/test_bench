@@ -44,6 +44,9 @@ h2 Codehunt #{@hexid&.upcase}
         input.form-control.spc[type="text" placeholder="Codeword 1" name="codeword1" value='#{@kwd}']
         input.form-control.spc[type="text" placeholder="Codeword 2" name="codeword2"]
         button.btn.btn-primary.spc VIEW SOLUTION
+      - if flash[:solution]
+        p
+          div.alert.alert-success[role='alert'] == flash[:solution]
     - else
       h3 Using Codewords
       p Codehunt issues require two people to work together to find a solution.

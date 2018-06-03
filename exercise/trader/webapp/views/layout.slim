@@ -16,7 +16,8 @@ html[lang="en-US"]
     == slim @navbar || :layout_nav_base_bar
     .container-fluid[style="margin-top: 65px;"]
       - flash.keys.each do |type|
-        div[class="alert alert-#{type}" role="alert"] == flash[type]
+        - unless type == :solution
+          div[class="alert alert-#{type}" role="alert"] == flash[type]
       main[role="main"] == yield
       hr
       footer

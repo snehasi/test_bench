@@ -31,17 +31,17 @@ get "/codehunt/:hexid" do
   slim :codehunt
 end
 
-post "/codehunt/:hexid" do
-  protected!
-  cwrd = CodeWord.new
-  c1, c2 = [params['codeword1'].capitalize, params['codeword2'].capitalize]
-  if solution = cwrd.solution_for(c1, c2)
-    flash[:success] = "The solution for / #{c1} / #{c2} / is <b>#{solution}</b>"
-  else
-    flash[:danger] = "No solution was found for / #{c1} / #{c2} /"
-  end
-  redirect "/codehunt/#{params["hexid"]}"
-end
+# post "/codehunt/:hexid" do
+#   protected!
+#   cwrd = CodeWord.new
+#   c1, c2 = [params['codeword1'].capitalize, params['codeword2'].capitalize]
+#   if solution = cwrd.solution_for(c1, c2)
+#     flash[:solution] = "The solution for: #{c1} + #{c2} = <b>#{solution}</b>"
+#   else
+#     flash[:danger] = "No solution was found for / #{c1} / #{c2} /"
+#   end
+#   redirect "/codehunt/#{params["hexid"]}"
+# end
 
 get "/codehunt" do
   protected!
