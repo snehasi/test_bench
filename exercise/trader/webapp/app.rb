@@ -180,10 +180,13 @@ get "/position_buy/:offer_uuid" do
   user_uuid = current_user.uuid
   uuid      = params['offer_uuid']
   offer     = Offer.find_by_uuid(uuid)
+  binding.pry
   result    = OfferCmd::CreateCounter.new(offer, poolable: false, user_uuid: user_uuid)
   counter   = result.project.offer
+  binding.pry
   obj       = ContractCmd::Cross.new(counter, :transfer)
   contract  = obj.project.contract
+  binding.pry
   flash[:success] = "You have formed a new contract"
   redirect "/issues/#{contract.issue.uuid}"
 end

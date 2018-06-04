@@ -160,6 +160,9 @@
 - [x] test nightly cycle
 - [x] fix github sync bug
 
-## TBD
+## 2018-06-04 MON
+
+- [ ] add a contract visualization
+- [ ] offer
 
 - [ ] TBD
