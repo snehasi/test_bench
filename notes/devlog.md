@@ -162,7 +162,19 @@
 
 ## 2018-06-04 MON
 
-- [ ] add a contract visualization
-- [ ] offer
+- [x] OfferCmd::CreateCross(offer) <- create a counteroffer and cross exactly to the offer
 
-- [ ] TBD
+## 2018-06-05 TUE
+
+- [x] cross/transfer: generate amendment but not escrow
+- [x] cross/transfer: generate sub-positions
+- [x] cross/transfer: transfer money
+- [x] remove ancestry
+- [x] child positions should inherit escrow_uuid from parent (transfer cross)
+- [x] position scope: roots
+- [x] position scope: leaves
+
+- [ ] contract/resolve: pay leaf positions
+
+- [ ] add a contract visualization
+

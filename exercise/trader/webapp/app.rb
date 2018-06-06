@@ -149,7 +149,7 @@ get "/offer_accept/:offer_uuid" do
   uuid      = params['offer_uuid']
   offer     = Offer.find_by_uuid(uuid)
   counter   = OfferCmd::CreateCounter.new(offer, poolable: false, user_uuid: user_uuid).project.offer
-  contract  = ContractCmd::Cross.new(counter, :expand).project.contract
+  contract  = ContractCmd::Cross.new(counter, :expand, offer).project.contract
   flash[:success] = "You have formed a new contract"
   redirect "/issues/#{contract.issue.uuid}"
 end
@@ -180,13 +180,10 @@ get "/position_buy/:offer_uuid" do
   user_uuid = current_user.uuid
   uuid      = params['offer_uuid']
   offer     = Offer.find_by_uuid(uuid)
-  binding.pry
   result    = OfferCmd::CreateCounter.new(offer, poolable: false, user_uuid: user_uuid)
   counter   = result.project.offer
-  binding.pry
-  obj       = ContractCmd::Cross.new(counter, :transfer)
+  obj       = ContractCmd::Cross.new(counter, :transfer, offer)
   contract  = obj.project.contract
-  binding.pry
   flash[:success] = "You have formed a new contract"
   redirect "/issues/#{contract.issue.uuid}"
 end

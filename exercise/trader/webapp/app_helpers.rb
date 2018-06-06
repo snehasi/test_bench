@@ -219,11 +219,11 @@ module AppHelpers
   end
 
   def offer_awardee(offer)
+    return "was not accepted"     if offer.status == 'expired'
     return "needs to be accepted" if offer.status != 'crossed'
     return "waiting for maturation" if offer.position.contract.status != 'resolved'
-    user = Position.where("amendment_uuid = '#{offer.position.amendment.uuid}' AND side = '#{offer.position.contract.awardee}'").first.user
-    # user = offer.escrow.where(side: contract.awardee).first.user
-    if user.uuid == offer.user.uuid then
+    user = Position.where("amendment_uuid = '#{offer.position.amendment.uuid}' AND side = '#{offer.position.contract.awardee}'").first&.user
+    if user&.uuid == offer.user&.uuid then
       user_type = "trader"
     else
       user_type = "worker"
@@ -408,7 +408,7 @@ module AppHelpers
     if user
       user&.name || user&.uuid&[0..5]
     else
-      "err"
+      "TBD"
     end
   end
 
