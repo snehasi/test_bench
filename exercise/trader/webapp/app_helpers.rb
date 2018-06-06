@@ -198,6 +198,8 @@ module AppHelpers
         "FUNDING HOLD"
       elsif offer.user.uuid == user.uuid
         "My Offer"
+      elsif offer.issue.offers.where('expiration > ?', BugmTime.now).where(type: "Offer::Buy::Unfixed").pluck(:user_uuid).include?(user.uuid)
+        "You funded this issue"
       else
         cost = 20 - offer.value.to_i
         "<a class='btn btn-primary btn-sm' href='/#{action}/#{offer.uuid}'>ACCEPT OFFER (cost: #{cost} tokens)</a>"

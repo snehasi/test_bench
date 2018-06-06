@@ -43,7 +43,7 @@ table.table.table-sm[style='margin-top: 10px;']
       th Maturation
       th Resolution
   tbody
-    - @issue.offers_bu.each do |offer|
+    - @issue.offers_bu.without_branch_position.each do |offer|
       tr
         td = user_name(offer.user)
         td #{offer.value.to_i} tokens
@@ -52,7 +52,7 @@ table.table.table-sm[style='margin-top: 10px;']
         td #{offer.volume} tokens
         td == offer_maturation_date(offer)
         td == offer_awardee(offer)
-    - @issue.offers_sf.each do |offer|
+    - @issue.offers_sf.without_branch_position.each do |offer|
       tr
         td > #{user_name(offer.user)}
         td #{offer.value.to_i} tokens

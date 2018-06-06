@@ -175,8 +175,26 @@
 - [x] position scope: leaves
 - [x] contract/resolve: pay leaf positions
 
-- [ ] test funds distribution (pro-rata calculation)
+## 2018-06-06 WED
 
-## TBD
+- [x] do we show sold position (no - only leaf positions)
+- [x] test funds distribution (pro-rata calculation)
+- [x] documentation
+
+## MILESTONES
+
+- [ ] finish trader
+- [ ] customer validation
+- [ ] intern exercise
+- [ ] event tags and comments
+- [ ] proper assignment of Event UserUUIDs
+- [ ] build statement (history) into intern exercise
+- [ ] trade on identity
+- [ ] trade on group identity
+- [ ] add multi-register
+- [ ] write payment processor
+
+## FEATURES
 
 - [ ] add a contract visualization
+

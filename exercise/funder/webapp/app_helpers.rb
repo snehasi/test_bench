@@ -150,7 +150,6 @@ module AppHelpers
   end
 
   def offer_worker_link(user, offer)
-    #return "My Offer" if offer.user.uuid == user.uuid
     case offer.status
     when 'crossed'
       user_name(offer.position.counterusers.first)
