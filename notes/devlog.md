@@ -173,8 +173,10 @@
 - [x] child positions should inherit escrow_uuid from parent (transfer cross)
 - [x] position scope: roots
 - [x] position scope: leaves
+- [x] contract/resolve: pay leaf positions
 
-- [ ] contract/resolve: pay leaf positions
+- [ ] test funds distribution (pro-rata calculation)
+
+## TBD
 
 - [ ] add a contract visualization
-
