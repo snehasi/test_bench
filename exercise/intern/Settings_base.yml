@@ -1,0 +1,6 @@
+---
+app_repos:
+  - bugmark/exchange
+  - bugmark/test_bench
+  - bugmark/website
+  - bugmark/outreachy
