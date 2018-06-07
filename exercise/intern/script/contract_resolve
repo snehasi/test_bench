@@ -16,7 +16,7 @@ require 'awesome_print'
 
 puts "EXCHANGE_DIR=#{Exchange.src_dir}"
 puts 'EXERCISE SETTINGS'
-ap TrialSettings.settings
+ap TrialSettings.settings sort_keys: true
 
 # ----- load -----
 

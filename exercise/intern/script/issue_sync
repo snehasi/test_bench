@@ -10,13 +10,14 @@ TRIAL_DIR = dotenv_trial_dir(__dir__)
 
 require_relative '../../Base/lib/exchange'
 require_relative '../../Base/lib/trial_settings'
+require_relative '../../Base/lib/helpers'
 require 'awesome_print'
 
 # ----- info -----
 
 puts "EXCHANGE_DIR=#{Exchange.src_dir}"
 puts 'EXERCISE SETTINGS'
-ap TrialSettings.settings
+ap(TrialSettings.settings, sort_keys: true)
 
 # ----- load -----
 
@@ -38,12 +39,30 @@ puts ""
 # ----- sync -----
 
 puts 'SYNC ALL ISSUES TO BUGMARK'
-iora = Iora.new(TS.tracker_type, TS.tracker_name)
-tracker_uuid = Tracker.first.uuid
-iora.issues.each do |el|
-  base = {"stm_tracker_uuid" => tracker_uuid}
-  pkg  = el.merge(base)
-  print '.'
-  IssueCmd::Sync.new(pkg).project
+all_repos.each do |repo|
+  puts "Sync Issues for #{repo}"
+  tracker_name = iora_tracker_name_for(TS.tracker_type, repo)
+  iora = Iora.new(TS.tracker_type, tracker_name)
+  tracker_uuid = Tracker.find_by_name(bugmark_tracker_name_for(repo))
+  iora.issues.each do |el|
+    base = {"stm_tracker_uuid" => tracker_uuid}
+    pkg  = el.merge(base)
+    print '.'
+    IssueCmd::Sync.new(pkg).project
+  end
+  puts ''
 end
-puts ''
+
+# puts 'CREATE COMMENTS FOR ALL NEW ISSUES'
+# new_issues.each do |issue|
+#   exid    = issue["exid"]
+#   url     = "http://#{TS.webapp_url}/issues_ex/#{exid}"
+#   burl    = "http://#{TS.webapp_url}/badge_ex/#{exid}.svg"
+#   comment = "Bugmark is trading this issue. "
+#   img     = "<img src='#{burl}' alt='Click to View on Bugmark' style='max-width: 100%;'> "
+#   link    = "<a target='_blank' href='#{url}'>#{img}</a>"
+#   iora.create_comment(issue["sequence"], comment + "<br/>" + link)
+#   print '.'
+# end
+# puts ''
+

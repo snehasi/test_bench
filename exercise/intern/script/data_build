@@ -4,13 +4,14 @@ Dir.chdir File.expand_path(__dir__)
 
 require_relative '../../Base/lib/dotenv'
 
-dotenv_trial_data(__dir__).split(",").each do |dataset|
+(dotenv_trial_data(__dir__)&.split(",") || []).each do |dataset|
   builder = "#{dataset}_build"
   system "../../../data/#{builder} #{dotenv_trial_dir(__dir__)}"
 end
 
-base_settings = "Settings_base.yml"
+base_settings = "../Settings_base.yml"
 if File.exist?(base_settings)
-  system "cp ../#{base_settings} #{dotenv_trial_dir(__dir__)} 2> /dev/null" 
+  cmd = "cp #{base_settings} #{dotenv_trial_dir(__dir__)}/.trial_data"
+  system cmd
 end
 

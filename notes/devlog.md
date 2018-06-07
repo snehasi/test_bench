@@ -187,14 +187,16 @@
 
 - [x] base settings in the exercise directory
 - [x] add alt repos to settings
+- [x] add settings_show to intern
+- [x] distinguish between base repo and app_repos
+- [x] construct tracker name 
+- [x] ingest alt-repos in issue_sync, system_build
+- [x] create a build script
 
-- [ ] distinguish between base repo and app_repos
-- [ ] ingest alt-repos in issue_sync, system_build
-- [ ] construct tracker name 
-- [ ] let people add/edit comments on Ytrack
+- [ ] weekly top-up
 - [ ] weekly maturation dates
 - [ ] rank by offer value
-- [ ] create a build script
+- [ ] let people add/edit comments on Ytrack
 - [ ] install / configure influxdb
 - [ ] install / configure grafana
 

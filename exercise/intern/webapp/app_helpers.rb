@@ -471,6 +471,7 @@ module AppHelpers
   end
 
   def xformat(time)
+    return "TBD" if time.nil?
     time.strftime("%B %d")
   end
 
