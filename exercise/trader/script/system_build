@@ -28,8 +28,6 @@ require 'iora'
 
 # ----- issues -----
 
-require 'pry'
-
 puts 'LOAD EXERCISE TASKS INTO TRACKER'
 iora = Iora.new(TS.tracker_type, TS.tracker_name, labels: "EXERCISE")
 task_files = Dir.glob("#{File.expand_path TS.trial_dir}/.trial_data/*task*.yml")
@@ -37,9 +35,7 @@ new_issues = task_files.map do |file|
   tasks = YAML.load_file(file)
   tasks.map do |task|
     print '.'
-    result = iora.create(task["title"], task["body"], labels: task["labels"])
-    binding.pry
-    result
+    iora.create(task["title"], task["body"], labels: task["labels"])
   end
 end.flatten.map {|el| el.stringify_keys}
 puts ''
