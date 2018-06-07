@@ -53,12 +53,13 @@ new_issues.each do |issue|
 end
 puts ''
 
-puts 'CREATE KEYWORD STRUCTURE WITH ALL NEW ISSUE DATA'
+puts 'CREATE WORDQUEST KEYWORD STRUCTURE WITH ALL NEW ISSUE DATA'
 timestamp = BugmTime.now.strftime("%d%H%M%S")
-KEY_FILE  = File.expand_path(TS.trial_dir + "/.trial_data/quest_hash#{timestamp}.yml")
+KEY_FILE  = File.expand_path(TS.trial_dir + "/.trial_data/quest_hash_#{timestamp}.yml")
 GROUPS    = File.readlines(TS.trial_dir + "/.trial_data/quest_groups.txt").map {|line| line.chomp.strip.split(",")}.shuffle
 users     = User.all.pluck(:uuid).map {|el| el.gsub("'", "")}.shuffle
-utake     = ( users.length / 3 ) + 1
+fraction  = TS.user_fraction_per_issue&.to_f || 0.33  # percentage of users assigned to an issue
+utake     = (users.length * fraction).round
 hash = {}
 flt_issues = new_issues.select {|el| /^Wordquest/ =~ el["title"]}
 flt_issues.each_with_index do |issue, idx|
@@ -96,28 +97,38 @@ puts ""
 
 @build_offers = true
 
+def can_fund(email, idx)
+  idx <= 5 || email == TS.funder_email
+end
+
 if @build_offers
   puts 'CREATE A BUY-UNFIXED OFFER FOR EACH OPEN ISSUE'
-  funder = User.find_by_email(TS.funder_email)
-  term_files = Dir.glob("#{File.expand_path TS.trial_dir}/.trial_data/**/*term*.yml")
-  term_files.each do |file|
-    terms = YAML.load_file(file)
-    terms.each do |term|
-      uuid = Issue.by_hexid(term["hexid"]).open.first&.uuid
-      opts = {
-        price:          term["price"]       ,
-        volume:         term["volume"]      ,
-        user_uuid:      funder.uuid         ,
-        maturation:     BugmTime.end_of_day ,
-        expiration:     BugmTime.end_of_day ,
-        poolable:       false,
-        stm_issue_uuid: uuid
-      }
-      if uuid
-        FB.create(:offer_bu, opts).project
-        print '.'
-      else
-        print 'x'
+  [TS.funder_email, 'andy@r210.com', 'sstruble@mozilla.com'].each do |funder_email|
+    funder = User.find_by_email(funder_email)
+    term_files = Dir.glob("#{File.expand_path TS.trial_dir}/.trial_data/**/*term*.yml")
+    idx = 0
+    term_files.each_with_index do |file|
+      terms = YAML.load_file(file)
+      terms.each do |term|
+        uuid = Issue.by_hexid(term["hexid"]).open.first&.uuid
+        opts = {
+          price:          term["price"]       ,
+          volume:         term["volume"]      ,
+          user_uuid:      funder.uuid         ,
+          maturation:     BugmTime.end_of_day ,
+          expiration:     BugmTime.end_of_day ,
+          poolable:       false,
+          stm_issue_uuid: uuid
+        }
+        idx += 1
+        if uuid
+          if can_fund(funder_email, idx)
+            FB.create(:offer_bu, opts).project
+            print '.'
+          end
+        else
+          print 'x'
+        end
       end
     end
   end

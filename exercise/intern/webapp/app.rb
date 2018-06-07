@@ -19,7 +19,7 @@ get "/" do
   slim :home
 end
 
-# ----- codewords -----
+# ----- wordquest -----
 
 get "/wordquest/:hexid" do
   protected!
@@ -49,10 +49,10 @@ get "/wordquest" do
   slim :wordquest
 end
 
-get "/codewords" do
+get "/wordkeys" do
   protected!
   @cwrd = CodeWord.new.issues
-  slim :codewords
+  slim :wordkeys
 end
 
 # ----- events -----
@@ -149,7 +149,7 @@ get "/offer_accept/:offer_uuid" do
   uuid      = params['offer_uuid']
   offer     = Offer.find_by_uuid(uuid)
   counter   = OfferCmd::CreateCounter.new(offer, poolable: false, user_uuid: user_uuid).project.offer
-  contract  = ContractCmd::Cross.new(counter, :expand).project.contract
+  contract  = ContractCmd::Cross.new(counter, :expand, offer).project.contract
   flash[:success] = "You have formed a new contract"
   redirect "/issues/#{contract.issue.uuid}"
 end
@@ -167,7 +167,9 @@ post "/position_sell/:position_uuid" do
   protected!
   position = Position.find_by_uuid(params['position_uuid'])
   issue    = position.offer.issue
-  result   = OfferCmd::CreateSell.new(position, price: params['price'].to_f)
+  value    = params['value'].to_i
+  price    = (20 - value) / 20.0
+  result   = OfferCmd::CreateSell.new(position, price: price)
   alt = result.project
   flash[:success] = "You have made an offer to sell your position"
   redirect "/issues/#{issue.uuid}"
@@ -180,7 +182,7 @@ get "/position_buy/:offer_uuid" do
   offer     = Offer.find_by_uuid(uuid)
   result    = OfferCmd::CreateCounter.new(offer, poolable: false, user_uuid: user_uuid)
   counter   = result.project.offer
-  obj       = ContractCmd::Cross.new(counter, :transfer)
+  obj       = ContractCmd::Cross.new(counter, :transfer, offer)
   contract  = obj.project.contract
   flash[:success] = "You have formed a new contract"
   redirect "/issues/#{contract.issue.uuid}"

@@ -167,8 +167,8 @@ module AppHelpers
 
   def offer_sell_link(offer)
     counter = offer.position.counterpositions.first
-    ixid = offer.issue.xid
-    oval = offer.value
+    ixid = offer.issue.xid.capitalize
+    oval = offer.value.to_i
     "
     <a href='#' class='ttip' data-oval='#{oval}' data-ixid='#{ixid}' data-toggle='tooltip' id='#{counter.uuid}'>
     #{user_name(offer.position.counterusers.first)}
@@ -182,7 +182,7 @@ module AppHelpers
     user.positions.unresolved.fixed.unoffered.include?(poz)
   end
 
-  def offer_worker_link(user, offer)
+  def offer_worker_link(user, offer, action = "offer_accept")
     case offer.status
     when 'crossed'
       if sellable_offer(current_user, offer)
@@ -201,7 +201,8 @@ module AppHelpers
       elsif offer.issue.offers.where('expiration > ?', BugmTime.now).where(type: "Offer::Buy::Unfixed").pluck(:user_uuid).include?(user.uuid)
         "You funded this issue"
       else
-        "<a class='btn btn-primary btn-sm' href='/offer_accept/#{offer.uuid}'>ACCEPT OFFER (cost: 10 tokens)</a>"
+        cost = 20 - offer.value.to_i
+        "<a class='btn btn-primary btn-sm' href='/#{action}/#{offer.uuid}'>ACCEPT OFFER (cost: #{cost} tokens)</a>"
       end
     end
   end
@@ -220,11 +221,11 @@ module AppHelpers
   end
 
   def offer_awardee(offer)
+    return "was not accepted"     if offer.status == 'expired'
     return "needs to be accepted" if offer.status != 'crossed'
     return "waiting for maturation" if offer.position.contract.status != 'resolved'
-    user = Position.where("amendment_uuid = '#{offer.position.amendment.uuid}' AND side = '#{offer.position.contract.awardee}'").first.user
-    # user = offer.escrow.where(side: contract.awardee).first.user
-    if user.uuid == offer.user.uuid then
+    user = Position.where("amendment_uuid = '#{offer.position.amendment.uuid}' AND side = '#{offer.position.contract.awardee}'").first&.user
+    if user&.uuid == offer.user&.uuid then
       user_type = "trader"
     else
       user_type = "worker"
@@ -409,7 +410,7 @@ module AppHelpers
     if user
       user&.name || user&.uuid&[0..5]
     else
-      "err"
+      "TBD"
     end
   end
 

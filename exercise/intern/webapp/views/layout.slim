@@ -16,17 +16,16 @@ html[lang="en-US"]
     == slim @navbar || :layout_nav_base_bar
     .container-fluid[style="margin-top: 65px;"]
       - flash.keys.each do |type|
-        div[class="alert alert-#{type}" role="alert"] == flash[type]
+        - unless type == :solution
+          div[class="alert alert-#{type}" role="alert"] == flash[type]
       main[role="main"] == yield
       hr
       footer
         small
           .row
-            .col-md-4.text-center
+            .col-md-6.text-center
               | Powered by Bugmark
-            .col-md-4.text-center
-              == base_link("Positions-#{position_count(current_user)}"  , "/positions")
-            .col-md-4.text-center
+            .col-md-6.text-center
               == BugmTime.now.strftime("%B-%d %H:%M %Z")
     script[crossorigin="anonymous" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" src="https://code.jquery.com/jquery-3.2.1.slim.min.js"                              ]
     script[crossorigin="anonymous" integrity="sha384-lZmvU/TzxoIQIOD9yQDEpvxp6wEU32Fy0ckUgOH4EIlMOCdR823rg4+3gWRwnX1M" src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.bundle.min.js" ]
