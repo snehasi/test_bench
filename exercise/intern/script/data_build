@@ -9,8 +9,8 @@ dotenv_trial_data(__dir__).split(",").each do |dataset|
   system "../../../data/#{builder} #{dotenv_trial_dir(__dir__)}"
 end
 
-# TODO: 
-# 1) create Settings_app.yml with application-specific configs
-# 2) modify the TrialSettings class to incorporate Settings_app.yml
-system "cp X Y 2> /dev/null" if File.exist?("Settings_app.yml")
+base_settings = "Settings_base.yml"
+if File.exist?(base_settings)
+  system "cp ../#{base_settings} #{dotenv_trial_dir(__dir__)} 2> /dev/null" 
+end
 

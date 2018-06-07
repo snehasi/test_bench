@@ -180,12 +180,29 @@
 - [x] do we show sold position (no - only leaf positions)
 - [x] test funds distribution (pro-rata calculation)
 - [x] documentation
+- [x] intern: clone trader machine
+- [x] intern: setup dns intern.bugmark.net
+
+## 2018-06-07 THU
+
+- [x] base settings in the exercise directory
+- [x] add alt repos to settings
+
+- [ ] distinguish between base repo and app_repos
+- [ ] ingest alt-repos in issue_sync, system_build
+- [ ] construct tracker name 
+- [ ] let people add/edit comments on Ytrack
+- [ ] weekly maturation dates
+- [ ] rank by offer value
+- [ ] create a build script
+- [ ] install / configure influxdb
+- [ ] install / configure grafana
 
 ## MILESTONES
 
-- [ ] finish trader
-- [ ] customer validation
+- [x] finish trader
 - [ ] intern exercise
+- [ ] customer validation
 - [ ] event tags and comments
 - [ ] proper assignment of Event UserUUIDs
 - [ ] build statement (history) into intern exercise

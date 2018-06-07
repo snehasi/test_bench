@@ -61,8 +61,13 @@ puts ''
 
 # ----- bugmark tracker -----
 
-puts 'CREATE A BUGMARK TRACKER'
+puts 'CREATE A BUGMARK TRACKER FOR EVERY APP REPO'
 FB.create(:tracker, name: 'TraderExercise')
+TS.app_repos.each do |repo|
+  repost = repo.gsub("/", "-").upcase
+  puts "Create tracker for #{repost}"
+  FB.create(:tracker, name: repost).upcase)
+end
 
 # ----- issues -----
 
