@@ -37,6 +37,7 @@ new_issues = task_files.map do |file|
   tasks = YAML.load_file(file)
   tasks.map do |task|
     print '.'
+    sleep 5 if TS.tracker_type.to_s == 'github'
     iora.create(task["title"], task["body"], labels: task["labels"])
   end
 end.flatten.map {|el| el.stringify_keys}
@@ -50,6 +51,7 @@ new_issues.each do |issue|
   comment = "Bugmark is trading this issue. "
   img     = "<img src='#{burl}' alt='Click to View on Bugmark' style='max-width: 100%;'> "
   link    = "<a target='_blank' href='#{url}'>#{img}</a>"
+  sleep 5 if TS.tracker_type.to_s == 'github'
   iora.create_comment(issue["sequence"], comment + "<br/>" + link)
   print '.'
 end
@@ -97,7 +99,7 @@ Offer.open.expired_by_time.each do |offer|
 end
 puts ""
 
-@build_offers = true
+@build_offers = false
 
 def can_fund(email, idx)
   idx <= 5 || email == TS.funder_email
