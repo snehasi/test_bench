@@ -10,13 +10,14 @@ TRIAL_DIR = dotenv_trial_dir(__dir__)
 
 require_relative '../../Base/lib/exchange'
 require_relative '../../Base/lib/trial_settings'
+require_relative '../../Base/lib/helpers'
 require 'awesome_print'
 
 # ----- info -----
 
 puts "EXCHANGE_DIR=#{Exchange.src_dir}"
 puts 'EXERCISE SETTINGS'
-ap TrialSettings.settings
+ap TrialSettings.settings, sort_keys: true
 
 # ----- load -----
 
@@ -29,7 +30,8 @@ require 'iora'
 # ----- issues -----
 
 puts 'LOAD EXERCISE TASKS INTO TRACKER'
-iora = Iora.new(TS.tracker_type, TS.tracker_name, labels: "EXERCISE")
+tracker_name = iora_tracker_name_for(TS.tracker_type, TS.tracker_name)
+iora = Iora.new(TS.tracker_type, tracker_name, labels: "EXERCISE")
 task_files = Dir.glob("#{File.expand_path TS.trial_dir}/.trial_data/*task*.yml")
 new_issues = task_files.map do |file|
   tasks = YAML.load_file(file)
@@ -77,7 +79,7 @@ File.open(KEY_FILE, 'w') {|kf| kf.puts hash.to_yaml}
 
 puts 'SYNC ALL ISSUES TO BUGMARK'
 tracker_uuid = Tracker.first.uuid
-iora2 = Iora.new(TS.tracker_type, TS.tracker_name, status: 'open', labels: "EXERCISE")
+iora2 = Iora.new(TS.tracker_type, tracker_name, status: 'open', labels: "EXERCISE")
 iora2.issues.each do |el|
   base = {"stm_tracker_uuid" => tracker_uuid}
   pkg  = el.merge(base)

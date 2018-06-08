@@ -153,7 +153,7 @@ module AppHelpers
     color = BugmTime.now > offer.expiration ? "red" : "green"
     date = offer.expiration.strftime("%m-%d %H:%M %Z")
     date_iso = offer.expiration.strftime("%Y%m%dT%H%M%S")
-    "<a target='_blank' style='color: #{color}' href='https://www.timeanddate.com/worldclock/fixedtime.html?iso=#{date_iso}&p1=217'>#{date}</a>"
+    "<a target='_blank' style='color: #{color}' href='https://www.timeanddate.com/worldclock/fixedtime.html?iso=#{date_iso}&p1=2416'>#{date}</a>"
   end
 
   def offer_status_link(offer)
@@ -202,7 +202,11 @@ module AppHelpers
         "You funded this issue"
       else
         cost = 20 - offer.value.to_i
-        "<a class='btn btn-primary btn-sm' href='/#{action}/#{offer.uuid}'>ACCEPT OFFER (cost: #{cost} tokens)</a>"
+        lbl = offer.is_sell? ? "#{user_name(offer.user)} offers to sell position:<br/>" : ""
+        "
+        #{lbl}
+        <a class='btn btn-primary btn-sm' href='/#{action}/#{offer.uuid}'>ACCEPT OFFER (cost: #{cost} tokens)</a>
+        "
       end
     end
   end
@@ -318,7 +322,8 @@ module AppHelpers
   end
 
   def ytrack_nav_menu
-    iora = Iora.new(TS.tracker_type, TS.tracker_name)
+    tracker_name = iora_tracker_name_for(TS.tracker_type, TS.tracker_name)
+    iora = Iora.new(TS.tracker_type, tracker_name)
     iora.issues.map do |el|
       label = el["stm_title"]
       exid  = el["exid"]
