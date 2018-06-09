@@ -197,7 +197,7 @@ module AppHelpers
       if funding_hold?(user)
         "FUNDING HOLD"
       elsif offer.user.uuid == user.uuid
-        "My Offer"
+        "#{user_name(user)} is reselling this position"
       elsif offer.issue.offers.where('expiration > ?', BugmTime.now).where(type: "Offer::Buy::Unfixed").pluck(:user_uuid).include?(user.uuid)
         "You funded this issue"
       else

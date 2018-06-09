@@ -42,12 +42,13 @@ table.table#xtable
     small <b>*</b> issues where you have an offer or contract
 
 - content_for :page_js do
+  javascript:
+    table = $('#xtable').DataTable({"lengthMenu": [[-1, 100, 50, 10], ["All", 100, 50, 10]]});
   coffee:
-    table = $('#xtable').DataTable();
     setMyIssues  = -> table.search("*").draw()
     setAllIssues = -> table.search("").draw()
     $('document').ready ->
-      $('#myIssues').on  "focus", setMyIssues
-      $('#allIssues').on "focus", setAllIssues
+     $('#myIssues').on  "focus", setMyIssues
+     $('#allIssues').on "focus", setAllIssues
 
 
