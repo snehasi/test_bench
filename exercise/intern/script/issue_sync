@@ -61,6 +61,7 @@ end
 #   comment = "Bugmark is trading this issue. "
 #   img     = "<img src='#{burl}' alt='Click to View on Bugmark' style='max-width: 100%;'> "
 #   link    = "<a target='_blank' href='#{url}'>#{img}</a>"
+#   sleep 4 if TS.tracker_type.to_s == 'github'
 #   iora.create_comment(issue["sequence"], comment + "<br/>" + link)
 #   print '.'
 # end

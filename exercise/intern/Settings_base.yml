@@ -4,3 +4,4 @@ repo_list:
   - bugmark/test_bench
   - bugmark/website
   - bugmark/outreachy
+  - bugmark/iora

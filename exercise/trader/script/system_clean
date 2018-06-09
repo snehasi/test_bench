@@ -72,7 +72,7 @@ tracker_name = iora_tracker_name_for(TS.tracker_type, TS.tracker_name)
 `rm -f #{tracker_name}` if TS.tracker_type.to_s == 'yaml'
 iora = Iora.new(TS.tracker_type, tracker_name, state: 'open', labels: "EXERCISE")
 iora.issues.each do |el|
-  sleep 5 if TS.tracker_type.to_s == 'github'
+  sleep 4 if TS.tracker_type.to_s == 'github'
   iora.close(el['sequence'])
   print '.'
 end
