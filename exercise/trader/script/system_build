@@ -99,10 +99,10 @@ Offer.open.expired_by_time.each do |offer|
 end
 puts ""
 
-@build_offers = false
+@build_offers = true
 
 def can_fund(email, idx)
-  idx <= 5 || email == TS.funder_email
+  idx <= 5 #|| email == TS.funder_email
 end
 
 if @build_offers
