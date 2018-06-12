@@ -65,6 +65,7 @@ puts ''
 puts 'CREATE A BUGMARK TRACKER FOR EVERY APP REPO'
 FB.create(:tracker, name: 'TraderExercise')
 all_repos.each do |repo|
+  next if repo.nil?
   repost = bugmark_tracker_name_for(repo)
   puts "Create tracker for #{repost}"
   FB.create(:tracker, name: repost)

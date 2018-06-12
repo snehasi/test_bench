@@ -102,7 +102,7 @@ puts ""
 @build_offers = true
 
 def can_fund(email, idx)
-  idx <= 5 #|| email == TS.funder_email
+  idx <= 5
 end
 
 if @build_offers
