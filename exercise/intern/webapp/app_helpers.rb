@@ -4,6 +4,9 @@ module AppHelpers
 
   include ActionView::Helpers::DateHelper
 
+  # ----- scale -----
+
+
   # ----- positions -----
 
   def position_count(user)
@@ -26,8 +29,9 @@ module AppHelpers
   end
 
   def underactivity_penalty(user)
-    spread = invested_tokens(user) - TS.seed_balance
-    [ 0, spread ].min
+    0
+    # spread = invested_tokens(user) - TS.seed_balance
+    # [ 0, spread ].min
   end
 
   # ----- events -----
@@ -62,9 +66,7 @@ module AppHelpers
   end
 
   def account_lbl(user)
-    count = funding_count(user)
-    warn = funding_hold?(user) ? " / FUNDED #{count} of 5 " : ""
-    "#{user_name(user)}#{warn} / balance: #{user.token_available}"
+    "#{user_name(user)} / balance: #{user.token_available}"
   end
 
   def successful_fundings(user)
@@ -293,9 +295,11 @@ module AppHelpers
   end
 
   def tracker_link(issue = nil, label = nil)
-    url = case TS.tracker_type.to_sym
+    type = TS.tracker_type
+    url = case type&.to_sym
       when :yaml   then yaml_tracker_url(issue)
       when :github then github_tracker_url(issue)
+      else "TBD"
     end
     lbl = label || url
     "<a href='#{url}' target='_blank'>#{lbl}</a>"
