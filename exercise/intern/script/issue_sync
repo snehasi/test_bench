@@ -39,7 +39,9 @@ puts ""
 # ----- sync -----
 
 puts 'SYNC ALL ISSUES TO BUGMARK'
+require 'pry'
 all_repos.each do |repo|
+  next if repo.nil?
   puts "Sync Issues for #{repo}"
   tracker_name = iora_tracker_name_for(TS.tracker_type, repo)
   iora = Iora.new(TS.tracker_type, tracker_name)
