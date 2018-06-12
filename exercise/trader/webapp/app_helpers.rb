@@ -228,13 +228,12 @@ module AppHelpers
     return "was not accepted"     if offer.status == 'expired'
     return "needs to be accepted" if offer.status != 'crossed'
     return "waiting for maturation" if offer.position.contract.status != 'resolved'
-    user = Position.where("amendment_uuid = '#{offer.position.amendment.uuid}' AND side = '#{offer.position.contract.awardee}'").first&.user
-    if user&.uuid == offer.user&.uuid then
-      user_type = "trader"
+    user = if offer.is_buy?
+      Position.where("amendment_uuid = '#{offer.position.amendment.uuid}' AND side = '#{offer.position.contract.awardee}'").first&.user
     else
-      user_type = "worker"
+      Position.where("amendment_uuid = '#{offer.salable_position.amendment.uuid}' AND side = '#{offer.position.contract.awardee}'").first&.user
     end
-    "#{user_type} <b>#{user_name(user)}</b> received #{offer.volume.to_i} tokens"
+    "<b>#{user_name(user)}</b> received #{offer.volume.to_i} tokens"
   end
 
   # ----- contracts -----
