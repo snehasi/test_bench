@@ -106,6 +106,33 @@ get "/offer_fund/:issue_uuid" do
   redirect "/issues/#{uuid}"
 end
 
+post "/offer_create/:issue_uuid" do
+  protected!
+  uuid  = params['issue_uuid']
+  issue = Issue.find_by_uuid(uuid)
+  opts = {
+    aon:            params['side'] == 'unfixed' ? true : false ,
+    price:          params['side'] == 'unfixed' ? 0.80 : 0.20  ,
+    volume:         params['value'].to_i                       ,
+    user_uuid:      current_user.uuid,
+    maturation:     BugmTime.end_of_day,
+    expiration:     BugmTime.end_of_day,
+    poolable:       false,
+    stm_issue_uuid: uuid
+  }
+  if issue
+    type = params['side'] == 'unfixed' ? :offer_bu : :offer_bf
+    result = FB.create(type, opts).project
+    require 'pry'
+    binding.pry
+    offer = result.offer
+    flash[:success] = "You have funded a new offer (#{offer.xid})"
+  else
+    flash[:danger] = "Something went wrong"
+  end
+  redirect "/issues/#{uuid}"
+end
+
 # accept offer and form a contract
 get "/offer_accept/:offer_uuid" do
   protected!
@@ -292,6 +319,13 @@ get "/admin/resolve" do
   system script
   flash[:success] = "You have resolved mature contracts"
   redirect '/admin'
+end
+
+# ----- coffeescript -----
+
+get "/coffee/*.js" do
+  filename = params[:splat].first
+  coffee "coffee/#{filename}".to_sym
 end
 
 # ----- misc / testing -----
