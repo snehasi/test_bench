@@ -138,10 +138,10 @@ module AppHelpers
   end
 
   def offer_maturation_date(offer)
-    return "TBD" if offer.expiration.nil?
-    color = BugmTime.now > offer.expiration ? "red" : "green"
-    date = offer.expiration.strftime("%m-%d %H:%M")
-    date_iso = offer.expiration.strftime("%Y%m%dT%H%M%S")
+    return "TBD" if offer.maturation.nil?
+    color = BugmTime.now > offer.maturation ? "red" : "green"
+    date = offer.maturation.strftime("%m-%d %H:%M")
+    date_iso = offer.maturation.strftime("%Y%m%dT%H%M%S")
     "<a target='_blank' style='color: #{color}' href='https://www.timeanddate.com/worldclock/fixedtime.html?iso=#{date_iso}&p1=217'>#{date}</a>"
   end
 
@@ -176,10 +176,11 @@ module AppHelpers
     user.positions.unresolved.fixed.unoffered.include?(poz)
   end
 
-  def offer_worker_link(user, offer, action = "offer_accept")
+  def offer_funder_link(user, offer, action = "offer_accept")
+    return user_name(offer.user) if offer.is_unfixed?
     case offer.status
     when 'crossed'
-      if sellable_offer(current_user, offer)
+      if false # sellable_offer(current_user, offer)
         offer_sell_link(offer)
       else
         user = offer.position.counterusers.first
@@ -190,11 +191,35 @@ module AppHelpers
     when 'open'
       if offer.user.uuid == user.uuid
         "My Offer"
-      elsif offer.issue.offers.where('expiration > ?', BugmTime.now).where(type: "Offer::Buy::Unfixed").pluck(:user_uuid).include?(user.uuid)
-        "You funded this issue"
+        # elsif offer.issue.offers.where('expiration > ?', BugmTime.now).where(type: "Offer::Buy::Unfixed").pluck(:user_uuid).include?(user.uuid)
+        #   "You funded this issue"
       else
-        cost = 20 - offer.value.to_i
-        "<a class='btn btn-primary btn-sm' href='/#{action}/#{offer.uuid}'>ACCEPT OFFER (cost: #{cost} tokens)</a>"
+        "<a class='btn btn-primary btn-sm bxs' href='/#{action}/#{offer.uuid}'>ACCEPT OFFER</a>"
+      end
+    else
+      "TBD"
+    end
+  end
+
+  def offer_worker_link(user, offer, action = "offer_accept")
+    return user_name(offer.user) if offer.is_fixed?
+    case offer.status
+    when 'crossed'
+      if false # sellable_offer(current_user, offer)
+        offer_sell_link(offer)
+      else
+        user = offer.position.counterusers.first
+        user_name(user)
+      end
+    when 'expired'
+      'EXPIRED'
+    when 'open'
+      if offer.user.uuid == user.uuid
+        "My Offer"
+      # elsif offer.issue.offers.where('expiration > ?', BugmTime.now).where(type: "Offer::Buy::Unfixed").pluck(:user_uuid).include?(user.uuid)
+      #   "You funded this issue"
+      else
+        "<a class='btn btn-primary btn-sm bxs' href='/#{action}/#{offer.uuid}'>ACCEPT OFFER</a>"
       end
     end
   end

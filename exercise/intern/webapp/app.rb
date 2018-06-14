@@ -83,29 +83,16 @@ get "/offers" do
   slim :offers
 end
 
-# fund an offer
-get "/offer_fund/:issue_uuid" do
-  protected!
-  uuid  = params['issue_uuid']
-  issue = Issue.find_by_uuid(uuid)
-  opts = {
-    price:          0.50,
-    volume:         20,
-    user_uuid:      current_user.uuid,
-    maturation:     BugmTime.end_of_day,
-    expiration:     BugmTime.end_of_day,
-    poolable:       false,
-    stm_issue_uuid: uuid
-  }
-  if issue
-    offer = FB.create(:offer_bu, opts).project.offer
-    flash[:success] = "You have funded a new offer (#{offer.xid})"
-  else
-    flash[:danger] = "Something went wrong"
-  end
-  redirect "/issues/#{uuid}"
+# cancel an offer
+get "/offer_cancel/:offer_uuid" do
+  offer = Offer.find_by_uuid(params['offer_uuid'])
+  issue = offer.issue
+  OfferCmd::Cancel.new(offer).project
+  flash[:success] = "Offer was cancelled"
+  redirect "/issues/#{issue.uuid}"
 end
 
+# create an offer
 post "/offer_create/:issue_uuid" do
   protected!
   uuid  = params['issue_uuid']
@@ -115,16 +102,14 @@ post "/offer_create/:issue_uuid" do
     price:          params['side'] == 'unfixed' ? 0.80 : 0.20  ,
     volume:         params['value'].to_i                       ,
     user_uuid:      current_user.uuid,
-    maturation:     BugmTime.end_of_day,
-    expiration:     BugmTime.end_of_day,
+    maturation:     Time.parse(params['maturation']).change(hour: 23, min: 55),
+    expiration:     Time.parse(params['expiration']).change(hour: 23, min: 50),
     poolable:       false,
     stm_issue_uuid: uuid
   }
   if issue
     type = params['side'] == 'unfixed' ? :offer_bu : :offer_bf
     result = FB.create(type, opts).project
-    require 'pry'
-    binding.pry
     offer = result.offer
     flash[:success] = "You have funded a new offer (#{offer.xid})"
   else

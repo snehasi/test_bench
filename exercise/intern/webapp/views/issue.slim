@@ -9,6 +9,11 @@ css:
     margin: 0;
     margin-left: 5px;
   }
+  .bxs {
+    padding-top: 0;
+    padding-bottom: 0;
+    line-height: 1;
+  }
 
 .row
   .col-md-12
@@ -31,7 +36,7 @@ css:
 table.table.table-sm[style='margin-top: 10px;']
   thead
     tr
-      th[colspan=2]
+      th
         ' Funder
         a.obu[href="#"]
           i.fa.fa-file-o
@@ -43,41 +48,38 @@ table.table.table-sm[style='margin-top: 10px;']
       th Worker cost
       th Payout
       th Maturation
+      th
       th Resolution
       th
   tbody
-    - @issue.offers_bu.without_branch_position.each do |offer|
+    - @issue.offers.not_canceled.without_branch_position.each do |offer|
       tr
-        td
-          input.form-check[type="checkbox" style='margin-top: 5px;']
-        td = user_name(offer.user)
-        td #{offer.value.to_i} tokens
+        td == offer_funder_link(current_user, offer)
+        td #{offer.funder_cost.to_i} tokens
         td == offer_worker_link(current_user, offer)
-        td #{(offer.volume * (1 - offer.price)).to_i} tokens
+        td #{offer.fixer_cost.to_i} tokens
         td #{offer.volume} tokens
+        td == offer_maturation_date(offer)
         td
-          == offer_maturation_date(offer)
-          '
           i.fa.fa-calendar-times.exDate[title="offer expires<br/>#{offer_expiration_date(offer)}"]
         td == offer_awardee(offer)
         td
-          a.cancelOffer[href="/"]
-            i.fa.fa-window-close-o
-    - @issue.offers_sf.without_branch_position.each do |offer|
-      tr
-        td > #{user_name(offer.user)}
-        td #{offer.value.to_i} tokens
-        td == offer_worker_link(current_user, offer, "position_buy")
-        td #{20 - offer.value.to_i} tokens
-        td #{offer.volume} tokens
-        td == offer_maturation_date(offer)
-        td == offer_awardee(offer)
+          - if offer.user.uuid == current_user.uuid
+            a.cancelOffer[href="/offer_cancel/#{offer.uuid}"]
+              i.fa.fa-window-close-o
+    / - @issue.offers_sf.without_branch_position.each do |offer|
+    /   tr
+    /     td > #{user_name(offer.user)}
+    /     td #{offer.value.to_i} tokens
+    /     td == offer_worker_link(current_user, offer, "position_buy")
+    /     td #{20 - offer.value.to_i} tokens
+    /     td #{offer.volume} tokens
+    /     td == offer_maturation_date(offer)
+    /     td == offer_awardee(offer)
 hr
 .row
-  .col-md-6
-  .col-md-6.text-right
-    small Open offers mature at midnight #{BugmTime.now.strftime("%Z")}
-          (in #{eod_words} #{ic_link('/help#maturation').html_safe})
+  .col-md-12.text-center
+    small All times in #{BugmTime.now.strftime("%Z")} #{ic_link('/help#maturation').html_safe}
 
 .modal#modalOb
   .modal-dialog.modal-lg
@@ -116,7 +118,7 @@ hr
               .btn-group.btn-group-toggle#maturation[data-toggle="buttons"]
                 - BugmTime.next_week_ends.each_with_index do |date, idx|
                   label.btn.btn-secondary.btn-sm
-                    input[type="radio" value="#{dstr(date)}" name="mat" id="mat#{idx}"] #{dvis(date)}
+                    input[type="radio" value="#{dstr(date)}" name="maturation" id="mat#{idx}"] #{dvis(date)}
             .col-md-6
               p <b>Expires</b><br/>
               input#today[type='hidden' value='#{dstr(BugmTime.now)}']
