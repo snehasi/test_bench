@@ -193,12 +193,19 @@
 - [x] ingest alt-repos in issue_sync, system_build
 - [x] create a build script
 
-- [ ] weekly top-up
-- [ ] weekly maturation dates
-- [ ] rank by offer value
-- [ ] let people add/edit comments on Ytrack
-- [ ] install / configure influxdb
-- [ ] install / configure grafana
+## 2018-06-07 THU
+
+- [x] set correct maturation date
+- [x] set correct expiration date
+- [x] get cancel working
+- [x] only display the cancel button if it's your offer and not crossed
+- [x] get rid of checkbox (for now)
+- [x] fix the amounts
+- [x] be able to accept an obu
+- [x] be able to accept an obf
+- [x] shorter "Accept Offer" buttons
+
+- [ ] test crossing (partial crosses, multiple funders)
 
 ## MILESTONES
 

@@ -19,42 +19,6 @@ get "/" do
   slim :home
 end
 
-# ----- wordquest -----
-
-get "/wordquest/:hexid" do
-  protected!
-  @hexid  = params["hexid"].upcase
-  @issue  = Issue.by_hexid(@hexid).first
-  @cwrd   = CodeWord.new
-  @issues = @cwrd.issues_for_user(current_user.uuid)
-  @kwd    = @cwrd.codeword_for_user(@issue.sequence, current_user.uuid)
-  slim :wordquest
-end
-
-post "/wordquest/:hexid" do
-  protected!
-  cwrd = CodeWord.new
-  c1, c2 = [params['codeword1'].capitalize, params['codeword2'].capitalize]
-  if solution = cwrd.solution_for(c1, c2)
-    flash[:solution] = "The solution for: #{c1} + #{c2} = <b>#{solution}</b>"
-  else
-    flash[:danger] = "No solution was found for / #{c1} / #{c2} /"
-  end
-  redirect "/wordquest/#{params["hexid"]}"
-end
-
-get "/wordquest" do
-  protected!
-  @issues = CodeWord.new.issues_for_user(current_user.uuid)
-  slim :wordquest
-end
-
-get "/wordkeys" do
-  protected!
-  @cwrd = CodeWord.new.issues
-  slim :wordkeys
-end
-
 # ----- events -----
 
 get "/events" do
@@ -119,22 +83,34 @@ get "/offers" do
   slim :offers
 end
 
-# fund an offer
-get "/offer_fund/:issue_uuid" do
+# cancel an offer
+get "/offer_cancel/:offer_uuid" do
+  offer = Offer.find_by_uuid(params['offer_uuid'])
+  issue = offer.issue
+  OfferCmd::Cancel.new(offer).project
+  flash[:success] = "Offer was cancelled"
+  redirect "/issues/#{issue.uuid}"
+end
+
+# create an offer
+post "/offer_create/:issue_uuid" do
   protected!
   uuid  = params['issue_uuid']
   issue = Issue.find_by_uuid(uuid)
   opts = {
-    price:          0.50,
-    volume:         20,
+    aon:            params['side'] == 'unfixed' ? true : false ,
+    price:          params['side'] == 'unfixed' ? 0.80 : 0.20  ,
+    volume:         params['value'].to_i                       ,
     user_uuid:      current_user.uuid,
-    maturation:     BugmTime.end_of_day,
-    expiration:     BugmTime.end_of_day,
+    maturation:     Time.parse(params['maturation']).change(hour: 23, min: 55),
+    expiration:     Time.parse(params['expiration']).change(hour: 23, min: 50),
     poolable:       false,
     stm_issue_uuid: uuid
   }
   if issue
-    offer = FB.create(:offer_bu, opts).project.offer
+    type = params['side'] == 'unfixed' ? :offer_bu : :offer_bf
+    result = FB.create(type, opts).project
+    offer = result.offer
     flash[:success] = "You have funded a new offer (#{offer.xid})"
   else
     flash[:danger] = "Something went wrong"
@@ -307,40 +283,6 @@ get "/help" do
   slim :help
 end
 
-# ----- ytrack issue tracker -----
-
-get "/ytrack/:exid" do
-  @navbar = :layout_nav_ytrack
-  @exid   = params['exid']
-  @issue  = Iora.new(TS.tracker_type, TS.tracker_name).issue(@exid)
-  @page   = "issue"
-  slim :ytrack
-end
-
-get "/ytrack" do
-  @navbar = :layout_nav_ytrack
-  @page   = "home"
-  slim :ytrack
-end
-
-get "/ytrack_close/:exid" do
-  @exid = params['exid']
-  iora = Iora.new(TS.tracker_type, TS.tracker_name)
-  issue = iora.issue(@exid)
-  iora.close(issue["sequence"])
-  flash[:success] = "Issue was closed"
-  redirect "/ytrack/#{@exid}"
-end
-
-get "/ytrack_open/:exid" do
-  @exid = params['exid']
-  iora = Iora.new(TS.tracker_type, TS.tracker_name)
-  issue = iora.issue(@exid)
-  iora.open(issue["sequence"])
-  flash[:success] = "Issue was opened"
-  redirect "/ytrack/#{@exid}"
-end
-
 # ----- admin -----
 
 get "/admin" do
@@ -362,6 +304,13 @@ get "/admin/resolve" do
   system script
   flash[:success] = "You have resolved mature contracts"
   redirect '/admin'
+end
+
+# ----- coffeescript -----
+
+get "/coffee/*.js" do
+  filename = params[:splat].first
+  coffee "coffee/#{filename}".to_sym
 end
 
 # ----- misc / testing -----

@@ -1,6 +1,6 @@
 ---
-scram_num_pairs:      1
-scram_num_tasks:      1
+scram_num_pairs:      2
+scram_num_tasks:      2
 scram_max_hint_level: 3
 scram_c3_price:    1.00
 scram_c3_volume:   5

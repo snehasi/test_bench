@@ -10,6 +10,7 @@ TRIAL_DIR = dotenv_trial_dir(__dir__)
 
 require_relative '../../Base/lib/exchange'
 require_relative '../../Base/lib/trial_settings'
+require_relative '../../Base/lib/helpers'
 require 'awesome_print'
 
 # ----- info -----
@@ -38,7 +39,8 @@ puts ""
 # ----- sync -----
 
 puts 'SYNC ALL ISSUES TO BUGMARK'
-iora = Iora.new(TS.tracker_type, TS.tracker_name)
+tracker_name = iora_tracker_name_for(TS.tracker_type, TS.tracker_name)
+iora = Iora.new(TS.tracker_type, tracker_name)
 tracker_uuid = Tracker.first.uuid
 iora.issues.each do |el|
   base = {"stm_tracker_uuid" => tracker_uuid}

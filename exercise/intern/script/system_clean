@@ -41,7 +41,7 @@ end
 
 puts 'CREATE A BUGMARK FUNDER ACCOUNT'
 opts = {
-  balance: 10000,
+  balance: 200,
   email: TS.funder_email,
   password: pwd_for(TS.funder_email)
 }
@@ -53,7 +53,7 @@ TS.participants.each do |email|
     email:    email.chomp.strip,
     password: pwd_for(email.chomp.strip),
     name:     SecureRandom.hex(2),
-    balance:  TS.seed_balance || 500
+    balance:  TS.seed_balance || 200
   }
   FB.create(:user, opts)
   print '.'
@@ -65,9 +65,9 @@ puts ''
 puts 'CREATE A BUGMARK TRACKER FOR EVERY APP REPO'
 FB.create(:tracker, name: 'TraderExercise')
 all_repos.each do |repo|
-  repost = bugmark_tracker_name_for(repo)
-  puts "Create tracker for #{repost}"
-  FB.create(:tracker, name: repost)
+  next if repo.nil?
+  puts "Create tracker for #{repo}"
+  FB.create(:tracker, name: repo)
 end
 
 puts 'DONE'

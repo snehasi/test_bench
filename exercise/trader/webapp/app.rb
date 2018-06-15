@@ -75,6 +75,11 @@ end
 get "/issues/:uuid" do
   protected!
   @issue = Issue.find_by_uuid(params['uuid'])
+  @offers_bu = @issue.offers_bu.without_branch_position.select do |offer|
+    next true if offer.is_not_crossed?
+    offer.position.counterpositions.first.offers_sell.length == 0
+  end
+  @offers_sf = @issue.offers_sf.without_branch_position
   slim :issue
 end
 
@@ -310,9 +315,10 @@ end
 # ----- ytrack issue tracker -----
 
 get "/ytrack/:exid" do
+  tracker_name = iora_tracker_name_for(TS.tracker_type, TS.tracker_name)
   @navbar = :layout_nav_ytrack
   @exid   = params['exid']
-  @issue  = Iora.new(TS.tracker_type, TS.tracker_name).issue(@exid)
+  @issue  = Iora.new(TS.tracker_type, tracker_name).issue(@exid)
   @page   = "issue"
   slim :ytrack
 end
@@ -324,8 +330,9 @@ get "/ytrack" do
 end
 
 get "/ytrack_close/:exid" do
+  tracker_name = iora_tracker_name_for(TS.tracker_type, TS.tracker_name)
   @exid = params['exid']
-  iora = Iora.new(TS.tracker_type, TS.tracker_name)
+  iora = Iora.new(TS.tracker_type, tracker_name)
   issue = iora.issue(@exid)
   iora.close(issue["sequence"])
   flash[:success] = "Issue was closed"
@@ -333,8 +340,9 @@ get "/ytrack_close/:exid" do
 end
 
 get "/ytrack_open/:exid" do
+  tracker_name = iora_tracker_name_for(TS.tracker_type, TS.tracker_name)
   @exid = params['exid']
-  iora = Iora.new(TS.tracker_type, TS.tracker_name)
+  iora = Iora.new(TS.tracker_type, tracker_name)
   issue = iora.issue(@exid)
   iora.open(issue["sequence"])
   flash[:success] = "Issue was opened"

@@ -11,7 +11,7 @@ h2 Wordquest #{@hexid&.upcase}
 
 .row
 
-  .col-md-4
+  .col-md-5
     .menucol
       p.text-center
         b Codewords assigned to #{user_name(current_user)}
@@ -19,17 +19,19 @@ h2 Wordquest #{@hexid&.upcase}
         thead
           tr
             th Issue
+            th Source
             th Codeword
         tbody
           - @issues.each do |seq, issue|
             tr
               td == issue_id_link(Issue.find_by_sequence(seq))
+              td == tracker_btn(Issue.find_by_sequence(seq))
               td
                 == link_uc("#{Issue.find_by_sequence(seq).hexid.upcase} / #{issue.codeword_for(current_user.uuid)}", "/wordquest/#{Issue.find_by_sequence(seq)&.hexid}")
     p.text-center[style='margin-top: 10px;']
       == link_uc("Learn more", "/wordquest", hide: true)
 
-  .col-md-8
+  .col-md-7
     - if @hexid
       p Wordquest #{@hexid.upcase} is used in #{issue_id_link(@issue).html_safe}
       - if @kwd

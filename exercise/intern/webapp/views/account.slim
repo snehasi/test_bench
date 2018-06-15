@@ -11,17 +11,17 @@ hr
             '  (
             a[href='/contracts'] View
             '  )
-      p
-        | You funded <b>#{funding_count(current_user)}</b> offers.
-        - if funding_hold?(current_user)
-          | You are on #{funding_hold_link.html_safe}, ineligible to accept
-            offers until you fund <b>five</b> offers.
-      - if funding_count(current_user) > 0
-        p
-          | Of your funded offers, <b>#{successful_fundings(current_user)}</b>
-            have resolved sucessfully.  You will earn #{TS.fee_funding} tokens
-            for each successful resolution.
-            <a href='/help#funding' target='_blank'>Learn More</a>
+      / p
+      /   | You funded <b>#{funding_count(current_user)}</b> offers.
+      /   - if funding_hold?(current_user)
+      /     | You are on #{funding_hold_link.html_safe}, ineligible to accept
+      /       offers until you fund <b>five</b> offers.
+      / - if funding_count(current_user) > 0
+      /   p
+      /     | Of your funded offers, <b>#{successful_fundings(current_user)}</b>
+      /       have resolved sucessfully.  You will earn #{TS.fee_funding} tokens
+      /       for each successful resolution.
+      /       <a href='/help#funding' target='_blank'>Learn More</a>
       p
         ' You accepted the
         a[href="/consent_form"] UNO Consent Form
@@ -49,23 +49,23 @@ hr
           input[type="text" class="form-control" name="newName" placeholder="enter a new username"]
         button.btn.btn-primary.mb-2[type="submit"] Change
     .p-2.mt-auto[style='width: 100%']
-      table.table.table-sm.table-bordered.table-hover
-        tbody
-          tr
-            td[colspan=3] <b>Earnings</b>
-          tr
-            td[style='width: 170px;'] Participation Bonus
-            td #{TS.fee_participation}.0 tokens
-            td <small>For participating</small>
-          tr
-            td Account Balance
-            td #{current_user.token_available} tokens
-            td <small>You must have funds to trade.</small>
-          tr
-            td Underactivity Penalty
-            td #{underactivity_penalty(current_user)} tokens
-            td <small>Reduce to zero by funding more offers.</small>
-          tr
-            td <b>TOTAL EARNINGS</b>
-            td #{TS.fee_participation + current_user.token_available + underactivity_penalty(current_user)} tokens
-            td <small>Conversion rate: 10 tokens = $1USD.</small>
+      / table.table.table-sm.table-bordered.table-hover
+      /   tbody
+      /     tr
+      /       td[colspan=3] <b>Earnings</b>
+      /     tr
+      /       td[style='width: 170px;'] Participation Bonus
+      /       td #{TS.fee_participation}.0 tokens
+      /       td <small>For participating</small>
+      /     tr
+      /       td Account Balance
+      /       td #{current_user.token_available} tokens
+      /       td <small>You must have funds to trade.</small>
+      /     tr
+      /       td Underactivity Penalty
+      /       td #{underactivity_penalty(current_user)} tokens
+      /       td <small>Reduce to zero by funding more offers.</small>
+      /     tr
+      /       td <b>TOTAL EARNINGS</b>
+      /       td #{TS.fee_participation + current_user.token_available + underactivity_penalty(current_user)} tokens
+      /       td <small>Conversion rate: 10 tokens = $1USD.</small>

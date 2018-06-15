@@ -10,6 +10,7 @@ TRIAL_DIR = dotenv_trial_dir(__dir__)
 
 require_relative '../../Base/lib/exchange'
 require_relative '../../Base/lib/trial_settings'
+require_relative '../../Base/lib/helpers'
 require 'awesome_print'
 require 'securerandom'
 
@@ -17,7 +18,7 @@ require 'securerandom'
 
 puts "EXCHANGE_DIR=#{Exchange.src_dir}"
 puts 'EXERCISE SETTINGS'
-ap TrialSettings.settings
+ap TrialSettings.settings, sort_keys: true
 
 # ----- load -----
 
@@ -67,9 +68,11 @@ FB.create(:tracker, name: 'TraderExercise')
 # ----- issues -----
 
 puts 'CLOSE ALL EXERCISE-TAGGED ISSUES THAT ARE OPEN'
-`rm -f #{TS.tracker_name}` if TS.tracker_type.to_s == 'yaml'
-iora = Iora.new(TS.tracker_type, TS.tracker_name, state: 'open', labels: "EXERCISE")
+tracker_name = iora_tracker_name_for(TS.tracker_type, TS.tracker_name)
+`rm -f #{tracker_name}` if TS.tracker_type.to_s == 'yaml'
+iora = Iora.new(TS.tracker_type, tracker_name, state: 'open', labels: "EXERCISE")
 iora.issues.each do |el|
+  sleep 4 if TS.tracker_type.to_s == 'github'
   iora.close(el['sequence'])
   print '.'
 end

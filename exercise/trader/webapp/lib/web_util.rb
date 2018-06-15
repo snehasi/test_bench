@@ -5,6 +5,7 @@ require_relative "../../../Base/lib/dotenv"
 require_relative "../../../Base/lib/exchange"
 require_relative "../../../Base/lib/access_log"
 require_relative "../../../Base/lib/trial_settings"
+require_relative "../../../Base/lib/helpers"
 
 require_relative "./code_word"
 

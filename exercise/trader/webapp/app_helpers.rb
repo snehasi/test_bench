@@ -153,7 +153,7 @@ module AppHelpers
     color = BugmTime.now > offer.expiration ? "red" : "green"
     date = offer.expiration.strftime("%m-%d %H:%M %Z")
     date_iso = offer.expiration.strftime("%Y%m%dT%H%M%S")
-    "<a target='_blank' style='color: #{color}' href='https://www.timeanddate.com/worldclock/fixedtime.html?iso=#{date_iso}&p1=217'>#{date}</a>"
+    "<a target='_blank' style='color: #{color}' href='https://www.timeanddate.com/worldclock/fixedtime.html?iso=#{date_iso}&p1=2416'>#{date}</a>"
   end
 
   def offer_status_link(offer)
@@ -196,13 +196,17 @@ module AppHelpers
     when 'open'
       if funding_hold?(user)
         "FUNDING HOLD"
-      elsif offer.user.uuid == user.uuid
-        "My Offer"
+      elsif offer.user.uuid == user.uuid && offer.is_sell?
+        "#{user_name(user)} is reselling this position"
       elsif offer.issue.offers.where('expiration > ?', BugmTime.now).where(type: "Offer::Buy::Unfixed").pluck(:user_uuid).include?(user.uuid)
         "You funded this issue"
       else
         cost = 20 - offer.value.to_i
-        "<a class='btn btn-primary btn-sm' href='/#{action}/#{offer.uuid}'>ACCEPT OFFER (cost: #{cost} tokens)</a>"
+        lbl = offer.is_sell? ? "#{user_name(offer.user)} offers to sell position:<br/>" : ""
+        "
+        #{lbl}
+        <a class='btn btn-primary btn-sm' href='/#{action}/#{offer.uuid}'>ACCEPT OFFER (cost: #{cost} tokens)</a>
+        "
       end
     end
   end
@@ -224,13 +228,12 @@ module AppHelpers
     return "was not accepted"     if offer.status == 'expired'
     return "needs to be accepted" if offer.status != 'crossed'
     return "waiting for maturation" if offer.position.contract.status != 'resolved'
-    user = Position.where("amendment_uuid = '#{offer.position.amendment.uuid}' AND side = '#{offer.position.contract.awardee}'").first&.user
-    if user&.uuid == offer.user&.uuid then
-      user_type = "trader"
+    user = if offer.is_buy?
+      Position.where("amendment_uuid = '#{offer.position.amendment.uuid}' AND side = '#{offer.position.contract.awardee}'").first&.user
     else
-      user_type = "worker"
+      Position.where("amendment_uuid = '#{offer.salable_position.amendment.uuid}' AND side = '#{offer.position.contract.awardee}'").first&.user
     end
-    "#{user_type} <b>#{user_name(user)}</b> received #{offer.volume.to_i} tokens"
+    "<b>#{user_name(user)}</b> received #{offer.volume.to_i} tokens"
   end
 
   # ----- contracts -----
@@ -303,7 +306,7 @@ module AppHelpers
 
   def github_tracker_url(issue)
     base = "http://github.com/#{TS.tracker_name}/issues"
-    issue ? "#{base}/#{issue.sequence}" : base
+    issue ? "#{base}/#{issue&.sequence}" : base
   end
 
   def current_page(path)
@@ -318,7 +321,8 @@ module AppHelpers
   end
 
   def ytrack_nav_menu
-    iora = Iora.new(TS.tracker_type, TS.tracker_name)
+    tracker_name = iora_tracker_name_for(TS.tracker_type, TS.tracker_name)
+    iora = Iora.new(TS.tracker_type, tracker_name)
     iora.issues.map do |el|
       label = el["stm_title"]
       exid  = el["exid"]

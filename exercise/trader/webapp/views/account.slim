@@ -69,3 +69,9 @@ hr
             td <b>TOTAL EARNINGS</b>
             td #{TS.fee_participation + current_user.token_available + underactivity_penalty(current_user)} tokens
             td <small>Conversion rate: 10 tokens = $1USD.</small>
+
+- if current_user.offers.is_sell.count == 0
+  .row
+    .col-md-12
+      p <b>NOTE</b>: you must post an offer to resell at least one position in order
+        to en-cache your earnings.  Current you have posted no offers to resell.

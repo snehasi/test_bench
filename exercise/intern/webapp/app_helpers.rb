@@ -4,6 +4,9 @@ module AppHelpers
 
   include ActionView::Helpers::DateHelper
 
+  # ----- scale -----
+
+
   # ----- positions -----
 
   def position_count(user)
@@ -19,6 +22,15 @@ module AppHelpers
     Offer::Sell::Fixed.open
   end
 
+  # ----- date formatting -----
+  def dvis(time = BugmTime.now)
+    time.strftime("%b %d")
+  end
+
+  def dstr(time = BugmTime.now)
+    time.strftime("%Y-%m-%d")
+  end
+
   # ----- investment -----
 
   def invested_tokens(user)
@@ -26,8 +38,7 @@ module AppHelpers
   end
 
   def underactivity_penalty(user)
-    spread = invested_tokens(user) - TS.seed_balance
-    [ 0, spread ].min
+    0
   end
 
   # ----- events -----
@@ -49,30 +60,8 @@ module AppHelpers
 
   # ----- funding hold -----
 
-  def funding_count(user)
-    user.offers.is_buy_unfixed.count
-  end
-
-  def funding_hold?(user)
-    funding_count(user) < 5
-  end
-
-  def funding_hold_link
-    "<a href='/help#trader' target='_blank'>FUNDING HOLD</a>"
-  end
-
   def account_lbl(user)
-    count = funding_count(user)
-    warn = funding_hold?(user) ? " / FUNDED #{count} of 5 " : ""
-    "#{user_name(user)}#{warn} / balance: #{user.token_available}"
-  end
-
-  def successful_fundings(user)
-    user.positions.unfixed.resolved.losing.count
-  end
-
-  def funding_bonus(user)
-    (successful_fundings(user) * TS.fee_funding.to_i).to_f
+    "#{user_name(user)} / balance: #{user.token_available}"
   end
 
   # ----- time -----
@@ -149,11 +138,16 @@ module AppHelpers
   end
 
   def offer_maturation_date(offer)
-    return "TBD" if offer.expiration.nil?
-    color = BugmTime.now > offer.expiration ? "red" : "green"
-    date = offer.expiration.strftime("%m-%d %H:%M %Z")
-    date_iso = offer.expiration.strftime("%Y%m%dT%H%M%S")
+    return "TBD" if offer.maturation.nil?
+    color = BugmTime.now > offer.maturation ? "red" : "green"
+    date = offer.maturation.strftime("%m-%d %H:%M")
+    date_iso = offer.maturation.strftime("%Y%m%dT%H%M%S")
     "<a target='_blank' style='color: #{color}' href='https://www.timeanddate.com/worldclock/fixedtime.html?iso=#{date_iso}&p1=217'>#{date}</a>"
+  end
+
+  def offer_expiration_date(offer)
+    return "TBD" if offer.expiration.nil?
+    offer.expiration.strftime("%m-%d %H:%M %Z")
   end
 
   def offer_status_link(offer)
@@ -182,10 +176,11 @@ module AppHelpers
     user.positions.unresolved.fixed.unoffered.include?(poz)
   end
 
-  def offer_worker_link(user, offer, action = "offer_accept")
+  def offer_funder_link(user, offer, action = "offer_accept")
+    return user_name(offer.user) if offer.is_unfixed?
     case offer.status
     when 'crossed'
-      if sellable_offer(current_user, offer)
+      if false # sellable_offer(current_user, offer)
         offer_sell_link(offer)
       else
         user = offer.position.counterusers.first
@@ -194,23 +189,43 @@ module AppHelpers
     when 'expired'
       'EXPIRED'
     when 'open'
-      if funding_hold?(user)
-        "FUNDING HOLD"
-      elsif offer.user.uuid == user.uuid
+      if offer.user.uuid == user.uuid
         "My Offer"
-      elsif offer.issue.offers.where('expiration > ?', BugmTime.now).where(type: "Offer::Buy::Unfixed").pluck(:user_uuid).include?(user.uuid)
-        "You funded this issue"
+        # elsif offer.issue.offers.where('expiration > ?', BugmTime.now).where(type: "Offer::Buy::Unfixed").pluck(:user_uuid).include?(user.uuid)
+        #   "You funded this issue"
       else
-        cost = 20 - offer.value.to_i
-        "<a class='btn btn-primary btn-sm' href='/#{action}/#{offer.uuid}'>ACCEPT OFFER (cost: #{cost} tokens)</a>"
+        "<a class='btn btn-primary btn-sm bxs' href='/#{action}/#{offer.uuid}'>ACCEPT OFFER</a>"
+      end
+    else
+      "TBD"
+    end
+  end
+
+  def offer_worker_link(user, offer, action = "offer_accept")
+    return user_name(offer.user) if offer.is_fixed?
+    case offer.status
+    when 'crossed'
+      if false # sellable_offer(current_user, offer)
+        offer_sell_link(offer)
+      else
+        user = offer.position.counterusers.first
+        user_name(user)
+      end
+    when 'expired'
+      'EXPIRED'
+    when 'open'
+      if offer.user.uuid == user.uuid
+        "My Offer"
+      # elsif offer.issue.offers.where('expiration > ?', BugmTime.now).where(type: "Offer::Buy::Unfixed").pluck(:user_uuid).include?(user.uuid)
+      #   "You funded this issue"
+      else
+        "<a class='btn btn-primary btn-sm bxs' href='/#{action}/#{offer.uuid}'>ACCEPT OFFER</a>"
       end
     end
   end
 
   def offer_fund_link(user, issue)
-    return "Already 3 offers today" if issue.offers_bu.where('expiration > ?', BugmTime.now).count > 2
     return "Low Balance - Can't Fund Offers" if user.token_available < 10
-    return "You already placed an offer today" if issue_offerable?(user, issue)
     "<a class='btn btn-primary btn-sm' href='/offer_fund/#{issue.uuid}'>FUND A NEW OFFER (cost: 10 tokens)</a>"
   end
 
@@ -293,16 +308,19 @@ module AppHelpers
   end
 
   def tracker_link(issue = nil, label = nil)
-    url = case TS.tracker_type.to_sym
+    type = TS.tracker_type
+    url = case type&.to_sym
       when :yaml   then yaml_tracker_url(issue)
       when :github then github_tracker_url(issue)
+      else "TBD"
     end
     lbl = label || url
     "<a href='#{url}' target='_blank'>#{lbl}</a>"
   end
 
   def github_tracker_url(issue)
-    base = "http://github.com/#{TS.tracker_name}/issues"
+    return "NA" unless issue
+    base = "http://github.com/#{issue.tracker.name}/issues"
     issue ? "#{base}/#{issue.sequence}" : base
   end
 

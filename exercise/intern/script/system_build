@@ -2,6 +2,6 @@
 
 # ----- issues -----
 
-system "issue_sync"
+system "./issue_sync"
 
 puts 'DONE'
