@@ -8,18 +8,20 @@ table.table#xtable
   thead
     tr
       td ID
-      td TYPE
+      td CMD
+      td EVENT
       td PAYLOAD
-      td USER UUIDS
+      td NOTE
+      td USERS
   tbody
     - @events.each do |event|
       tr
-        td = event.id
-        td = clean_type(event)
+        td <small>event.id</small>
+        td <small>#{clean_cmd(event)}</small>
+        td <small>#{clean_type(event)}</small>
         td <small>#{clean_payload(event)}</small>
-        td
-          small
-            == user_links(event)
+        td <small>#{event.note}</small>
+        td <small>#{user_links(event).html_safe}</small>
 
 - content_for :page_js do
   coffee:
