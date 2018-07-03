@@ -204,13 +204,12 @@
 - [x] be able to accept an obu
 - [x] be able to accept an obf
 - [x] shorter "Accept Offer" buttons
-
-- [ ] test crossing (partial crosses, multiple funders)
+- [x] test crossing (partial crosses, multiple funders)
 
 ## MILESTONES
 
 - [x] finish trader
-- [ ] intern exercise
+- [x] intern exercise
 - [ ] customer validation
 - [ ] event tags and comments
 - [ ] proper assignment of Event UserUUIDs

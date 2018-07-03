@@ -8,6 +8,7 @@ table.table#xtable
   thead
     tr
       td ID
+      td CMD
       td TYPE
       td PAYLOAD
       td USER UUIDS
@@ -15,7 +16,8 @@ table.table#xtable
     - @events.each do |event|
       tr
         td = event.id
-        td = clean_type(event)
+        td <small>#{clean_cmd(event)}</small>
+        td <small>#{clean_type(event)}</small>
         td <small>#{clean_payload(event)}</small>
         td
           small

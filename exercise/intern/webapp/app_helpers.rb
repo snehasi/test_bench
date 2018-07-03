@@ -43,6 +43,10 @@ module AppHelpers
 
   # ----- events -----
 
+  def clean_cmd(event)
+    event.cmd_type.gsub("Cmd::", "")
+  end
+
   def clean_type(event)
     event.event_type.gsub("Event::", "")
   end
@@ -426,7 +430,7 @@ module AppHelpers
 
   def user_name(user = current_user)
     if user
-      user&.name || user&.uuid&[0..5]
+      user&.name || user&.uuid[0..5]
     else
       "TBD"
     end

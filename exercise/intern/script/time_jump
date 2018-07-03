@@ -29,4 +29,4 @@ require 'iora'
 # ----- time jump -----
 
 puts 'MOVE SYSTEM TIME AHEAD 1 DAY'
-BugmTime.increment_day_offset(1)
+BugmTime.increment_day_offset(40)
