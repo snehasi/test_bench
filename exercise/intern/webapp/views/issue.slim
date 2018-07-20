@@ -32,7 +32,7 @@ css:
       == "<br/>(last synced at #{@issue.synced_at&.strftime("%b-%d %H:%M:%S %Z") || 'TBD'})"
   .col-md-7
     b Issue Body:<br/>
-    if @issue.stm_body
+    - if @issue.stm_body
       == @issue.stm_body.gsub("\n", "<br/>").sans_hexid
 table.table.table-sm[style='margin-top: 10px;']
   thead
