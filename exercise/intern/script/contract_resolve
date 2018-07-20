@@ -29,7 +29,8 @@ require 'iora'
 # ----- expired offers -----
 puts 'MARK ALL EXPIRED OFFERS'
 Offer.open.expired_by_time.each do |offer|
-  offer.update_attribute(:status, 'expired')
+  OfferCmd::Expire.new(offer)
+  # offer.update_attribute(:status, 'expired')
   print "."
 end
 puts ""
