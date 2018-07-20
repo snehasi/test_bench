@@ -21,5 +21,7 @@ def env_file_in_parent(path)
   parent      = File.expand_path("../.env", path)
   grandparent = File.expand_path("../../.env", path)
   targets = [base, parent, grandparent]
-  Dir.glob(targets).first
+  result = Dir.glob(targets).first
+  raise "ERROR: .env file not found" unless result
+  result
 end
