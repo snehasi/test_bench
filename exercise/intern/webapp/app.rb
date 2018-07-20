@@ -13,6 +13,30 @@ enable :sessions
 
 helpers AppHelpers
 
+# ----- filters -----
+before do
+  @start_clock = Time.now
+end
+
+after do
+  if USE_INFLUX == true
+    path = request.env["REQUEST_PATH"]
+    meth = request.env["REQUEST_METHOD"]
+    user = current_user&.email || "NA"
+    time = Time.now - @start_clock
+    args = {
+      tags: {
+        user: user,
+        method: meth,
+        path: path
+      },
+      values: {req_time: time},
+      timestamp: BugmTime.now.to_i
+    }
+    InfluxViews.write_point "Request", args
+  end
+end
+
 # ----- core app -----
 
 get "/" do
