@@ -14,15 +14,15 @@ BASEDIR = File.expand_path(__dir__)
 
 job_type :runscript, "cd #{BASEDIR} && :task" 
 
-every 15.minutes do
-  runscript 'script/issue_sync_all'
+every 30.minutes do
+  runscript 'script/issue_sync'
 end
 
-every '10,20,40,50 * * * *' do
+every '10,40 * * * *' do
   runscript 'script/resolve_contracts'
 end
 
-# every 1.day at '12:35am' do
-#   runscript 'script/reset_nightly'
-# end
+every :sunday, at: '11:45pm' do
+  runscript 'script/weekly_reset'
+end
 
