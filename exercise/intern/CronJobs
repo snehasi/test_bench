@@ -29,4 +29,3 @@ end
 every :monday, at: '00:05am' do
   runscript 'script/weekly_reset'
 end
-

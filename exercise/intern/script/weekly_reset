@@ -36,9 +36,9 @@ end
 users.each do |user|
   delta = 200.0 - user.balance
   args  = {
-    uuid:    user.uuid     ,
-    amount:  delta         ,
-    comment: "Low-balance adjustment"
+    uuid:   user.uuid     ,
+    amount: delta         ,
+    note:   "Low-balance adjustment"
   }
   puts "Updating balance for #{user.email}"
   UserCmd::Deposit.new(args).project

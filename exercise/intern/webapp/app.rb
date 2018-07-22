@@ -1,4 +1,5 @@
 require_relative "./lib/web_util"
+require_relative "./lib/balance"
 require_relative "./app_helpers"
 
 require 'sinatra'
@@ -48,6 +49,11 @@ end
 get "/events" do
   @events = Event.all
   slim :events
+end
+
+get "/events/:event_uuid" do
+  @event = Event.by_uuid(params['event_uuid'])
+  slim event
 end
 
 get "/events_user/:user_uuid" do
@@ -218,6 +224,7 @@ end
 get "/account" do
   protected!
   @events = Event.for_user(current_user)
+  @rows   = Balance.new(@events).rows
   slim :account
 end
 

@@ -13,22 +13,8 @@ hr
             '  )
       p
         ' You accepted the
-        a[href="/consent_form"] UNO Consent Form
+        a[href="/consent_form"] Consent Form
         '  on #{AccessLog.new(current_user.email).formatted_consent_date}
-    .p-2.mt-auto[style='width: 100%']
-      table.table.table-sm.table-bordered.table-hover
-        tbody
-          tr
-            td[colspan=2] <b>Seed Utilization</b>
-          tr
-            td[style='width: 170px;'] Seed Balance
-            td #{TS.seed_balance}.0 tokens
-          tr
-            td Investment Amount
-            td #{invested_tokens(current_user)}.tokens
-          tr
-            td Underactivity Penalty
-            td #{underactivity_penalty(current_user)} tokens
   .col-md-6.d-flex.align-items-start.flex-column
     .p-2
       | Your current username is <b>#{user_name}</b>.
@@ -38,29 +24,46 @@ hr
           input[type="text" class="form-control" name="newName" placeholder="enter a new username"]
         button.btn.btn-primary.mb-2[type="submit"] Change
     .p-2.mt-auto[style='width: 100%']
+h3 Balance
+table.table.table-sm
+  thead
+    tr
+      td ID
+      td Date
+      td Event
+      td Note
+      td Adjustment
+      td Balance
+  tbody
+    - @rows.each do |row|
+      tr
+        td <a href="/events/#{row.uuid}">event.#{row.id}</a></small>
+        td = row.date
+        td = row.event_type
+        td = row.note
+        td = row.adjustment
+        td = row.balance
 hr
 h3 Events
 table.table#xtable
   thead
     tr
       td ID
+      td DATE
       td CMD
       td EVENT
-      td PAYLOAD
       td NOTE
       td USERS
   tbody
     - @events.each do |event|
       tr
-        td <small>event.id</small>
+        td <small><a href="/events/#{event.uuid}">event.#{event.id}</a></small>
+        td <small>#{event.projected_at.strftime("%m-%d %H:%M:%S")}</small>
         td <small>#{clean_cmd(event)}</small>
         td <small>#{clean_type(event)}</small>
-        td <small>#{clean_payload(event)}</small>
         td <small>#{event.note}</small>
         td <small>#{user_links(event).html_safe}</small>
 
 - content_for :page_js do
   coffee:
     $('#xtable').DataTable();
-
-
