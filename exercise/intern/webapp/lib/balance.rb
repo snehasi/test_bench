@@ -22,7 +22,7 @@ class Balance
     row.balance    = balance
     row.adjustment = adjustment
     row.id         = event.id
-    row.uuid       = event.uuid
+    row.uuid       = event.event_uuid
     row.date       = event.projected_at.strftime("%m-%d %H:%M:%S")
     row.cmd_type   = event.cmd_type
     row.event_type = event.event_type.gsub("Event::", "")

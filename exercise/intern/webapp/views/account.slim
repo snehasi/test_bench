@@ -57,7 +57,7 @@ table.table#xtable
   tbody
     - @events.each do |event|
       tr
-        td <small><a href="/events/#{event.uuid}">event.#{event.id}</a></small>
+        td <small><a href="/events/#{event.event_uuid}">event.#{event.id}</a></small>
         td <small>#{event.projected_at.strftime("%m-%d %H:%M:%S")}</small>
         td <small>#{clean_cmd(event)}</small>
         td <small>#{clean_type(event)}</small>

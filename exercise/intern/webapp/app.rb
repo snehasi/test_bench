@@ -52,8 +52,8 @@ get "/events" do
 end
 
 get "/events/:event_uuid" do
-  @event = Event.by_uuid(params['event_uuid'])
-  slim event
+  @event = Event.find_by_event_uuid(params['event_uuid'])
+  slim :event
 end
 
 get "/events_user/:user_uuid" do
@@ -68,7 +68,8 @@ end
 # show one issue
 get "/issues/:uuid" do
   protected!
-  @issue = Issue.find_by_uuid(params['uuid'])
+  @issue  = Issue.find_by_uuid(params['uuid'])
+  @events = Event.where("payload->>'exid' = ?", @issue.exid) || []
   slim :issue
 end
 
