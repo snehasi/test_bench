@@ -68,20 +68,27 @@ table.table.table-sm[style='margin-top: 10px;']
           - if offer.user.uuid == current_user.uuid
             a.cancelOffer[href="/offer_cancel/#{offer.uuid}"]
               i.fa.fa-window-close-o
-    / - @issue.offers_sf.without_branch_position.each do |offer|
-    /   tr
-    /     td > #{user_name(offer.user)}
-    /     td #{offer.value.to_i} tokens
-    /     td == offer_worker_link(current_user, offer, "position_buy")
-    /     td #{20 - offer.value.to_i} tokens
-    /     td #{offer.volume} tokens
-    /     td == offer_maturation_date(offer)
-    /     td == offer_awardee(offer)
 hr
 .row
   .col-md-12.text-center
     small All times in #{BugmTime.now.strftime("%Z")} #{ic_link('/help#maturation').html_safe}
-
+hr
+.row
+  .col-md-12
+    table.table.table-sm
+      thead
+        tr
+          th ID
+          th DATE
+          th COMMAND
+          th EVENT
+      tbody
+        - @events.each do |event|
+          tr
+            td <a href="/events/#{event.event_uuid}">#{event.xid}</a>
+            td = event.projected_at.strftime("%m-%d %H:%M:%S")
+            td = event.cmd_type
+            td = event.event_type.gsub("Event::", "")
 .modal#modalOb
   .modal-dialog.modal-lg
     form.form-inline[action="/offer_create/#{@issue.uuid}" method="post"]
