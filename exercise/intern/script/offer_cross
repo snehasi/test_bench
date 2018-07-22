@@ -1,3 +1,58 @@
 #!/usr/bin/env ruby
 
-puts "UNDER CONSTRUCTION"
+# ----- setup -----
+
+Dir.chdir File.expand_path(__dir__)
+require_relative '../../Base/lib/dotenv'
+TRIAL_DIR = dotenv_trial_dir(__dir__)
+
+# ----- libraries -----
+
+require_relative '../../Base/lib/exchange'
+require_relative '../../Base/lib/trial_settings'
+require_relative '../../Base/lib/helpers'
+require 'awesome_print'
+require 'securerandom'
+
+# ----- info -----
+
+puts "EXCHANGE_DIR=#{Exchange.src_dir}"
+puts 'EXERCISE SETTINGS'
+ap(TrialSettings.settings, sort_keys: true)
+
+# ----- load -----
+
+puts 'LOADING RAILS'
+Exchange.load_rails
+
+# ----- reset -----
+
+puts 'CROSSING OFFERS'
+
+Offer.is_buy_fixed.open.each do |offer|
+  OfferCmd::Cross.new(offer, :expand).project
+  print "."
+end
+
+Offer.is_buy_unfixed.open.each do |offer|
+  OfferCmd::Cross.new(offer, :expand).project
+  print "."
+end
+
+Offer.is_sell.open.each do |offer|
+  OfferCmd::Cross.new(offer, :transfer).project
+  print "."
+end
+
+Offer.is_sell_fixed.open.each do |offer|
+  OfferCmd::Cross.new(offer, :reduce).project
+  print "."
+end
+
+Offer.is_sell_unfixed.open.each do |offer|
+  OfferCmd::Cross.new(offer, :reduce).project
+  print "."
+end
+
+puts "."
+puts "DONE."
