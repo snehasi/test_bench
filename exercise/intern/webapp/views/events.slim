@@ -8,18 +8,18 @@ table.table#xtable
   thead
     tr
       td ID
+      td DATE
       td CMD
       td EVENT
-      td PAYLOAD
       td NOTE
       td USERS
   tbody
     - @events.each do |event|
       tr
-        td <small>event.id</small>
+        td <small><a href="/events/#{event.event_uuid}">event.#{event.id}</a></small>
+        td <small>#{event.projected_at.strftime("%m-%d %H:%M:%S")}</small>
         td <small>#{clean_cmd(event)}</small>
         td <small>#{clean_type(event)}</small>
-        td <small>#{clean_payload(event)}</small>
         td <small>#{event.note}</small>
         td <small>#{user_links(event).html_safe}</small>
 

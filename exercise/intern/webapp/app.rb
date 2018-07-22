@@ -1,4 +1,5 @@
 require_relative "./lib/web_util"
+require_relative "./lib/balance"
 require_relative "./app_helpers"
 
 require 'sinatra'
@@ -50,6 +51,11 @@ get "/events" do
   slim :events
 end
 
+get "/events/:event_uuid" do
+  @event = Event.find_by_event_uuid(params['event_uuid'])
+  slim :event
+end
+
 get "/events_user/:user_uuid" do
   user = User.find_by_uuid(params['user_uuid'])
   @title  = user.email
@@ -62,7 +68,8 @@ end
 # show one issue
 get "/issues/:uuid" do
   protected!
-  @issue = Issue.find_by_uuid(params['uuid'])
+  @issue  = Issue.find_by_uuid(params['uuid'])
+  @events = Event.where("payload->>'exid' = ?", @issue.exid) || []
   slim :issue
 end
 
@@ -218,6 +225,7 @@ end
 get "/account" do
   protected!
   @events = Event.for_user(current_user)
+  @rows   = Balance.new(@events).rows
   slim :account
 end
 

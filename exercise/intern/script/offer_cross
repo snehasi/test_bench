@@ -27,21 +27,32 @@ Exchange.load_rails
 
 # ----- reset -----
 
-puts 'UPDATE USER BALANCES'
+puts 'CROSSING OFFERS'
 
-users = User.all.select do |user|
-  user.balance < 200.0
+Offer.is_buy_fixed.open.each do |offer|
+  OfferCmd::Cross.new(offer, :expand).project
+  print "."
 end
 
-users.each do |user|
-  delta = 200.0 - user.balance
-  args  = {
-    uuid:   user.uuid     ,
-    amount: delta         ,
-    note:   "Low-balance adjustment"
-  }
-  puts "Updating balance for #{user.email}"
-  UserCmd::Deposit.new(args).project
+Offer.is_buy_unfixed.open.each do |offer|
+  OfferCmd::Cross.new(offer, :expand).project
+  print "."
 end
 
+Offer.is_sell.open.each do |offer|
+  OfferCmd::Cross.new(offer, :transfer).project
+  print "."
+end
 
+Offer.is_sell_fixed.open.each do |offer|
+  OfferCmd::Cross.new(offer, :reduce).project
+  print "."
+end
+
+Offer.is_sell_unfixed.open.each do |offer|
+  OfferCmd::Cross.new(offer, :reduce).project
+  print "."
+end
+
+puts "."
+puts "DONE."
