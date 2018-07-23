@@ -34,7 +34,7 @@ class TrialSettings
     end
 
     def base_opts
-      base = File.expand_path("./.trial_data/Settings_base.yml", TRIAL_DIR)
+      base = File.expand_path("../Settings_base.yml")
       yaml_settings(base)
     end
 
