@@ -30,27 +30,27 @@ Exchange.load_rails
 puts 'CROSSING OFFERS'
 
 Offer.is_buy_fixed.open.each do |offer|
-  OfferCmd::Cross.new(offer, :expand).project
+  ContractCmd::Cross.new(offer, :expand).project
   print "."
 end
 
 Offer.is_buy_unfixed.open.each do |offer|
-  OfferCmd::Cross.new(offer, :expand).project
+  ContractCmd::Cross.new(offer, :expand).project
   print "."
 end
 
 Offer.is_sell.open.each do |offer|
-  OfferCmd::Cross.new(offer, :transfer).project
+  ContractCmd::Cross.new(offer, :transfer).project
   print "."
 end
 
 Offer.is_sell_fixed.open.each do |offer|
-  OfferCmd::Cross.new(offer, :reduce).project
+  ContractCmd::Cross.new(offer, :reduce).project
   print "."
 end
 
 Offer.is_sell_unfixed.open.each do |offer|
-  OfferCmd::Cross.new(offer, :reduce).project
+  ContractCmd::Cross.new(offer, :reduce).project
   print "."
 end
 
