@@ -34,47 +34,50 @@ css:
     b Issue Body:<br/>
     - if @issue.stm_body
       == @issue.stm_body.gsub("\n", "<br/>").sans_hexid
-table.table.table-sm[style='margin-top: 10px;']
-  thead
-    tr
-      th
-        ' Funder
-        a.obu[href="#"]
-          i.fa.fa-file-o
-      th Funder cost
-      th
-        ' Worker
-        a.obf[href="#"]
-          i.fa.fa-file-o
-      th Worker cost
-      th Payout
-      th Maturation
-      th
-      th Resolution
-      th
-  tbody
-    - @issue.offers.not_canceled.without_branch_position.each do |offer|
-      tr
-        td == offer_funder_link(current_user, offer)
-        td #{offer.funder_cost.to_i} tokens
-        td == offer_worker_link(current_user, offer)
-        td #{offer.fixer_cost.to_i} tokens
-        td #{offer.volume} tokens
-        td == offer_maturation_date(offer)
-        td
-          i.fa.fa-calendar-times.exDate[title="offer expires<br/>#{offer_expiration_date(offer)}"]
-        td == offer_awardee(offer)
-        td
-          - if offer.user.uuid == current_user.uuid
-            a.cancelOffer[href="/offer_cancel/#{offer.uuid}"]
-              i.fa.fa-window-close-o
-hr
-.row
-  .col-md-12.text-center
-    small All times in #{BugmTime.now.strftime("%Z")} #{ic_link('/help#maturation').html_safe}
-hr
-.row
-  .col-md-12
+
+ul.nav.nav-tabs#xTab[role="tablist"]
+  li.nav-item
+    a.nav-link.active#offers-tab[data-toggle="tab" href="#offers" role="tab"] Open Offers
+  li.nav-item
+    a.nav-link#history-tab[data-toggle="tab" href="#history" role="tab"] Sync History
+
+.tab-content#xTabContent
+  .tab-pane.fade.show.active#offers[role="tabpanel"]
+    table.table.table-sm[style='margin-top: 10px;']
+      thead
+        tr
+          th
+            ' Funder
+            a.obu[href="#"]
+              i.fa.fa-file-o
+          th Funder cost
+          th
+            ' Worker
+            a.obf[href="#"]
+              i.fa.fa-file-o
+          th Worker cost
+          th Payout
+          th Maturation
+          th
+          th Resolution
+          th
+      tbody
+        - @offers.each do |offer|
+          tr
+            td == offer_funder_link(current_user, offer)
+            td #{offer.funder_cost.to_i} tokens
+            td == offer_worker_link(current_user, offer)
+            td #{offer.fixer_cost.to_i} tokens
+            td #{offer.volume} tokens
+            td == offer_maturation_date(offer)
+            td
+              i.fa.fa-calendar-times.exDate[title="offer expires<br/>#{offer_expiration_date(offer)}"]
+            td == offer_awardee(offer)
+            td
+              - if offer.user.uuid == current_user.uuid && offer.is_open?
+                a.cancelOffer[href="/offer_cancel/#{offer.uuid}"]
+                  i.fa.fa-window-close-o
+  .tab-pane.fade#history[role="tabpanel"]
     table.table.table-sm
       thead
         tr
@@ -85,10 +88,16 @@ hr
       tbody
         - @events.each do |event|
           tr
-            td <a href="/events/#{event.event_uuid}">#{event.xid}</a>
-            td = event.projected_at.strftime("%m-%d %H:%M:%S")
-            td = event.cmd_type
-            td = event.event_type.gsub("Event::", "")
+            td <a href="/events/#{event&.event_uuid}">#{event&.xid}</a>
+            td = event&.projected_at.strftime("%m-%d %H:%M:%S")
+            td = event&.cmd_type
+            td = event&.event_type.gsub("Event::", "")
+
+hr
+.row
+  .col-md-12.text-center
+    small All times in #{BugmTime.now.strftime("%Z")} #{ic_link('/help#maturation').html_safe}
+
 .modal#modalOb
   .modal-dialog.modal-lg
     form.form-inline[action="/offer_create/#{@issue.uuid}" method="post"]

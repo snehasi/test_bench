@@ -70,6 +70,7 @@ get "/issues/:uuid" do
   protected!
   @issue  = Issue.find_by_uuid(params['uuid'])
   @events = Event.where("payload->>'exid' = ?", @issue.exid) || []
+  @offers = @issue.offers.open.without_branch_position
   slim :issue
 end
 
@@ -111,6 +112,13 @@ end
 get "/offers" do
   protected!
   @offers = Offer.open.with_issue.all
+  slim :offers
+end
+
+get "/all_offers" do
+  protected!
+  @label  = "All Offers"
+  @offers = Offer.all
   slim :offers
 end
 
@@ -224,7 +232,7 @@ end
 
 get "/account" do
   protected!
-  @events = Event.for_user(current_user)
+  @events = Event.for_user(current_user).order(:id)
   @rows   = Balance.new(@events).rows
   slim :account
 end

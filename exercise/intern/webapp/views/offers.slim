@@ -1,6 +1,6 @@
 .row[style='margin-bottom: 15px;']
   .col-md-4
-    h2 Open Offers (#{@offers.open.count})
+    h2 #{@label || "Open Offers"} (#{@offers.open.count})
   .col-md-8.text-right
     small Open offers mature at midnight Eastern Time
           (in #{eod_words} #{ic_link('/help#maturation').html_safe})
@@ -13,7 +13,8 @@ table.table#xtable
       td Trader
       td Value
       td Issue
-      td Action
+      td Side
+      td Status
   tbody
     - @offers.each do |offer|
       tr
@@ -22,8 +23,8 @@ table.table#xtable
         td = user_name(offer.user)
         td = offer.value.to_s + " tokens"
         td == tracker_btn(offer.issue)
-        td
-          a[href="/offers/#{offer.uuid}"] ACCEPT
+        td == offer.side
+        td == offer.status
 
 - content_for :page_js do
   javascript:
