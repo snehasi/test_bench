@@ -39,6 +39,8 @@ ul.nav.nav-tabs#xTab[role="tablist"]
   li.nav-item
     a.nav-link.active#offers-tab[data-toggle="tab" href="#offers" role="tab"] Open Offers
   li.nav-item
+    a.nav-link#contracts-tab[data-toggle="tab" href="#contracts" role="tab"] Contracts
+  li.nav-item
     a.nav-link#history-tab[data-toggle="tab" href="#history" role="tab"] Sync History
 
 .tab-content#xTabContent
@@ -59,7 +61,6 @@ ul.nav.nav-tabs#xTab[role="tablist"]
           th Payout
           th Maturation
           th
-          th Resolution
           th
       tbody
         - @offers.each do |offer|
@@ -72,11 +73,13 @@ ul.nav.nav-tabs#xTab[role="tablist"]
             td == offer_maturation_date(offer)
             td
               i.fa.fa-calendar-times.exDate[title="offer expires<br/>#{offer_expiration_date(offer)}"]
-            td == offer_awardee(offer)
             td
               - if offer.user.uuid == current_user.uuid && offer.is_open?
                 a.cancelOffer[href="/offer_cancel/#{offer.uuid}"]
                   i.fa.fa-window-close-o
+  .tab-pane.fade#contracts[role="tabpanel"]
+    p Num Contracts: #{@contracts.count}
+    p Num Open Contracts: #{@contracts.open.count}
   .tab-pane.fade#history[role="tabpanel"]
     table.table.table-sm
       thead

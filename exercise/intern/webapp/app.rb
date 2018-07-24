@@ -68,9 +68,10 @@ end
 # show one issue
 get "/issues/:uuid" do
   protected!
-  @issue  = Issue.find_by_uuid(params['uuid'])
-  @events = Event.where("payload->>'exid' = ?", @issue.exid) || []
-  @offers = @issue.offers.open.without_branch_position
+  @issue     = Issue.find_by_uuid(params['uuid'])
+  @contracts = @issue.contracts
+  @events    = Event.where("payload->>'exid' = ?", @issue.exid) || []
+  @offers    = @issue.offers.open.without_branch_position
   slim :issue
 end
 
@@ -86,6 +87,15 @@ get "/issues" do
   protected!
   @issues = Issue.open
   slim :issues
+end
+
+get "/sync_now" do
+  protected!
+  script = File.expand_path("../script/issue_sync", __dir__)
+  job = fork {exec script}
+  Process.detach(job)
+  flash[:success] = "Issue sync has started - estimated finish in 60 seconds..."
+  redirect "/issues"
 end
 
 # render a dynamic SVG for the issues
