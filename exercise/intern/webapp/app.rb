@@ -1,4 +1,5 @@
 require_relative "./lib/web_util"
+require_relative "./lib/balance"
 require_relative "./app_helpers"
 
 require 'sinatra'
@@ -13,6 +14,30 @@ enable :sessions
 
 helpers AppHelpers
 
+# ----- filters -----
+before do
+  @start_clock = Time.now
+end
+
+after do
+  if USE_INFLUX == true
+    path = request.env["REQUEST_PATH"]
+    meth = request.env["REQUEST_METHOD"]
+    user = current_user&.email || "NA"
+    time = Time.now - @start_clock
+    args = {
+      tags: {
+        user: user,
+        method: meth,
+        path: path
+      },
+      values: {req_time: time},
+      timestamp: BugmTime.now.to_i
+    }
+    InfluxViews.write_point "Request", args
+  end
+end
+
 # ----- core app -----
 
 get "/" do
@@ -24,6 +49,11 @@ end
 get "/events" do
   @events = Event.all
   slim :events
+end
+
+get "/events/:event_uuid" do
+  @event = Event.find_by_event_uuid(params['event_uuid'])
+  slim :event
 end
 
 get "/events_user/:user_uuid" do
@@ -38,7 +68,10 @@ end
 # show one issue
 get "/issues/:uuid" do
   protected!
-  @issue = Issue.find_by_uuid(params['uuid'])
+  @issue     = Issue.find_by_uuid(params['uuid'])
+  @contracts = @issue.contracts
+  @events    = Event.where("payload->>'exid' = ?", @issue.exid) || []
+  @offers    = @issue.offers.open.without_branch_position
   slim :issue
 end
 
@@ -54,6 +87,15 @@ get "/issues" do
   protected!
   @issues = Issue.open
   slim :issues
+end
+
+get "/sync_now" do
+  protected!
+  script = File.expand_path("../script/issue_sync", __dir__)
+  job = fork {exec script}
+  Process.detach(job)
+  flash[:success] = "Issue sync has started - estimated finish in 60 seconds..."
+  redirect "/issues"
 end
 
 # render a dynamic SVG for the issues
@@ -80,6 +122,13 @@ end
 get "/offers" do
   protected!
   @offers = Offer.open.with_issue.all
+  slim :offers
+end
+
+get "/all_offers" do
+  protected!
+  @label  = "All Offers"
+  @offers = Offer.all
   slim :offers
 end
 
@@ -193,7 +242,8 @@ end
 
 get "/account" do
   protected!
-  @events = Event.for_user(current_user)
+  @events = Event.for_user(current_user).order(:id)
+  @rows   = Balance.new(@events).rows
   slim :account
 end
 

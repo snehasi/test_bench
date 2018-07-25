@@ -27,6 +27,15 @@ Exchange.load_rails
 puts 'LOADING IORA'
 require 'iora'
 
+# ----- bugmark tracker -----
+
+puts 'CREATE A BUGMARK TRACKER FOR EVERY APP REPO'
+all_repos.each do |repo|
+  next if repo.nil?
+  puts "Create tracker for #{repo}"
+  FB.create(:tracker, name: repo)
+end
+
 # ----- expired offers -----
 
 puts 'MARK ALL EXPIRED OFFERS'
@@ -39,7 +48,6 @@ puts ""
 # ----- sync -----
 
 puts 'SYNC ALL ISSUES TO BUGMARK'
-require 'pry'
 all_repos.each do |repo|
   next if repo.nil?
   puts "Sync Issues for #{repo}"

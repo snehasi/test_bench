@@ -62,14 +62,4 @@ TS.participants.each do |email|
 end
 puts ''
 
-# ----- bugmark tracker -----
-
-puts 'CREATE A BUGMARK TRACKER FOR EVERY APP REPO'
-FB.create(:tracker, name: 'TraderExercise')
-all_repos.each do |repo|
-  next if repo.nil?
-  puts "Create tracker for #{repo}"
-  FB.create(:tracker, name: repo)
-end
-
 puts 'DONE'

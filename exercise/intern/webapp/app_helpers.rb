@@ -58,7 +58,8 @@ module AppHelpers
 
   def user_links(event)
     event.user_uuids.map do |x|
-      "<a href='/events_user/#{x}'>#{x[0..5]}</a>"
+      y = x || ""
+      "<a href='/events_user/#{y}'>#{y[0..5]}</a>"
     end.join(", ")
   end
 
@@ -195,8 +196,6 @@ module AppHelpers
     when 'open'
       if offer.user.uuid == user.uuid
         "My Offer"
-        # elsif offer.issue.offers.where('expiration > ?', BugmTime.now).where(type: "Offer::Buy::Unfixed").pluck(:user_uuid).include?(user.uuid)
-        #   "You funded this issue"
       else
         "<a class='btn btn-primary btn-sm bxs' href='/#{action}/#{offer.uuid}'>ACCEPT OFFER</a>"
       end

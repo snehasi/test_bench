@@ -6,3 +6,5 @@ repo_list:
   - bugmark/website
   - bugmark/outreachy
   - bugmark/iora
+  - bugmark/paypro
+  - Bugmark-Simulator/bugmark_simulation

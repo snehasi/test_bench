@@ -1,0 +1,47 @@
+#!/usr/bin/env ruby
+
+# ----- setup -----
+
+Dir.chdir File.expand_path(__dir__)
+require_relative '../../Base/lib/dotenv'
+TRIAL_DIR = dotenv_trial_dir(__dir__)
+
+# ----- libraries -----
+
+require_relative '../../Base/lib/exchange'
+require_relative '../../Base/lib/trial_settings'
+require_relative '../../Base/lib/helpers'
+require 'awesome_print'
+require 'securerandom'
+
+# ----- info -----
+
+puts "EXCHANGE_DIR=#{Exchange.src_dir}"
+puts 'EXERCISE SETTINGS'
+ap(TrialSettings.settings, sort_keys: true)
+
+# ----- load -----
+
+puts 'LOADING RAILS'
+Exchange.load_rails
+
+# ----- reset -----
+
+puts 'UPDATE USER BALANCES'
+
+users = User.all.select do |user|
+  user.balance < 200.0
+end
+
+users.each do |user|
+  delta = 200.0 - user.balance
+  args  = {
+    uuid:   user.uuid     ,
+    amount: delta         ,
+    note:   "Low-balance adjustment"
+  }
+  puts "Updating balance for #{user.email}"
+  UserCmd::Deposit.new(args).project
+end
+
+
