@@ -1,0 +1,32 @@
+#!/usr/bin/env ruby
+
+
+# ----- setup -----
+
+Dir.chdir File.expand_path(__dir__)
+require_relative '../../Base/lib/dotenv'
+TRIAL_DIR = dotenv_trial_dir(__dir__)
+
+# ----- libraries -----
+
+require_relative '../../Base/lib/exchange'
+require_relative '../../Base/lib/trial_settings'
+require_relative '../../Base/lib/helpers'
+require 'awesome_print'
+
+# ----- info -----
+
+puts "EXCHANGE_DIR=#{Exchange.src_dir}"
+puts 'EXERCISE SETTINGS'
+ap(TrialSettings.settings, sort_keys: true)
+
+# ----- load -----
+
+puts 'LOADING RAILS'
+Exchange.load_rails
+
+# ---- print user data ----
+User.all.each do |user|
+  puts "#{user.email},#{user.balance},#{user.token_reserve},#{user.offers.open.count},#{user.offers.not_open.count},#{user.contracts.count}"
+end
+
