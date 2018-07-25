@@ -1,6 +1,5 @@
 #!/usr/bin/env ruby
 
-
 # ----- setup -----
 
 Dir.chdir File.expand_path(__dir__)
@@ -26,7 +25,52 @@ puts 'LOADING RAILS'
 Exchange.load_rails
 
 # ---- print user data ----
-User.all.each do |user|
-  puts "#{user.email},#{user.balance},#{user.token_reserve},#{user.offers.open.count},#{user.offers.not_open.count},#{user.contracts.count}"
+
+def write_point(metric, values, user)
+  args = {
+    tags: {
+      user_id: user.id,
+      user_uuid: user.uuid,
+      user_email: user.email
+    },
+    values: values,
+    timestamp: BugmTime.now.to_i
+  }
+  InfluxStats.write_point metric, args
 end
+
+def write_ledger(user)
+  values = {
+    balance: user.balance,
+    token_reserve: user.token_reserve,
+    token_available: user.token_available
+  }
+  write_point("UserStatLedger", values, user)
+end
+
+def write_offers(user)
+  values = {
+    num_offers: user.offers.count,
+    num_open_offers: user.offers.open.count,
+  }
+  write_point("UserStatOffers", values, user)
+end
+
+def write_contracts(user)
+  values = {
+    num_contracts: user.contracts.count,
+  }
+  write_point("UserStatContracts", values, user)
+end
+
+
+puts "Writing user stats to InfluxDB for #{User.count} users."
+User.all.each do |user|
+  print "."
+  write_ledger(user)
+  write_offers(user)
+  write_contracts(user)
+end
+puts "."
+puts "Done."
 
