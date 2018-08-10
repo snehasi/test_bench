@@ -52,6 +52,7 @@ def write_offers(user)
   values = {
     num_offers: user.offers.count,
     num_open_offers: user.offers.open.count,
+    num_closed_offers: user.offers.not_open.count
   }
   write_point("UserStatOffers", values, user)
 end
@@ -73,4 +74,3 @@ User.all.each do |user|
 end
 puts "."
 puts "Done."
-
